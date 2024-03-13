@@ -26,6 +26,7 @@ public class ProductList {
     @NotNull
     private SmallCategory smallCategory;
 
+    @Column(name = "tiny_category_id")
     private Long tinyCategory;
 
 }

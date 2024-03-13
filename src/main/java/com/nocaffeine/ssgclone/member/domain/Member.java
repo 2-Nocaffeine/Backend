@@ -2,7 +2,6 @@ package com.nocaffeine.ssgclone.member.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.NonNull;
 
 @Entity
 public class Member {
@@ -20,7 +19,7 @@ public class Member {
     private String name;
 
     @NotNull
-    private String phoneNNumber;
+    private String phoneNumber;
 
     @NotNull
     private String address;

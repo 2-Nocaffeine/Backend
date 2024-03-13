@@ -16,15 +16,15 @@ public class ProductOption {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
-    private SizeOption size;
+    private SizeOption sizeOption;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
-    private ColorOption color;
+    private ColorOption colorOption;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
-    private AddOption otherOption;
+    private AddOption addOption;
 
     @NotNull
     private int quantity;

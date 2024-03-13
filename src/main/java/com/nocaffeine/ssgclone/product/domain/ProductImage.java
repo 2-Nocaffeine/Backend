@@ -21,7 +21,7 @@ public class ProductImage {
     private int thumbnail;
 
     @NotNull
-    private int thumbnailNumber;
+    private int imageNumber;
 
 
 }

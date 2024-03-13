@@ -1,6 +1,5 @@
 package com.nocaffeine.ssgclone.qna.domain;
 
-import com.nocaffeine.ssgclone.member.domain.Member;
 import com.nocaffeine.ssgclone.product.domain.Product;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -15,6 +14,7 @@ public class Qna {
     @NotNull
     private Product product;
 
+    @Column(name = "member_id")
     @NotNull
     private Long member;
 

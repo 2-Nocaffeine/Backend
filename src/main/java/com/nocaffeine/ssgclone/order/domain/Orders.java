@@ -1,6 +1,5 @@
 package com.nocaffeine.ssgclone.order.domain;
 
-import com.nocaffeine.ssgclone.member.domain.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -12,6 +11,7 @@ public class Orders {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "member_id")
     private Long member;
 
     @NotNull

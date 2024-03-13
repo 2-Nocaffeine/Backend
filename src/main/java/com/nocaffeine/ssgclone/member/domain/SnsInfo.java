@@ -13,6 +13,7 @@ public class SnsInfo {
 
     @NotNull
     private String name;
+
     private String profile;
 
 }
