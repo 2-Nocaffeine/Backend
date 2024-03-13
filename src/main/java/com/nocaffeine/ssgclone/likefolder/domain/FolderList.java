@@ -1,9 +1,5 @@
 package com.nocaffeine.ssgclone.likefolder.domain;
 
-
-import com.nocaffeine.ssgclone.like.domain.BrandLike;
-import com.nocaffeine.ssgclone.like.domain.CategoryLike;
-import com.nocaffeine.ssgclone.like.domain.ProductLike;
 import com.nocaffeine.ssgclone.member.domain.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -21,10 +17,13 @@ public class FolderList {
     @NotNull
     private Member member;
 
+    @Column(name = "category_like_id")
     private Long categoryLike;
 
+    @Column(name = "product_like_id")
     private Long productLike;
 
+    @Column(name = "brand_like_id")
     private Long brandLike;
 
 

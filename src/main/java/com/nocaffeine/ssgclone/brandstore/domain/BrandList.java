@@ -18,5 +18,4 @@ public class BrandList {
     @NotNull
     private Brand brand;
 
-
 }

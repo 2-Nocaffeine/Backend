@@ -1,10 +1,5 @@
 package com.nocaffeine.ssgclone.like.domain;
 
-import com.nocaffeine.ssgclone.category.domain.LargeCategory;
-import com.nocaffeine.ssgclone.category.domain.MediumCategory;
-import com.nocaffeine.ssgclone.category.domain.SmallCategory;
-import com.nocaffeine.ssgclone.category.domain.TinyCategory;
-import com.nocaffeine.ssgclone.likefolder.domain.Folder;
 import com.nocaffeine.ssgclone.member.domain.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -19,13 +14,18 @@ public class CategoryLike {
     @NotNull
     private Member member;
 
+    @Column(name = "large_category_id")
     private Long largeCategory;
 
+    @Column(name = "medium_category_id")
     private Long mediumCategory;
 
+    @Column(name = "small_category_id")
     private Long smallCategory;
 
+    @Column(name = "tiny_category_id")
     private Long tinyCategory;
 
+    @Column(name = "folder_id")
     private Long folder;
 }
