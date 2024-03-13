@@ -24,6 +24,9 @@ public class ResponseDto<T> {
         return new ResponseDto<>(false, message, null, new Error(code));
     }
 
+    public static <T> ResponseDto<T> fail(String code, T data,String message) {
+        return new ResponseDto<>(false, message, data, new Error(code));
+    }
     @Getter
     @AllArgsConstructor
     static class Error {
