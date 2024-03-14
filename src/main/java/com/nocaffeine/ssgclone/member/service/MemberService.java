@@ -1,15 +1,19 @@
 package com.nocaffeine.ssgclone.member.service;
 
-import com.nocaffeine.ssgclone.member.domain.Member;
-import com.nocaffeine.ssgclone.member.repository.MemberRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import java.util.UUID;
+import com.nocaffeine.ssgclone.ResponseDto;
+import com.nocaffeine.ssgclone.member.dto.MemberLoginRequestDto;
+import com.nocaffeine.ssgclone.member.dto.MemberPasswordRequestDto;
+import com.nocaffeine.ssgclone.member.dto.MemberSaveRequestDto;
+import org.springframework.http.ResponseEntity;
 
-@Service
-public class MemberService {
-    private MemberRepository memberRepository;
+public interface MemberService {
 
-    Member member = memberRepository.findByUUID(UUID.fromString(uuid)).orElse(null);
+    public ResponseDto<Void> duplicationEmail(String email);
+    public ResponseDto<Void> signUp(MemberSaveRequestDto memberSaveRequestDto);
+
+    public ResponseEntity<ResponseDto<Object>> logIn(MemberLoginRequestDto memberLoginRequestDto);
+
+    public ResponseDto<Void> changePassword(String token, MemberPasswordRequestDto memberPasswordRequestDto);
+
 }
