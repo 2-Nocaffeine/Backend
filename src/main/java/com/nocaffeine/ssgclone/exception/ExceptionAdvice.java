@@ -24,8 +24,12 @@ public class ExceptionAdvice {
                 .getAllErrors()
                 .get(0)
                 .getDefaultMessage();
-
         return ResponseDto.fail("error", errorMessage);
     }
 
+    @ExceptionHandler(BaseException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseDto<?> baseException(BaseException e) {
+        return ResponseDto.fail("error", e.getMessage());
+    }
 }

@@ -49,6 +49,10 @@ public class Member implements UserDetails {
         this.address = address;
     }
 
+    public void changePassword(String password) {
+        this.password = password;
+    }
+
     public Member(String uuid) {
         this.uuid = uuid;
     }
