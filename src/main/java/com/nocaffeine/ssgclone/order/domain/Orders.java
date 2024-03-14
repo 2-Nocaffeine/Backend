@@ -1,5 +1,6 @@
 package com.nocaffeine.ssgclone.order.domain;
 
+import com.nocaffeine.ssgclone.member.domain.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
