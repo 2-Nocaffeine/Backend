@@ -1,12 +1,13 @@
 package com.nocaffeine.ssgclone.product.domain;
 
+import com.nocaffeine.ssgclone.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 @Entity
 @Getter
-public class Product {
+public class Product extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

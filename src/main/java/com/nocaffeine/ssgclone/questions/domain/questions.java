@@ -1,15 +1,13 @@
-package com.nocaffeine.ssgclone.review.domain;
+package com.nocaffeine.ssgclone.questions.domain;
 
 import com.nocaffeine.ssgclone.common.BaseTimeEntity;
-import com.nocaffeine.ssgclone.member.domain.Member;
 import com.nocaffeine.ssgclone.product.domain.Product;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
-import java.sql.Timestamp;
-
 @Entity
-public class Review extends BaseTimeEntity {
+public class questions extends BaseTimeEntity {
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -17,17 +15,19 @@ public class Review extends BaseTimeEntity {
     @NotNull
     private Product product;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name = "member_id")
     @NotNull
-    private Member member;
+    private Long member;
+
+    @NotNull
+    private int type;
+
+    @NotNull
+    private String title;
 
     @NotNull
     private String content;
 
     @NotNull
-    private int rate;
-
-    @NotNull
-    private Timestamp date;
-
+    private int status;
 }

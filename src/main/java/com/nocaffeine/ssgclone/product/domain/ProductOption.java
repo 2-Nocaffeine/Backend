@@ -1,24 +1,29 @@
-package com.nocaffeine.ssgclone.order.domain;
+package com.nocaffeine.ssgclone.product.domain;
 
-import com.nocaffeine.ssgclone.product.domain.ProductOption;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-public class OrderProduct {
+public class ProductOption {
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
-    private Orders order;
+    private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
-    private ProductOption productOption;
+    private SizeOption sizeOption;
 
+    @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
-    private int price;
+    private ColorOption colorOption;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @NotNull
+    private AddOption addOption;
 
     @NotNull
     private int quantity;

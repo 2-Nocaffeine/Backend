@@ -1,5 +1,6 @@
 package com.nocaffeine.ssgclone.member.domain;
 
+import com.nocaffeine.ssgclone.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -17,7 +18,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member implements UserDetails {
+public class Member extends BaseTimeEntity implements UserDetails{
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -49,8 +50,8 @@ public class Member implements UserDetails {
         this.address = address;
     }
 
-    public void changePassword(String password) {
-        this.password = password;
+    public void changeHashPassword(String password) {
+        this.password = new BCryptPasswordEncoder().encode(password);
     }
 
     public Member(String uuid) {
