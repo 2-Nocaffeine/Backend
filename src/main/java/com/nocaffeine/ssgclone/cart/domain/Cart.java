@@ -34,4 +34,5 @@ public class Cart {
         this.pin = pin;
         this.checkProduct = checkProduct;
     }
+
 }
