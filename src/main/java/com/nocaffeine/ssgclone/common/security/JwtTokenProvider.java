@@ -6,9 +6,11 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -24,6 +26,9 @@ import java.util.function.Function;
 public class JwtTokenProvider {
 
     private final Environment env;
+
+    @Value("${JWT.SECRET_KEY}")
+    private String secretKey;
 
     public String getUuid(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -45,13 +50,14 @@ public class JwtTokenProvider {
 
         log.info("generateToken {} ", userDetails);
         return Jwts.builder()
-                .setClaims(extractClaims)
+                .setClaims(extractClaims) // 정보저장
                 .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + env.getProperty("JWT.EXPIRATION_TIME", Long.class)))
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .setIssuedAt(new Date(System.currentTimeMillis())) // 토큰 발행 시간
+                .setExpiration(new Date(System.currentTimeMillis() + env.getProperty("JWT.EXPIRATION_TIME", Long.class)))// 토큰 유효시간
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256) // 암호화 알고리즘
                 .compact();
     }
+
 
     public String validateAndGetUserUuid(String token) {
         try {
@@ -66,6 +72,9 @@ public class JwtTokenProvider {
         final String uuid = getUuid(token);
         return (uuid.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
+
+
+
 
 
     private boolean isTokenExpired(String token) {
@@ -99,5 +108,4 @@ public class JwtTokenProvider {
         }
         return null;
     }
-
 }
