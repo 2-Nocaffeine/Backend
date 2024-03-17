@@ -3,8 +3,13 @@ package com.nocaffeine.ssgclone.product.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
+@NoArgsConstructor
 public class Total {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,9 +23,19 @@ public class Total {
     private int sales;
 
     @NotNull
-    private Double review_average;
+    @Column(name = "rate_average")
+    private Double rateAverage;
 
     @NotNull
-    private int review_count;
+    @Column(name = "review_count")
+    private int reviewCount;
+
+    @Builder
+    public Total(Product product, int sales, Double rateAverage, int reviewCount) {
+        this.product = product;
+        this.sales = sales;
+        this.rateAverage = rateAverage;
+        this.reviewCount = reviewCount;
+    }
 
 }

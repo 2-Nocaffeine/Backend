@@ -1,14 +1,19 @@
 package com.nocaffeine.ssgclone.product.presentation;
 
 import com.nocaffeine.ssgclone.common.ResponseDto;
-import com.nocaffeine.ssgclone.product.dto.ProductResponseDto;
+import com.nocaffeine.ssgclone.product.dto.request.AddOptionResponse;
+import com.nocaffeine.ssgclone.product.dto.request.ColorOptionResponse;
+import com.nocaffeine.ssgclone.product.dto.request.ProductResponse;
 import com.nocaffeine.ssgclone.product.application.ProductService;
+import com.nocaffeine.ssgclone.product.dto.request.SizeOptionResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,7 +24,7 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping("/{id}")
-    public ResponseDto<ProductResponseDto> getProduct(@PathVariable Long id) {
+    public ResponseDto<ProductResponse> getProduct(@PathVariable Long id) {
         return productService.getProduct(id);
         // @PathVariable 은 URL 경로에 변수를 넣어주는 것이다.
         // 작동원리는 @PathVariable 을 통해 id를 받아온다.
@@ -28,5 +33,19 @@ public class ProductController {
         // 이러한 동작은 productService.getProduct(id) 메소드에서 orElse(null) 이기 때문이다.
     }
 
+    @GetMapping("/{id}/size")
+    public ResponseDto<List<SizeOptionResponse>> getSizeOptions(@PathVariable Long id) {
+        return productService.getSizeOptions(id);
+    }
+
+    @GetMapping("/{id}/color")
+    public ResponseDto<List<ColorOptionResponse>> getColorOptions(@PathVariable Long id) {
+        return productService.getColorOptions(id);
+    }
+
+    @GetMapping("/{id}/add")
+    public ResponseDto<List<AddOptionResponse>> getAddOptions(@PathVariable Long id) {
+        return productService.getAddOptions(id);
+    }
 
 }
