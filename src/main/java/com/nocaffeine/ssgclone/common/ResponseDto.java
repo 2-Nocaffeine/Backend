@@ -12,6 +12,13 @@ public class ResponseDto<T> {
     private String message;
     private T data;
     private Error error;
+
+    public ResponseDto(boolean success, String message, T data,Error error) {
+        this.success = success;
+        this.message = message;
+        this.data = data;
+        this.error = error;
+    }
     public static <T> ResponseDto<T> success(String message) {
         return new ResponseDto<>(true, message, null,null);
     }
@@ -27,10 +34,10 @@ public class ResponseDto<T> {
     public static <T> ResponseDto<T> fail(String code, T data,String message) {
         return new ResponseDto<>(false, message, data, new Error(code));
     }
+
     @Getter
     @AllArgsConstructor
     static class Error {
         private String code;
     }
-
 }
