@@ -1,6 +1,6 @@
 package com.nocaffeine.ssgclone.product.presentation;
 
-import com.nocaffeine.ssgclone.common.CommonResponse;
+import com.nocaffeine.ssgclone.common.ResponseDto;
 import com.nocaffeine.ssgclone.product.dto.ProductResponseDto;
 import com.nocaffeine.ssgclone.product.application.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping("/{id}")
-    public CommonResponse<ProductResponseDto> getProduct(@PathVariable Long id) {
+    public ResponseDto<ProductResponseDto> getProduct(@PathVariable Long id) {
         return productService.getProduct(id);
         // @PathVariable 은 URL 경로에 변수를 넣어주는 것이다.
         // 작동원리는 @PathVariable 을 통해 id를 받아온다.
