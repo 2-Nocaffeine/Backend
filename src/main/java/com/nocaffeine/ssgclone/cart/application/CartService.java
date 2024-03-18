@@ -2,12 +2,14 @@ package com.nocaffeine.ssgclone.cart.application;
 
 
 import com.nocaffeine.ssgclone.cart.dto.request.CartRemoveListRequest;
-import com.nocaffeine.ssgclone.common.CommonResponse;
+import com.nocaffeine.ssgclone.common.ResponseDto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 
 public interface CartService {
 
-    CommonResponse<Void> addCart(Long productOptionId, String memberUuid);
-    CommonResponse<Void> removeCart(CartRemoveListRequest cartRemoveListRequest, String memberUuid);
+    ResponseDto<Void> addCart(Long productOptionId, String memberUuid);
+    ResponseDto<Void> removeCart(CartRemoveListRequest cartRemoveListRequest, String memberUuid);
 
 }

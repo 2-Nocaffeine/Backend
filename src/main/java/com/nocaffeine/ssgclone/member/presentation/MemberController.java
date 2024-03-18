@@ -1,9 +1,9 @@
 package com.nocaffeine.ssgclone.member.presentation;
 
-import com.nocaffeine.ssgclone.common.CommonResponse;
-import com.nocaffeine.ssgclone.member.dto.request.MemberLoginRequestDto;
-import com.nocaffeine.ssgclone.member.dto.request.MemberPasswordRequestDto;
-import com.nocaffeine.ssgclone.member.dto.request.MemberSaveRequestDto;
+import com.nocaffeine.ssgclone.common.ResponseDto;
+import com.nocaffeine.ssgclone.member.dto.request.MemberLoginRequest;
+import com.nocaffeine.ssgclone.member.dto.request.MemberPasswordRequest;
+import com.nocaffeine.ssgclone.member.dto.request.MemberSaveRequest;
 import com.nocaffeine.ssgclone.member.application.MemberService;
 import com.nocaffeine.ssgclone.common.security.JwtTokenProvider;
 import com.nocaffeine.ssgclone.member.dto.response.MemberDetailResponse;
@@ -26,25 +26,26 @@ public class MemberController {
 
     @Operation(summary = "이메일 중복 검증", description = "이메일 중복 검증", tags = {"Duplication Email"})
     @GetMapping("/duplication")
-    public CommonResponse<Void> duplicationEmail(@RequestParam String email) {
+    public ResponseDto<Void> duplicationEmail(@RequestParam String email) {
         return memberService.duplicationEmail(email);
     }
 
     @Operation(summary = "회원가입", description = "회원가입", tags = {"Sign Up"})
     @PostMapping("/member")
-    public CommonResponse<Void> createMember(@Valid @RequestBody MemberSaveRequestDto memberSaveDto) {
-        return memberService.signUp(memberSaveDto);
+    public ResponseDto<Void> memberCreate(@Valid @RequestBody MemberSaveRequest memberSaveDto) {
+        return memberService.addMember(memberSaveDto);
     }
 
     @Operation(summary = "로그인", description = "로그인", tags = {"Log In"})
     @PostMapping("/member/login")
-    public ResponseEntity<CommonResponse<Object>> logIn(@RequestBody MemberLoginRequestDto memberLoginRequestDto) {
-        return memberService.logIn(memberLoginRequestDto);
+    public ResponseEntity<ResponseDto<TokenResponse>> logIn(@RequestBody MemberLoginRequest memberLoginRequest) {
+        // todo : 이미 로그인 되어있을 경우?
+        return memberService.logIn(memberLoginRequest);
     }
 
     @Operation(summary = "비밀번호 변경", description = "비밀번호 변경", tags = {"Change Password"})
     @PatchMapping("/member/password")
-    public CommonResponse<Void> changePassword(@RequestBody MemberPasswordRequestDto memberPasswordRequestDto) {
+    public ResponseDto<Void> changePassword(@RequestBody MemberPasswordRequest memberPasswordRequest) {
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
         return memberService.updatePassword(memberUuid, memberPasswordRequest);
     }
