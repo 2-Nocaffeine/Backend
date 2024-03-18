@@ -8,7 +8,6 @@ import com.nocaffeine.ssgclone.member.dto.request.MemberSaveRequestDto;
 import org.springframework.http.ResponseEntity;
 
 public interface MemberService {
-
     public CommonResponse<Void> duplicationEmail(String email);
     public CommonResponse<Void> signUp(MemberSaveRequestDto memberSaveRequestDto);
 
@@ -16,4 +15,7 @@ public interface MemberService {
 
     public CommonResponse<Void> changePassword(String memberUuid, MemberPasswordRequestDto memberPasswordRequestDto);
 
+    ResponseDto<MemberDetailResponse> findMember(String memberUuid);
+
+    ResponseDto<Void> removeMember(String memberUuid);
 }

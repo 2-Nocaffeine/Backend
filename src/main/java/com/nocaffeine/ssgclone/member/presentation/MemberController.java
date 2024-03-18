@@ -6,6 +6,8 @@ import com.nocaffeine.ssgclone.member.dto.request.MemberPasswordRequestDto;
 import com.nocaffeine.ssgclone.member.dto.request.MemberSaveRequestDto;
 import com.nocaffeine.ssgclone.member.application.MemberService;
 import com.nocaffeine.ssgclone.common.security.JwtTokenProvider;
+import com.nocaffeine.ssgclone.member.dto.response.MemberDetailResponse;
+import com.nocaffeine.ssgclone.member.dto.response.TokenResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +46,21 @@ public class MemberController {
     @PatchMapping("/member/password")
     public CommonResponse<Void> changePassword(@RequestBody MemberPasswordRequestDto memberPasswordRequestDto) {
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
-        return memberService.changePassword(memberUuid, memberPasswordRequestDto);
+        return memberService.updatePassword(memberUuid, memberPasswordRequest);
     }
+
+    @Operation(summary = "회원 상세 정보", description = "회원 상세 정보", tags = {"Member Detail"})
+    @GetMapping("/member")
+    public ResponseDto<MemberDetailResponse> memberDetail() {
+        String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
+        return memberService.findMember(memberUuid);
+    }
+
+    @Operation(summary = "회원 탈퇴", description = "회원 탈퇴", tags = {"Remove Member"})
+    @DeleteMapping("/member")
+    public ResponseDto<Void> memberRemove() {
+        String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
+        return memberService.removeMember(memberUuid);
+    }
+
 }

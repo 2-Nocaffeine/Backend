@@ -3,9 +3,11 @@ package com.nocaffeine.ssgclone.member.application;
 import com.nocaffeine.ssgclone.common.CommonResponse;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
 import com.nocaffeine.ssgclone.member.domain.Member;
-import com.nocaffeine.ssgclone.member.dto.request.MemberLoginRequestDto;
-import com.nocaffeine.ssgclone.member.dto.request.MemberPasswordRequestDto;
-import com.nocaffeine.ssgclone.member.dto.request.MemberSaveRequestDto;
+import com.nocaffeine.ssgclone.member.dto.request.MemberLoginRequest;
+import com.nocaffeine.ssgclone.member.dto.request.MemberPasswordRequest;
+import com.nocaffeine.ssgclone.member.dto.request.MemberSaveRequest;
+import com.nocaffeine.ssgclone.member.dto.response.MemberDetailResponse;
+import com.nocaffeine.ssgclone.member.dto.response.TokenResponse;
 import com.nocaffeine.ssgclone.member.infrastructure.MemberRepository;
 import com.nocaffeine.ssgclone.common.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -50,11 +52,12 @@ public class MemberServiceImp implements MemberService {
     public CommonResponse<Void> signUp(MemberSaveRequestDto memberSaveRequestDto) {
 
         try{
-            duplicationEmail(memberSaveRequestDto.getEmail());
+            duplicationEmail(memberSaveRequest.getEmail());
         } catch (BaseException e){
             throw new BaseException(DUPLICATE_EMAIL);
         }
-        createMember(memberSaveRequestDto);
+
+        createMember(memberSaveRequest);
 
         return CommonResponse.success("CreateMember success");
     }
@@ -70,7 +73,7 @@ public class MemberServiceImp implements MemberService {
             authenticateManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             member.getUsername(),
-                            memberLoginRequestDto.getPassword()
+                            memberLoginRequest.getPassword()
                     ));
         } catch (Exception e){
             throw new BaseException(FAILED_TO_LOGIN);
@@ -84,6 +87,9 @@ public class MemberServiceImp implements MemberService {
 
         return ResponseEntity.ok().headers(httpHeaders)
                 .body(CommonResponse.success("login success", token));
+                        TokenResponse.builder()
+                                .accessToken(token)
+                                .build()));
     }
 
     /**
@@ -101,26 +107,57 @@ public class MemberServiceImp implements MemberService {
         }
 
         // 비밀번호 변경
-        member.changeHashPassword(memberPasswordRequestDto.getPassword());
+        member.updateHashPassword(memberPasswordRequest.getPassword());
 
         return CommonResponse.success("비밀번호를 변경했습니다.");
     }
 
+    /**
+     * 회원 정보 조회
+     */
+    @Override
+    public ResponseDto<MemberDetailResponse> findMember(String memberUuid) {
+        Member member = memberRepository.findByUuid(memberUuid)
+                .orElseThrow(() -> new BaseException("회원을 찾을 수 없습니다."));
+
+        return ResponseDto.success("FindMember Success",
+                MemberDetailResponse.builder()
+                .email(member.getEmail())
+                .name(member.getName())
+                .phoneNumber(member.getPhoneNumber())
+                .build());
+    }
 
 
-    private void createMember(MemberSaveRequestDto memberSaveRequestDto) {
+    /**
+     * 회원 삭제
+     */
+    @Override
+    @Transactional
+    public ResponseDto<Void> removeMember(String memberUuid) {
+        Member member = memberRepository.findByUuid(memberUuid)
+                .orElseThrow(() -> new BaseException("회원을 찾을 수 없습니다."));
+
+        memberRepository.delete(member);
+
+        return ResponseDto.success("RemoveMember Success.");
+    }
+
+
+
+    private void createMember(MemberSaveRequest memberSaveRequest) {
         String uuid = UUID.randomUUID().toString();
 
         Member member = Member.builder()
-                .email(memberSaveRequestDto.getEmail())
-                .password(memberSaveRequestDto.getPassword())
+                .email(memberSaveRequest.getEmail())
+                .password(memberSaveRequest.getPassword())
                 .uuid(uuid)
-                .name(memberSaveRequestDto.getName())
-                .phoneNumber(memberSaveRequestDto.getPhoneNumber())
+                .name(memberSaveRequest.getName())
+                .phoneNumber(memberSaveRequest.getPhoneNumber())
                 .build();
 
         // 비밀번호 암호화
-        member.hashPassword(memberSaveRequestDto.getPassword());
+        member.hashPassword(memberSaveRequest.getPassword());
 
         memberRepository.save(member);
     }
