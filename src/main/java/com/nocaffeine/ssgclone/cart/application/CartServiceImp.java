@@ -6,6 +6,7 @@ import com.nocaffeine.ssgclone.cart.dto.request.CartRemoveListRequest;
 import com.nocaffeine.ssgclone.cart.infrastructure.CartRepository;
 import com.nocaffeine.ssgclone.common.ResponseDto;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
+import com.nocaffeine.ssgclone.common.exception.BaseResponseStatus;
 import com.nocaffeine.ssgclone.member.domain.Member;
 import com.nocaffeine.ssgclone.member.infrastructure.MemberRepository;
 import com.nocaffeine.ssgclone.product.domain.ProductOption;
@@ -16,6 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.MEMBERS_STATUS_IS_NOT_FOUND;
+import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.NO_EXIST_MEMBERS;
 
 @Service
 @RequiredArgsConstructor
@@ -34,10 +38,10 @@ public class CartServiceImp implements CartService {
     @Transactional
     public ResponseDto<Void> addCart(Long productOptionId, String memberUuid) {
         Member member = memberRepository.findByUuid(memberUuid)
-                .orElseThrow(() -> new BaseException("존재하지 않는 회원입니다."));
+                .orElseThrow(() -> new BaseException(MEMBERS_STATUS_IS_NOT_FOUND));
 
         ProductOption productOption = productOptionRepository.findById(productOptionId)
-                .orElseThrow(() -> new BaseException("존재하지 않는 상품입니다."));
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
 
         Cart cart = Cart.builder()
                 .member(member)

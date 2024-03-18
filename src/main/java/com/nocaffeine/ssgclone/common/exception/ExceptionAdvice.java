@@ -11,25 +11,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ExceptionAdvice {
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseDto<?> illegalArgumentException(IllegalArgumentException e) {
-        return ResponseDto.fail( "error", e.getMessage());
-    }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseDto<?> methodArgumentNotValidException(MethodArgumentNotValidException e) {
-        String errorMessage = e.getBindingResult()
-                .getAllErrors()
-                .get(0)
-                .getDefaultMessage();
-        return ResponseDto.fail("error", errorMessage);
-    }
-
     @ExceptionHandler(BaseException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    @ResponseStatus(HttpStatus.OK)
     public ResponseDto<?> baseException(BaseException e) {
-        return ResponseDto.fail("error", e.getMessage());
+        return ResponseDto.fail(e.getErrorCode(), e.getMessage());
     }
+
 }

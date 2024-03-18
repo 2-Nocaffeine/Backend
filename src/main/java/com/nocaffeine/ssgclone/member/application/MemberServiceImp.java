@@ -19,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
+import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.*;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -35,7 +37,7 @@ public class MemberServiceImp implements MemberService {
     @Override
     public ResponseDto<Void> duplicationEmail(String email) {
         if (memberRepository.findByEmail(email).isPresent()) {
-            throw new BaseException("이미 사용중인 아이디 입니다. 다른 아이디를 입력해주세요.");
+            throw new BaseException(DUPLICATE_EMAIL);
         }
         return ResponseDto.success("duplicationEmail success");
     }
@@ -50,7 +52,7 @@ public class MemberServiceImp implements MemberService {
         try{
             duplicationEmail(memberSaveRequestDto.getEmail());
         } catch (BaseException e){
-            throw new BaseException("아이디 중복체크를 해주세요.");
+            throw new BaseException(DUPLICATE_EMAIL);
         }
         createMember(memberSaveRequestDto);
 
@@ -63,7 +65,7 @@ public class MemberServiceImp implements MemberService {
     @Override
     public ResponseEntity<ResponseDto<Object>> logIn(MemberLoginRequestDto memberLoginRequestDto) {
         Member member = memberRepository.findByEmail(memberLoginRequestDto.getEmail())
-                .orElseThrow(() -> new BaseException("아이디 또는 비밀번호가 일치하지 않습니다. 다시 확인하신 후 입력해주세요."));
+                .orElseThrow(() -> new BaseException(FAILED_TO_LOGIN));
         try{
             authenticateManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -71,7 +73,7 @@ public class MemberServiceImp implements MemberService {
                             memberLoginRequestDto.getPassword()
                     ));
         } catch (Exception e){
-            throw new BaseException("아이디 또는 비밀번호가 일치하지 않습니다. 다시 확인하신 후 입력해주세요.");
+            throw new BaseException(FAILED_TO_LOGIN);
         }
 
         String token = createToken(member);
@@ -92,10 +94,10 @@ public class MemberServiceImp implements MemberService {
     public ResponseDto<Void> changePassword(String memberUuid, MemberPasswordRequestDto memberPasswordRequestDto) {
         // 회원 정보 조회
         Member member = memberRepository.findByUuid(memberUuid)
-                .orElseThrow(() -> new BaseException("회원을 찾을 수 없습니다."));
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
 
         if(!memberPasswordRequestDto.password.equals(memberPasswordRequestDto.getPasswordCheck())){
-            throw new BaseException("비밀번호를 다시 한번 확인 해 주세요.");
+            throw new BaseException(FAILED_TO_PASSWORD);
         }
 
         // 비밀번호 변경
