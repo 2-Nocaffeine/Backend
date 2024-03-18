@@ -1,6 +1,6 @@
 package com.nocaffeine.ssgclone.member.application;
 
-import com.nocaffeine.ssgclone.common.ResponseDto;
+import com.nocaffeine.ssgclone.common.CommonResponse;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
 import com.nocaffeine.ssgclone.member.domain.Member;
 import com.nocaffeine.ssgclone.member.dto.request.MemberLoginRequestDto;
@@ -35,11 +35,11 @@ public class MemberServiceImp implements MemberService {
      * 아이디 중복 확인
      */
     @Override
-    public ResponseDto<Void> duplicationEmail(String email) {
+    public CommonResponse<Void> duplicationEmail(String email) {
         if (memberRepository.findByEmail(email).isPresent()) {
             throw new BaseException(DUPLICATE_EMAIL);
         }
-        return ResponseDto.success("duplicationEmail success");
+        return CommonResponse.success("duplicationEmail success");
     }
 
     /**
@@ -47,7 +47,7 @@ public class MemberServiceImp implements MemberService {
      */
     @Override
     @Transactional
-    public ResponseDto<Void> signUp(MemberSaveRequestDto memberSaveRequestDto) {
+    public CommonResponse<Void> signUp(MemberSaveRequestDto memberSaveRequestDto) {
 
         try{
             duplicationEmail(memberSaveRequestDto.getEmail());
@@ -56,14 +56,14 @@ public class MemberServiceImp implements MemberService {
         }
         createMember(memberSaveRequestDto);
 
-        return ResponseDto.success("CreateMember success");
+        return CommonResponse.success("CreateMember success");
     }
 
     /**
      * 로그인
      */
     @Override
-    public ResponseEntity<ResponseDto<Object>> logIn(MemberLoginRequestDto memberLoginRequestDto) {
+    public ResponseEntity<CommonResponse<Object>> logIn(MemberLoginRequestDto memberLoginRequestDto) {
         Member member = memberRepository.findByEmail(memberLoginRequestDto.getEmail())
                 .orElseThrow(() -> new BaseException(FAILED_TO_LOGIN));
         try{
@@ -83,7 +83,7 @@ public class MemberServiceImp implements MemberService {
         httpHeaders.add("Authorization", token);
 
         return ResponseEntity.ok().headers(httpHeaders)
-                .body(ResponseDto.success("login success", token));
+                .body(CommonResponse.success("login success", token));
     }
 
     /**
@@ -91,7 +91,7 @@ public class MemberServiceImp implements MemberService {
      */
     @Override
     @Transactional
-    public ResponseDto<Void> changePassword(String memberUuid, MemberPasswordRequestDto memberPasswordRequestDto) {
+    public CommonResponse<Void> changePassword(String memberUuid, MemberPasswordRequestDto memberPasswordRequestDto) {
         // 회원 정보 조회
         Member member = memberRepository.findByUuid(memberUuid)
                 .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
@@ -103,7 +103,7 @@ public class MemberServiceImp implements MemberService {
         // 비밀번호 변경
         member.changeHashPassword(memberPasswordRequestDto.getPassword());
 
-        return ResponseDto.success("비밀번호를 변경했습니다.");
+        return CommonResponse.success("비밀번호를 변경했습니다.");
     }
 
 
