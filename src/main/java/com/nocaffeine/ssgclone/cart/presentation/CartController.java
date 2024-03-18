@@ -3,7 +3,7 @@ package com.nocaffeine.ssgclone.cart.presentation;
 
 import com.nocaffeine.ssgclone.cart.application.CartService;
 import com.nocaffeine.ssgclone.cart.dto.request.CartRemoveListRequest;
-import com.nocaffeine.ssgclone.common.ResponseDto;
+import com.nocaffeine.ssgclone.common.CommonResponse;
 import com.nocaffeine.ssgclone.common.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,13 +22,13 @@ public class CartController {
     private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/cart")
-    public ResponseDto<Void> addCart(String token, Long productOptionId) {
+    public CommonResponse<Void> addCart(String token, Long productOptionId) {
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
         return cartService.addCart(productOptionId, memberUuid);
     }
 
     @DeleteMapping("/cart")
-    public ResponseDto<Void> removeCart(String token, CartRemoveListRequest cartRemoveListRequest) {
+    public CommonResponse<Void> removeCart(String token, CartRemoveListRequest cartRemoveListRequest) {
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
         return cartService.removeCart(cartRemoveListRequest, memberUuid);
     }
