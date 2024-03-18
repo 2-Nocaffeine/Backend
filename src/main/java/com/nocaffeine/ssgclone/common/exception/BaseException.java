@@ -1,27 +1,15 @@
 package com.nocaffeine.ssgclone.common.exception;
 
+
 import lombok.Getter;
+
 
 @Getter
 public class BaseException extends RuntimeException{
-    public BaseException() {
-        super();
-    }
+    private final BaseResponseStatus errorCode;
 
-    public BaseException(String message) {
-        super(message);
-    }
-
-
-    public BaseException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public BaseException(Throwable cause) {
-        super(cause);
-    }
-
-    protected BaseException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+    public BaseException(BaseResponseStatus errorCode) {
+        super(errorCode.getMessage());
+        this.errorCode = errorCode;
     }
 }
