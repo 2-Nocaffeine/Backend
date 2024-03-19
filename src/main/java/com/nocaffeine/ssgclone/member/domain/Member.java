@@ -50,7 +50,7 @@ public class Member extends BaseTimeEntity implements UserDetails{
         this.address = address;
     }
 
-    public void changeHashPassword(String password) {
+    public void updateHashPassword(String password) {
         this.password = new BCryptPasswordEncoder().encode(password);
     }
 
