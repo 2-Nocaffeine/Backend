@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class AddOption extends BaseTimeEntity {
+public class AddOption {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

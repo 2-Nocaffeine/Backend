@@ -1,4 +1,4 @@
-package com.nocaffeine.ssgclone.product.dto.request;
+package com.nocaffeine.ssgclone.product.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddOptionResponse {
+public class SizeOptionResponse {
 
-    // AddOption 엔티티의 필드들을 가져온다.
+    // SizeOption 엔티티의 필드들을 가져온다.
     private Long id;
-    private String optionName;
+    private String size;
 }

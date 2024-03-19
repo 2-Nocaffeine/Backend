@@ -1,10 +1,10 @@
 package com.nocaffeine.ssgclone.product.application;
 
 import com.nocaffeine.ssgclone.common.ResponseDto;
-import com.nocaffeine.ssgclone.product.dto.request.AddOptionResponse;
-import com.nocaffeine.ssgclone.product.dto.request.ColorOptionResponse;
-import com.nocaffeine.ssgclone.product.dto.request.ProductResponse;
-import com.nocaffeine.ssgclone.product.dto.request.SizeOptionResponse;
+import com.nocaffeine.ssgclone.product.dto.response.AddOptionResponse;
+import com.nocaffeine.ssgclone.product.dto.response.ColorOptionResponse;
+import com.nocaffeine.ssgclone.product.dto.response.ProductResponse;
+import com.nocaffeine.ssgclone.product.dto.response.SizeOptionResponse;
 
 import java.util.List;
 

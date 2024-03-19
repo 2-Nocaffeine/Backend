@@ -1,4 +1,4 @@
-package com.nocaffeine.ssgclone.product.dto.request;
+package com.nocaffeine.ssgclone.product.dto.response;
 
 import lombok.*;
 

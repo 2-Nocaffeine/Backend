@@ -2,12 +2,13 @@ package com.nocaffeine.ssgclone.product.application;
 
 import com.nocaffeine.ssgclone.common.ResponseDto;
 import com.nocaffeine.ssgclone.product.domain.*;
-import com.nocaffeine.ssgclone.product.dto.request.AddOptionResponse;
-import com.nocaffeine.ssgclone.product.dto.request.ColorOptionResponse;
-import com.nocaffeine.ssgclone.product.dto.request.ProductResponse;
-import com.nocaffeine.ssgclone.product.dto.request.SizeOptionResponse;
+import com.nocaffeine.ssgclone.product.dto.response.AddOptionResponse;
+import com.nocaffeine.ssgclone.product.dto.response.ColorOptionResponse;
+import com.nocaffeine.ssgclone.product.dto.response.ProductResponse;
+import com.nocaffeine.ssgclone.product.dto.response.SizeOptionResponse;
 import com.nocaffeine.ssgclone.product.infrastructure.ProductOptionRepository;
 import com.nocaffeine.ssgclone.product.infrastructure.ProductRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,7 @@ public class ProductServiceImpl implements ProductService{
     private final ProductRepository productRepository;
     private final ProductOptionRepository productOptionRepository;
 
-
+    @Transactional
     @Override
     public ResponseDto<ProductResponse> getProduct(Long id) {
         Optional<Product> product = productRepository.findById(id);
@@ -44,6 +45,7 @@ public class ProductServiceImpl implements ProductService{
                 .build();
     }
 
+    @Transactional
     @Override
     public ResponseDto<List<SizeOptionResponse>> getSizeOptions(Long id) {
         List<ProductOption> productOptions = productOptionRepository.findByProductId(id);
@@ -76,6 +78,7 @@ public class ProductServiceImpl implements ProductService{
                 .build();
     }
 
+    @Transactional
     @Override
     public ResponseDto<List<ColorOptionResponse>> getColorOptions(Long id) {
         List<ProductOption> productOptions = productOptionRepository.findByProductId(id);
@@ -108,6 +111,7 @@ public class ProductServiceImpl implements ProductService{
                 .build();
     }
 
+    @Transactional
     @Override
     public ResponseDto<List<AddOptionResponse>> getAddOptions(Long id) {
         List<ProductOption> productOptions = productOptionRepository.findByProductId(id);

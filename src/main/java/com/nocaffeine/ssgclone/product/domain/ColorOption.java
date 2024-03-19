@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class ColorOption extends BaseTimeEntity {
+public class ColorOption {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,4 +22,8 @@ public class ColorOption extends BaseTimeEntity {
     public ColorOption(String color) {
         this.color = color;
     }
+
+//    public String getName() {
+//        return this.color;
+//    }
 }
