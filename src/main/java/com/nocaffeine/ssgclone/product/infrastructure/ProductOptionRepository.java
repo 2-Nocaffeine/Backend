@@ -18,5 +18,4 @@ public interface ProductOptionRepository extends JpaRepository<ProductOption, Lo
 
     @Query("SELECT po FROM ProductOption po JOIN FETCH po.product JOIN FETCH po.sizeOption JOIN FETCH po.colorOption JOIN FETCH po.addOption WHERE po.id = :id")
     Optional<ProductOption> findById(@Param("id") Long id);
-
 }
