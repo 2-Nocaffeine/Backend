@@ -1,14 +1,15 @@
 package com.nocaffeine.ssgclone.category.application;
 
 import com.nocaffeine.ssgclone.category.domain.MediumCategory;
+import com.nocaffeine.ssgclone.category.domain.ProductList;
 import com.nocaffeine.ssgclone.category.domain.SmallCategory;
 import com.nocaffeine.ssgclone.category.domain.TinyCategory;
-import com.nocaffeine.ssgclone.category.dto.request.MediumCategoryRequest;
-import com.nocaffeine.ssgclone.category.dto.response.MediumCategoryDto;
-import com.nocaffeine.ssgclone.category.dto.response.SmallCategoryDto;
-import com.nocaffeine.ssgclone.category.dto.response.TinyCategoryDto;
-import com.nocaffeine.ssgclone.category.infrastructure.LargeCategoryRepository;
+import com.nocaffeine.ssgclone.category.dto.response.MediumCategoryResponse;
+import com.nocaffeine.ssgclone.category.dto.response.ProductListResponse;
+import com.nocaffeine.ssgclone.category.dto.response.SmallCategoryResponse;
+import com.nocaffeine.ssgclone.category.dto.response.TinyCategoryResponse;
 import com.nocaffeine.ssgclone.category.infrastructure.MediumCategoryRepository;
+import com.nocaffeine.ssgclone.category.infrastructure.ProductListRepository;
 import com.nocaffeine.ssgclone.category.infrastructure.SmallCategoryRepository;
 import com.nocaffeine.ssgclone.category.infrastructure.TinyCategoryRepository;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
@@ -19,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.No_Tiny_Category;
+import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.No_TINY_CATEGORY;
 
 @Service
 @RequiredArgsConstructor
@@ -29,28 +30,29 @@ public class CategoryServiceImp implements CategoryService{
     private final MediumCategoryRepository mediumCategoryRepository;
     private final SmallCategoryRepository smallCategoryRepository;
     private final TinyCategoryRepository tinyCategoryRepository;
+    private final ProductListRepository productListRepository;
 
     @Override
-    public List<MediumCategoryDto> findLargetoMedium(Long large_id) {
+    public List<MediumCategoryResponse> findLargetoMedium(Long large_id) {
 
-        List<MediumCategoryDto> mediumCategoryDtoList = new ArrayList<>();
+        List<MediumCategoryResponse> mediumCategoryDtoList = new ArrayList<>();
 
         for (MediumCategory mediumCategory : mediumCategoryRepository.findByLargeCategory_Id(large_id)) {
-            MediumCategoryDto mediumCategoryDto = new MediumCategoryDto();
-            mediumCategoryDto.setId(mediumCategory.getId());
-            mediumCategoryDto.setName(mediumCategory.getName());
+            MediumCategoryResponse mediumCategoryDto = MediumCategoryResponse.builder()
+                    .id(mediumCategory.getId())
+                    .name(mediumCategory.getName())
+                    .build();
             mediumCategoryDtoList.add(mediumCategoryDto);
         }
 
-        return mediumCategoryDtoList;
     }
 
     @Override
-    public List<SmallCategoryDto> findMediumtoSmall(Long medium_id) {
-        List<SmallCategoryDto> smallCategoryDtoList = new ArrayList<>();
+    public List<SmallCategoryResponse> findMediumtoSmall(Long medium_id) {
+        List<SmallCategoryResponse> smallCategoryDtoList = new ArrayList<>();
 
         for (SmallCategory smallCategory : smallCategoryRepository.findByMediumCategory_Id(medium_id)) {
-            SmallCategoryDto smallCategoryDto = new SmallCategoryDto();
+            SmallCategoryResponse smallCategoryDto = new SmallCategoryResponse();
             smallCategoryDto.setId(smallCategory.getId());
             smallCategoryDto.setName(smallCategory.getName());
             smallCategoryDtoList.add(smallCategoryDto);
@@ -60,20 +62,30 @@ public class CategoryServiceImp implements CategoryService{
     }
 
     @Override
-    public List<TinyCategoryDto> findSmalltoTiny(Long small_id) {
-        List<TinyCategoryDto> TinyCategoryDtoList = new ArrayList<>();
+    public List<TinyCategoryResponse> findSmalltoTiny(Long small_id) {
+        List<TinyCategoryResponse> TinyCategoryDtoList = new ArrayList<>();
 
         for (TinyCategory tinyCategory : tinyCategoryRepository.findBySmallCategory_Id(small_id)) {
             if (tinyCategory == null) {
-                throw new BaseException(No_Tiny_Category);
+                throw new BaseException(No_TINY_CATEGORY);
             }
-            TinyCategoryDto tinyCategoryDto = new TinyCategoryDto();
+            TinyCategoryResponse tinyCategoryDto = new TinyCategoryResponse();
             tinyCategoryDto.setId(tinyCategory.getId());
             tinyCategoryDto.setName(tinyCategory.getName());
             TinyCategoryDtoList.add(tinyCategoryDto);
         }
 
         return TinyCategoryDtoList;
+    }
+
+    @Override
+    public List<ProductList> findProductcategory(Long largeId) {
+        List<ProductList> productcategorylist = new ArrayList<>();
+
+        for (ProductList productList : productListRepository.findByLargeCategory_Id(largeId){
+            ProductListResponse productcategory = new ProductListResponse();
+            productcategorylist.add(productcategory.setProduct(productList.getProduct()));
+        }
     }
 
 }

@@ -6,12 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class SmallCategoryDto {
+public class ProductListResponse {
 
-    private Long id;
-    private String name;
-    private Long mediumCategoryId;
 }
