@@ -1,6 +1,6 @@
 package com.nocaffeine.ssgclone.product.application;
 
-import com.nocaffeine.ssgclone.common.ResponseDto;
+import com.nocaffeine.ssgclone.common.CommonResponse;
 import com.nocaffeine.ssgclone.product.domain.ProductOption;
 import com.nocaffeine.ssgclone.product.dto.response.ProductOptionResponse;
 import com.nocaffeine.ssgclone.product.infrastructure.ProductOptionRepository;
@@ -16,16 +16,16 @@ public class ProductOptionServiceImpl implements ProductOptionService {
 
     private final ProductOptionRepository productOptionRepository;
 
-    @Transactional
-    @Override
-    public ResponseDto<ProductOptionResponse> getProductOptionSelected(Long id) {
-        Optional<ProductOption> productOption = productOptionRepository.findById(id);
-        if(productOption.isPresent()){
-            ProductOptionResponse productOptionResponseDto = convertToDto(productOption.get());
-            return ResponseDto.success("옵션 선택을 완료한 최종 구매 가능 상품을 찾았습니다.", productOptionResponseDto);
-        }
-        return ResponseDto.fail("옵션 선택을 완료한 최종 구매 가능 상품을 찾을 수 없습니다.", "ID가 " + id + "인 옵션 선택을 완료한 최종 구매 가능 상품을 찾을 수 없습니다.");
-    }
+//    @Transactional
+//    @Override
+//    public CommonResponse<ProductOptionResponse> getProductOptionSelected(Long id) {
+//        Optional<ProductOption> productOption = productOptionRepository.findById(id);
+//        if(productOption.isPresent()){
+//            ProductOptionResponse productOptionResponseDto = convertToDto(productOption.get());
+//            return CommonResponse.success("옵션 선택을 완료한 최종 구매 가능 상품을 찾았습니다.", productOptionResponseDto);
+//        }
+//        return CommonResponse.fail("옵션 선택을 완료한 최종 구매 가능 상품을 찾을 수 없습니다.", "ID가 " + id + "인 옵션 선택을 완료한 최종 구매 가능 상품을 찾을 수 없습니다.");
+//    }
 
     private ProductOptionResponse convertToDto(ProductOption productOption) {
         return ProductOptionResponse.builder()

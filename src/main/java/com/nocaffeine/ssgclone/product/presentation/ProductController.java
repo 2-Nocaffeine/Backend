@@ -1,6 +1,6 @@
 package com.nocaffeine.ssgclone.product.presentation;
 
-import com.nocaffeine.ssgclone.common.ResponseDto;
+import com.nocaffeine.ssgclone.common.CommonResponse;
 import com.nocaffeine.ssgclone.product.dto.response.AddOptionResponse;
 import com.nocaffeine.ssgclone.product.dto.response.ColorOptionResponse;
 import com.nocaffeine.ssgclone.product.dto.response.ProductResponse;
@@ -24,23 +24,23 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping("/{id}")
-    public ResponseDto<ProductResponse> getProduct(@PathVariable Long id) {
-        return productService.getProduct(id);
+    public CommonResponse<ProductResponse> getProduct(@PathVariable Long id) {
+        return CommonResponse.success("Product retrieved successfully", productService.getProduct(id));
     }
 
-    @GetMapping("/{id}/size")
-    public ResponseDto<List<SizeOptionResponse>> getSizeOptions(@PathVariable Long id) {
-        return productService.getSizeOptions(id);
-    }
-
-    @GetMapping("/{id}/color")
-    public ResponseDto<List<ColorOptionResponse>> getColorOptions(@PathVariable Long id) {
-        return productService.getColorOptions(id);
-    }
-
-    @GetMapping("/{id}/add")
-    public ResponseDto<List<AddOptionResponse>> getAddOptions(@PathVariable Long id) {
-        return productService.getAddOptions(id);
-    }
+//    @GetMapping("/{id}/size")
+//    public CommonResponse<List<SizeOptionResponse>> getSizeOptions(@PathVariable Long id) {
+//        return productService.getSizeOptions(id);
+//    }
+//
+//    @GetMapping("/{id}/color")
+//    public CommonResponse<List<ColorOptionResponse>> getColorOptions(@PathVariable Long id) {
+//        return productService.getColorOptions(id);
+//    }
+//
+//    @GetMapping("/{id}/add")
+//    public CommonResponse<List<AddOptionResponse>> getAddOptions(@PathVariable Long id) {
+//        return productService.getAddOptions(id);
+//    }
 
 }

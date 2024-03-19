@@ -1,6 +1,6 @@
 package com.nocaffeine.ssgclone.product.presentation;
 
-import com.nocaffeine.ssgclone.common.ResponseDto;
+import com.nocaffeine.ssgclone.common.CommonResponse;
 import com.nocaffeine.ssgclone.product.application.ProductOptionService;
 import com.nocaffeine.ssgclone.product.dto.response.ProductOptionResponse;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +18,8 @@ public class ProductOptionController {
 
     private final ProductOptionService productOptionService;
 
-    @GetMapping("/{product-option-id}")
-    public ResponseDto<ProductOptionResponse> getProductOption(@PathVariable("product-option-id") Long id) {
-        return productOptionService.getProductOptionSelected(id);
-    }
+//    @GetMapping("/{product-option-id}")
+//    public CommonResponse<ProductOptionResponse> getProductOption(@PathVariable("product-option-id") Long id) {
+//        return productOptionService.getProductOptionSelected(id);
+//    }
 }
