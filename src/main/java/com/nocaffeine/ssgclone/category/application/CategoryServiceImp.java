@@ -11,12 +11,15 @@ import com.nocaffeine.ssgclone.category.infrastructure.LargeCategoryRepository;
 import com.nocaffeine.ssgclone.category.infrastructure.MediumCategoryRepository;
 import com.nocaffeine.ssgclone.category.infrastructure.SmallCategoryRepository;
 import com.nocaffeine.ssgclone.category.infrastructure.TinyCategoryRepository;
+import com.nocaffeine.ssgclone.common.exception.BaseException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.No_Tiny_Category;
 
 @Service
 @RequiredArgsConstructor
@@ -61,6 +64,9 @@ public class CategoryServiceImp implements CategoryService{
         List<TinyCategoryDto> TinyCategoryDtoList = new ArrayList<>();
 
         for (TinyCategory tinyCategory : tinyCategoryRepository.findBySmallCategory_Id(small_id)) {
+            if (tinyCategory == null) {
+                throw new BaseException(No_Tiny_Category);
+            }
             TinyCategoryDto tinyCategoryDto = new TinyCategoryDto();
             tinyCategoryDto.setId(tinyCategory.getId());
             tinyCategoryDto.setName(tinyCategory.getName());
