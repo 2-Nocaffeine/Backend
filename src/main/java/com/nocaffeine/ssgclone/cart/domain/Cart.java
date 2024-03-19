@@ -35,4 +35,7 @@ public class Cart {
         this.checkProduct = checkProduct;
     }
 
+    public void addQuantity(int quantity) {
+        this.quantity += quantity;
+    }
 }

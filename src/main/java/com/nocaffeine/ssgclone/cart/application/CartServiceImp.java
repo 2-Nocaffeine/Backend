@@ -2,9 +2,9 @@ package com.nocaffeine.ssgclone.cart.application;
 
 
 import com.nocaffeine.ssgclone.cart.domain.Cart;
+import com.nocaffeine.ssgclone.cart.dto.request.CartAddRequest;
 import com.nocaffeine.ssgclone.cart.dto.request.CartRemoveListRequest;
 import com.nocaffeine.ssgclone.cart.infrastructure.CartRepository;
-import com.nocaffeine.ssgclone.common.CommonResponse;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
 import com.nocaffeine.ssgclone.member.domain.Member;
 import com.nocaffeine.ssgclone.member.infrastructure.MemberRepository;
@@ -16,9 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
-import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.NO_DATA;
-import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.NO_EXIST_MEMBERS;
+import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.*;
 
 @Service
 @RequiredArgsConstructor
@@ -35,37 +35,44 @@ public class CartServiceImp implements CartService {
      */
     @Override
     @Transactional
-    public CommonResponse<Void> addCart(Long productOptionId, String memberUuid) {
+    public void addCart(CartAddRequest cartAddRequest, String memberUuid) {
         Member member = memberRepository.findByUuid(memberUuid)
                 .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
 
-        ProductOption productOption = productOptionRepository.findById(productOptionId)
-                .orElseThrow(() -> new BaseException(NO_DATA));
+        ProductOption productOption = productOptionRepository.findById(cartAddRequest.getProductOptionId())
+                .orElseThrow(() -> new BaseException(NO_SELECTED_OPTION_PRODUCT));
 
-        Cart cart = Cart.builder()
-                .member(member)
-                .productOption(productOption)
-                .quantity(1) // 최초 수량은 1개
-                .pin(false)
-                .checkProduct(false)
-                .build();
+        Optional<Cart> memberCart = cartRepository.findByMemberAndProductOption(member, productOption);
 
-        cartRepository.save(cart);
+        if(memberCart.isPresent()) {
+            // 이미 장바구니에 해당 상품이 존재하는 경우 -> 수량만큼 추가
+            memberCart.get().addQuantity(cartAddRequest.getQuantity());
+        } else{
+            // 장바구니에 해당 상품이 없는경우
+            Cart cart = Cart.builder()
+                    .member(member)
+                    .productOption(productOption)
+                    .quantity(cartAddRequest.getQuantity())
+                    .pin(false)
+                    .checkProduct(false)
+                    .build();
 
-        return CommonResponse.success("장바구니에 상품을 추가하였습니다.");
+            cartRepository.save(cart);
+        }
     }
+
+
 
     /**
      * 장바구니 선택 상품 삭제.
      */
     @Override
     @Transactional
-    public CommonResponse<Void> removeCart(CartRemoveListRequest cartRemoveListRequest, String memberUuid) {
+    public void removeCart(CartRemoveListRequest cartRemoveListRequest, String memberUuid) {
         List<Long> cartIds = cartRemoveListRequest.getCartId();
         for (Long cartId : cartIds) {
             cartRepository.deleteById(cartId);
         }
-        return CommonResponse.success("장바구니에서 상품을 삭제하였습니다.");
     }
 
 
