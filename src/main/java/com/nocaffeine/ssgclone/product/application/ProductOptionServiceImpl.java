@@ -1,6 +1,8 @@
 package com.nocaffeine.ssgclone.product.application;
 
 import com.nocaffeine.ssgclone.common.CommonResponse;
+import com.nocaffeine.ssgclone.common.exception.BaseException;
+import com.nocaffeine.ssgclone.common.exception.BaseResponseStatus;
 import com.nocaffeine.ssgclone.product.domain.ProductOption;
 import com.nocaffeine.ssgclone.product.dto.response.ProductOptionResponse;
 import com.nocaffeine.ssgclone.product.infrastructure.ProductOptionRepository;
@@ -10,22 +12,21 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.NO_SELECTED_OPTION_PRODUCT;
+
 @Service// 서비스는 컨트롤러에서 받은 요청을 처리하고, 결과를 다시 컨트롤러에게 반환하는 역할을 한다.
 @RequiredArgsConstructor
 public class ProductOptionServiceImpl implements ProductOptionService {
 
     private final ProductOptionRepository productOptionRepository;
 
-//    @Transactional
-//    @Override
-//    public CommonResponse<ProductOptionResponse> getProductOptionSelected(Long id) {
-//        Optional<ProductOption> productOption = productOptionRepository.findById(id);
-//        if(productOption.isPresent()){
-//            ProductOptionResponse productOptionResponseDto = convertToDto(productOption.get());
-//            return CommonResponse.success("옵션 선택을 완료한 최종 구매 가능 상품을 찾았습니다.", productOptionResponseDto);
-//        }
-//        return CommonResponse.fail("옵션 선택을 완료한 최종 구매 가능 상품을 찾을 수 없습니다.", "ID가 " + id + "인 옵션 선택을 완료한 최종 구매 가능 상품을 찾을 수 없습니다.");
-//    }
+    @Override
+    public ProductOptionResponse getProductOptionSelected(Long id) {
+        ProductOption productOption = productOptionRepository.findById(id)
+                .orElseThrow(() -> new BaseException(NO_SELECTED_OPTION_PRODUCT));
+
+        return convertToDto(productOption);
+    }
 
     private ProductOptionResponse convertToDto(ProductOption productOption) {
         return ProductOptionResponse.builder()
