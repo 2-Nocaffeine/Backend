@@ -1,13 +1,11 @@
 package com.nocaffeine.ssgclone.member.application;
 
 
-import com.nocaffeine.ssgclone.common.ResponseDto;
 import com.nocaffeine.ssgclone.member.dto.request.MemberLoginRequest;
 import com.nocaffeine.ssgclone.member.dto.request.MemberPasswordRequest;
 import com.nocaffeine.ssgclone.member.dto.request.MemberSaveRequest;
 import com.nocaffeine.ssgclone.member.dto.response.MemberDetailResponse;
 import com.nocaffeine.ssgclone.member.dto.response.TokenResponse;
-import org.springframework.http.ResponseEntity;
 
 public interface MemberService {
 

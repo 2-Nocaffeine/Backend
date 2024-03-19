@@ -1,6 +1,5 @@
 package com.nocaffeine.ssgclone.member.application;
 
-import com.nocaffeine.ssgclone.common.ResponseDto;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
 import com.nocaffeine.ssgclone.member.domain.Member;
 import com.nocaffeine.ssgclone.member.dto.request.MemberLoginRequest;
@@ -12,14 +11,14 @@ import com.nocaffeine.ssgclone.member.infrastructure.MemberRepository;
 import com.nocaffeine.ssgclone.common.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
+
+import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.*;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +36,7 @@ public class MemberServiceImp implements MemberService {
     @Override
     public void duplicationEmail(String email) {
         if (memberRepository.findByEmail(email).isPresent()) {
-            throw new BaseException("이미 사용중인 아이디 입니다. 다른 아이디를 입력해주세요.");
+            throw new BaseException(DUPLICATE_EMAIL);
         }
     }
 
@@ -50,7 +49,7 @@ public class MemberServiceImp implements MemberService {
         try{
             duplicationEmail(memberSaveRequest.getEmail());
         } catch (BaseException e){
-            throw new BaseException("아이디 중복체크를 해주세요.");
+            throw new BaseException(DUPLICATE_EMAIL);
         }
 
         createMember(memberSaveRequest);
@@ -62,7 +61,7 @@ public class MemberServiceImp implements MemberService {
     @Override
     public TokenResponse logIn(MemberLoginRequest memberLoginRequest) {
         Member member = memberRepository.findByEmail(memberLoginRequest.getEmail())
-                .orElseThrow(() -> new BaseException("아이디 또는 비밀번호가 일치하지 않습니다. 다시 확인하신 후 입력해주세요."));
+                .orElseThrow(() -> new BaseException(FAILED_TO_LOGIN));
         try{
             authenticateManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -70,7 +69,7 @@ public class MemberServiceImp implements MemberService {
                             memberLoginRequest.getPassword()
                     ));
         } catch (Exception e){
-            throw new BaseException("아이디 또는 비밀번호가 일치하지 않습니다. 다시 확인하신 후 입력해주세요.");
+            throw new BaseException(FAILED_TO_LOGIN);
         }
 
         String token = createToken(member);
@@ -87,10 +86,10 @@ public class MemberServiceImp implements MemberService {
     @Transactional
     public void updatePassword(String memberUuid, MemberPasswordRequest memberPasswordRequest) {
         Member member = memberRepository.findByUuid(memberUuid)
-                .orElseThrow(() -> new BaseException("회원을 찾을 수 없습니다."));
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
 
         if(!memberPasswordRequest.password.equals(memberPasswordRequest.getPasswordCheck())){
-            throw new BaseException("비밀번호를 다시 한번 확인 해 주세요.");
+            throw new BaseException(FAILED_TO_PASSWORD);
         }
 
         // 비밀번호 변경
@@ -104,7 +103,7 @@ public class MemberServiceImp implements MemberService {
     @Override
     public MemberDetailResponse findMember(String memberUuid) {
         Member member = memberRepository.findByUuid(memberUuid)
-                .orElseThrow(() -> new BaseException("회원을 찾을 수 없습니다."));
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
 
         return MemberDetailResponse.builder()
                 .email(member.getEmail())
@@ -121,7 +120,7 @@ public class MemberServiceImp implements MemberService {
     @Transactional
     public void removeMember(String memberUuid) {
         Member member = memberRepository.findByUuid(memberUuid)
-                .orElseThrow(() -> new BaseException("회원을 찾을 수 없습니다."));
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
 
         memberRepository.delete(member);
     }
