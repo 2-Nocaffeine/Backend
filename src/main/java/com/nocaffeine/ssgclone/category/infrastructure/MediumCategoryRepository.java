@@ -10,7 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface MediumCategoryRepository extends JpaRepository<MediumCategory, Long> {
-    List<MediumCategory> findByLargeCategory_Id(Long largeCategoryId);
 
-    MediumCategory findByName(String name);
+    List<MediumCategory> findByLargeCategory_Id(Long largeCategoryId);
 }

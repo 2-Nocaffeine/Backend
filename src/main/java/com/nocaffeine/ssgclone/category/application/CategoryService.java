@@ -1,21 +1,17 @@
 package com.nocaffeine.ssgclone.category.application;
 
-import com.nocaffeine.ssgclone.category.domain.MediumCategory;
-import com.nocaffeine.ssgclone.category.domain.SmallCategory;
-import com.nocaffeine.ssgclone.category.domain.TinyCategory;
-import com.nocaffeine.ssgclone.category.dto.LargeCategoryRequest;
-import com.nocaffeine.ssgclone.category.dto.MediumCategoryRequest;
-import com.nocaffeine.ssgclone.category.dto.SmallCategoryRequest;
-import com.nocaffeine.ssgclone.common.ResponseDto;
+import com.nocaffeine.ssgclone.category.dto.request.MediumCategoryRequest;
+import com.nocaffeine.ssgclone.category.dto.response.MediumCategoryDto;
+import com.nocaffeine.ssgclone.category.dto.response.SmallCategoryDto;
+import com.nocaffeine.ssgclone.category.dto.response.TinyCategoryDto;
 
 import java.util.List;
 
 public interface CategoryService {
 
-    ResponseDto<List<MediumCategory>> findLargetoMedium(LargeCategoryRequest largeCategoryRequest);
+    List<MediumCategoryDto> findLargetoMedium(Long large_id);
 
-    ResponseDto<List<SmallCategory>> findMediumtoSmall(MediumCategoryRequest mediumCategoryRequest);
+    List<SmallCategoryDto> findMediumtoSmall(Long medium_id);
 
-
-    ResponseDto<List<TinyCategory>> findSmalltoTiny(SmallCategoryRequest smallCategoryRequest);
+    List<TinyCategoryDto> findSmalltoTiny(Long small_id);
 }

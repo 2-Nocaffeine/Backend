@@ -2,13 +2,12 @@ package com.nocaffeine.ssgclone.category.dto;
 
 import lombok.*;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SmallCategoryRequest {
+public class SmallCategoryResponse {
 
-    private String name;
+    private Long id;
     private Long mediumCategoryId;
 }

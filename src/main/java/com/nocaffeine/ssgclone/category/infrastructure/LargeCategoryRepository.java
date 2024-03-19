@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LargeCategoryRepository extends JpaRepository<LargeCategory, Long>{
-    LargeCategory findByName(String name);
 }

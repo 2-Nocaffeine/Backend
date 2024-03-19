@@ -1,18 +1,17 @@
 package com.nocaffeine.ssgclone.category.presentation;
 
 import com.nocaffeine.ssgclone.category.application.CategoryService;
-import com.nocaffeine.ssgclone.category.domain.LargeCategory;
-import com.nocaffeine.ssgclone.category.domain.MediumCategory;
 import com.nocaffeine.ssgclone.category.domain.SmallCategory;
 import com.nocaffeine.ssgclone.category.domain.TinyCategory;
-import com.nocaffeine.ssgclone.category.dto.LargeCategoryRequest;
-import com.nocaffeine.ssgclone.category.dto.MediumCategoryRequest;
-import com.nocaffeine.ssgclone.category.dto.SmallCategoryRequest;
+import com.nocaffeine.ssgclone.category.dto.SmallCategoryResponse;
+import com.nocaffeine.ssgclone.category.dto.request.MediumCategoryRequest;
+import com.nocaffeine.ssgclone.category.dto.response.MediumCategoryDto;
+import com.nocaffeine.ssgclone.category.dto.response.SmallCategoryDto;
+import com.nocaffeine.ssgclone.category.dto.response.TinyCategoryDto;
 import com.nocaffeine.ssgclone.common.ResponseDto;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -23,26 +22,24 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    //전체조회 + 대분류
-//    @GetMapping("/api/v1/category/category")
-//    public ResponseDto<List<LargeCategory>> getLargecategory() {
-//        return categoryService.findLargeCategory();
-//    }
-
     //대분류 + 중분류
-    @GetMapping("/api/v1/category/")
-    public ResponseDto<List<MediumCategory>> getMediumcategory(@RequestBody @Valid LargeCategoryRequest largeCategoryRequest) {
-        return categoryService.findLargetoMedium(largeCategoryRequest);
+    @GetMapping("/api/v1/category/{large_id}")
+    public ResponseDto<List<MediumCategoryDto>> getMediumcategory(@PathVariable Long large_id) {
+        List<MediumCategoryDto> mediumCategoryDtoList = categoryService.findLargetoMedium(large_id);
+        return ResponseDto.success("성공", mediumCategoryDtoList);
     }
-    //중분류 + 소분류
-    @GetMapping("/api/v1/category/small")
-    public ResponseDto<List<SmallCategory>> getSmallcategory(@RequestBody @Valid MediumCategoryRequest mediumCategoryRequest) {
-        return categoryService.findMediumtoSmall(mediumCategoryRequest);
+
+    @GetMapping("/api/v1/category/{large_id}/{medium_id}")
+    public ResponseDto<List<SmallCategoryDto>> getSmallcategory(@PathVariable Long large_id, Long medium_id) {
+        List<SmallCategoryDto> smallCategoryDtoList = categoryService.findMediumtoSmall(medium_id);
+        return ResponseDto.success("성공", smallCategoryDtoList);
     }
-    //중분류 + 소분류
-    @GetMapping("/api/v1/category/tiny")
-    public ResponseDto<List<TinyCategory>> getTinycategory(@RequestBody @Valid SmallCategoryRequest smallCategoryRequest) {
-        return categoryService.findSmalltoTiny(smallCategoryRequest);
+
+    @GetMapping("/api/v1/category/{large_id}/{medium_id}/{tiny_id}")
+    public ResponseDto<List<TinyCategoryDto>> getTinycategory(@PathVariable Long large_id, Long medium_id, Long small_id) {
+        List<TinyCategoryDto> tinyCategoryDtoList = categoryService.findSmalltoTiny(small_id);
+        return ResponseDto.success("성공", tinyCategoryDtoList);
     }
+
 
 }
