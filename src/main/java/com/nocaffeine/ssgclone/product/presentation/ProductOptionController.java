@@ -18,8 +18,9 @@ public class ProductOptionController {
 
     private final ProductOptionService productOptionService;
 
-//    @GetMapping("/{product-option-id}")
-//    public CommonResponse<ProductOptionResponse> getProductOption(@PathVariable("product-option-id") Long id) {
-//        return productOptionService.getProductOptionSelected(id);
-//    }
+    @GetMapping("/{product-option-id}")
+    public CommonResponse<ProductOptionResponse> getProductOption(@PathVariable("product-option-id") Long id) {
+        ProductOptionResponse getProductOption = productOptionService.getProductOptionSelected(id);
+        return CommonResponse.success("상품 옵션을 성공적으로 찾았습니다.", getProductOption);
+    }
 }

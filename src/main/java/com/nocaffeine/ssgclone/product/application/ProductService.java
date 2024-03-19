@@ -12,8 +12,8 @@ public interface ProductService {
 
      // 제품을 찾는 메소드
      ProductResponse getProduct(Long id);
-//     CommonResponse<List<SizeOptionResponse>> getSizeOptions(Long id);
-//     CommonResponse<List<ColorOptionResponse>> getColorOptions(Long id);
-//     CommonResponse<List<AddOptionResponse>> getAddOptions(Long id);
+     List<SizeOptionResponse> getSizeOptions(Long id);
+     List<ColorOptionResponse> getColorOptions(Long id);
+     List<AddOptionResponse> getAddOptions(Long id);
 
 }

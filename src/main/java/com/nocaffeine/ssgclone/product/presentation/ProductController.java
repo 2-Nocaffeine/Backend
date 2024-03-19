@@ -25,22 +25,25 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public CommonResponse<ProductResponse> getProduct(@PathVariable Long id) {
-        return CommonResponse.success("Product retrieved successfully", productService.getProduct(id));
+        return CommonResponse.success("상품을 성공적으로 찾았습니다.", productService.getProduct(id));
     }
 
-//    @GetMapping("/{id}/size")
-//    public CommonResponse<List<SizeOptionResponse>> getSizeOptions(@PathVariable Long id) {
-//        return productService.getSizeOptions(id);
-//    }
-//
-//    @GetMapping("/{id}/color")
-//    public CommonResponse<List<ColorOptionResponse>> getColorOptions(@PathVariable Long id) {
-//        return productService.getColorOptions(id);
-//    }
-//
-//    @GetMapping("/{id}/add")
-//    public CommonResponse<List<AddOptionResponse>> getAddOptions(@PathVariable Long id) {
-//        return productService.getAddOptions(id);
-//    }
+    @GetMapping("/{id}/size")
+    public CommonResponse<List<SizeOptionResponse>> getSizeOptions(@PathVariable Long id) {
+        List<SizeOptionResponse> getSizeOptions = productService.getSizeOptions(id);
+        return CommonResponse.success("사이즈 옵션을 성공적으로 찾았습니다.", getSizeOptions);
+    }
+
+    @GetMapping("/{id}/color")
+    public CommonResponse<List<ColorOptionResponse>> getColorOptions(@PathVariable Long id) {
+        List<ColorOptionResponse> colorOptions = productService.getColorOptions(id);
+        return CommonResponse.success("색상 옵션을 성공적으로 찾았습니다.", colorOptions);
+    }
+
+    @GetMapping("/{id}/add")
+    public CommonResponse<List<AddOptionResponse>> getAddOptions(@PathVariable Long id) {
+        List<AddOptionResponse> addOptions = productService.getAddOptions(id);
+        return CommonResponse.success("추가 옵션을 성공적으로 찾았습니다.", addOptions);
+    }
 
 }
