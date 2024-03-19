@@ -4,7 +4,7 @@ package com.nocaffeine.ssgclone.cart.application;
 import com.nocaffeine.ssgclone.cart.domain.Cart;
 import com.nocaffeine.ssgclone.cart.dto.request.CartRemoveListRequest;
 import com.nocaffeine.ssgclone.cart.infrastructure.CartRepository;
-import com.nocaffeine.ssgclone.common.ResponseDto;
+import com.nocaffeine.ssgclone.common.CommonResponse;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
 import com.nocaffeine.ssgclone.member.domain.Member;
 import com.nocaffeine.ssgclone.member.infrastructure.MemberRepository;
@@ -16,6 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.NO_DATA;
+import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.NO_EXIST_MEMBERS;
 
 @Service
 @RequiredArgsConstructor
@@ -32,12 +35,12 @@ public class CartServiceImp implements CartService {
      */
     @Override
     @Transactional
-    public ResponseDto<Void> addCart(Long productOptionId, String memberUuid) {
+    public CommonResponse<Void> addCart(Long productOptionId, String memberUuid) {
         Member member = memberRepository.findByUuid(memberUuid)
-                .orElseThrow(() -> new BaseException("존재하지 않는 회원입니다."));
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
 
         ProductOption productOption = productOptionRepository.findById(productOptionId)
-                .orElseThrow(() -> new BaseException("존재하지 않는 상품입니다."));
+                .orElseThrow(() -> new BaseException(NO_DATA));
 
         Cart cart = Cart.builder()
                 .member(member)
@@ -49,7 +52,7 @@ public class CartServiceImp implements CartService {
 
         cartRepository.save(cart);
 
-        return ResponseDto.success("장바구니에 상품을 추가하였습니다.");
+        return CommonResponse.success("장바구니에 상품을 추가하였습니다.");
     }
 
     /**
@@ -57,12 +60,12 @@ public class CartServiceImp implements CartService {
      */
     @Override
     @Transactional
-    public ResponseDto<Void> removeCart(CartRemoveListRequest cartRemoveListRequest, String memberUuid) {
+    public CommonResponse<Void> removeCart(CartRemoveListRequest cartRemoveListRequest, String memberUuid) {
         List<Long> cartIds = cartRemoveListRequest.getCartId();
         for (Long cartId : cartIds) {
             cartRepository.deleteById(cartId);
         }
-        return ResponseDto.success("장바구니에서 상품을 삭제하였습니다.");
+        return CommonResponse.success("장바구니에서 상품을 삭제하였습니다.");
     }
 
 
