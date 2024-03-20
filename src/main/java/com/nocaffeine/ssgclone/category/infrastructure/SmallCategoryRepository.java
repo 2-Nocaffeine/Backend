@@ -10,5 +10,4 @@ import java.util.List;
 public interface SmallCategoryRepository extends JpaRepository<SmallCategory, Long> {
     List<SmallCategory> findByMediumCategory_Id(Long id);
 
-    SmallCategory findByName(String name);
 }

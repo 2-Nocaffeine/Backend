@@ -13,5 +13,4 @@ public class SmallCategoryResponse {
 
     private Long id;
     private String name;
-    private Long mediumCategoryId;
 }

@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProductListRepository {
-    ProductList[] findByLargeCategory_Id(Long largeId);
+//    ProductList[] findByLargeCategory_Id(Long largeId);
 }

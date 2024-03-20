@@ -12,5 +12,4 @@ import lombok.NoArgsConstructor;
 public class MediumCategoryResponse {
     private Long id;
     private String name;
-    private Long largeCategoryId;
 }
