@@ -49,8 +49,8 @@ public class CategoryController {
 
 //    컴포넌트의 productList값 가져옴(상품명, 가격)
     @GetMapping("/api/v1/product/productList/{product_id}")
-    public CommonResponse<List<ProductListResponse>> findProductListValue(@PathVariable("product_id") Long product_id) {
-        List<ProductListResponse> productListvalue = categoryService.findProductListValueToLarge(product_id);
+    public CommonResponse<ProductListResponse> findProductListValue(@PathVariable("product_id") Long product_id) {
+        ProductListResponse productListvalue = categoryService.findProductListValueToLarge(product_id);
         return CommonResponse.success("성공", productListvalue);
     }
 

@@ -15,5 +15,5 @@ public interface CategoryService {
 
     List<ProductIdResponse> findProductIdToLarge(Long large_id);
 
-    List<ProductListResponse> findProductListValueToLarge(Long product_id);
+    ProductListResponse findProductListValueToLarge(Long product_id);
 }

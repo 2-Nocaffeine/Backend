@@ -36,13 +36,7 @@ public class CategoryServiceImp implements CategoryService{
     private final MediumCategoryRepository mediumCategoryRepository;
     private final SmallCategoryRepository smallCategoryRepository;
     private final TinyCategoryRepository tinyCategoryRepository;
-
-//    private final ProductRepository productRepository;
-    private final TotalRepository totalRepository;
-    private final ProductImageRepository productImageRepository;
-    private final BrandRepository brandRepository;
     private final ProductListRepository productListRepository;
-    private final BrandListRepository brandListRepository;
 
     private EntityManager entityManager;
 
@@ -107,18 +101,17 @@ public class CategoryServiceImp implements CategoryService{
     }
 
     @Override
-    public List<ProductListResponse> findProductListValueToLarge(Long product_id) {
-        List<ProductListResponse> productListResponseList = new ArrayList<>();
+    public ProductListResponse findProductListValueToLarge(Long product_id) {
 
-        for (ProductList productList : productListRepository.findByLargeCategory_Id(product_id)) {
+        ProductList productList = productListRepository.findByProduct_Id(product_id)
+                .orElseThrow(() -> new BaseException(NO_PRODUCT));
 
-            ProductListResponse productListResponse = ProductListResponse.builder()
-                    .productList_id(productList.getId())
-                    .product_name(productList.getProduct().getName())
-                    .product_price(productList.getProduct().getPrice())
-                    .build();
-            productListResponseList.add(productListResponse);
-        }
-        return productListResponseList;
-        }
+        ProductListResponse productListResponse = ProductListResponse.builder()
+                .productList_id(productList.getId())
+                .product_name(productList.getProduct().getName())
+                .product_price(productList.getProduct().getPrice())
+                .build();
+
+        return productListResponse;
     }
+}
