@@ -17,18 +17,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ProductListResponse {
 
-//    private ProductList productList_id;
-//    private Product product_name;
-//    private Product product_price;
-//    private Brand brand;
-//    private Total rate;
-//    private Total reviewCount;
-//    private Image url;
     private Long productList_id;
     private String product_name;
     private int product_price;
-    private String brand;
-    private double rate;
-    private int reviewCount;
-    private String url;
 }

@@ -1,5 +1,7 @@
 package com.nocaffeine.ssgclone.category.application;
 
+import com.nocaffeine.ssgclone.brandstore.infrastructure.BrandListRepository;
+import com.nocaffeine.ssgclone.brandstore.infrastructure.BrandRepository;
 import com.nocaffeine.ssgclone.category.domain.MediumCategory;
 import com.nocaffeine.ssgclone.category.domain.ProductList;
 import com.nocaffeine.ssgclone.category.domain.SmallCategory;
@@ -14,6 +16,7 @@ import com.nocaffeine.ssgclone.product.domain.Total;
 import com.nocaffeine.ssgclone.product.infrastructure.ProductImageRepository;
 import com.nocaffeine.ssgclone.product.infrastructure.ProductRepository;
 import com.nocaffeine.ssgclone.product.infrastructure.TotalRepository;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.NO_PRODUCT;
 import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.No_TINY_CATEGORY;
 
 @Service
@@ -34,10 +38,13 @@ public class CategoryServiceImp implements CategoryService{
     private final TinyCategoryRepository tinyCategoryRepository;
 
 //    private final ProductRepository productRepository;
-//    private final TotalRepository totalRepository;
-//    private final ProductImageRepository productImageRepository;
-//    private final BrandRepository brandRepository;
-//    private final ProductListRepository productListRepository;
+    private final TotalRepository totalRepository;
+    private final ProductImageRepository productImageRepository;
+    private final BrandRepository brandRepository;
+    private final ProductListRepository productListRepository;
+    private final BrandListRepository brandListRepository;
+
+    private EntityManager entityManager;
 
     @Override
     public List<MediumCategoryResponse> findLargetoMedium(Long large_id) {
@@ -85,30 +92,33 @@ public class CategoryServiceImp implements CategoryService{
         return TinyCategoryDtoList;
     }
 
-//    @Override
-//    public List<ProductListResponse> findProductToLarge(Long largeId) {
-//        List<ProductListResponse> productListResponseList = new ArrayList<>();
-//
-//        for (ProductList productList : productListRepository.findByLargeCategory_Id(largeId)) {
-//            ProductListResponse productListResponse = ProductListResponse.builder()
-//                    .productList_id(productList.getId())
-//                    .product_name(productList.getProduct().getName())
-//                    .product_price(productList.getProduct().getPrice())
-//
-//                    .rate(totalRepository.findByProduct_Id(productList.getProduct().getId()).getRateAverage())
-//                    .reviewCount(totalRepository.findByProduct_Id(productList.getProduct().getId()).getReviewCount())
-//
-//                    .url(productImageRepository.findByProduct_Id(productList.getProduct().getId()).get(0).getImage())
-//
-//                    .brand(brandRepository.findByProduct_Id(productList.getProduct().getId()).getName())
-//
-//                    .build();
-//            productListResponseList.add(productListResponse);
-//        }
+    @Override
+    public List<ProductIdResponse> findProductIdToLarge(Long large_id) {
+        List<ProductIdResponse> productListResponseList = new ArrayList<>();
+
+        for (ProductList productList : productListRepository.findByLargeCategory_Id(large_id)) {
+            if (productList == null){
+                throw new BaseException(NO_PRODUCT);
+            }
+            ProductIdResponse productIdResponse = new ProductIdResponse(productList.getProduct().getId());
+            productListResponseList.add(productIdResponse);
+        }
+        return productListResponseList;
     }
 
+    @Override
+    public List<ProductListResponse> findProductListValueToLarge(Long product_id) {
+        List<ProductListResponse> productListResponseList = new ArrayList<>();
 
-//        .rate(totalRepository.rateByProduct_Id(productList.getProduct().getId()))
-//        .reviewCount(reviewRepository.ByProduct_Id(productList.getProduct().getId()))
-//        .image(productImageRepository.findByProduct_Id(productList.getProduct().getId()).get(0).getImage())
-//        .brand(brandRepository.findByProduct_Id(productList.getProduct().getId()).getName())
+        for (ProductList productList : productListRepository.findByLargeCategory_Id(product_id)) {
+
+            ProductListResponse productListResponse = ProductListResponse.builder()
+                    .productList_id(productList.getId())
+                    .product_name(productList.getProduct().getName())
+                    .product_price(productList.getProduct().getPrice())
+                    .build();
+            productListResponseList.add(productListResponse);
+        }
+        return productListResponseList;
+        }
+    }
