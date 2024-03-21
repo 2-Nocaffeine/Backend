@@ -3,7 +3,8 @@ package com.nocaffeine.ssgclone.like.application;
 
 import com.nocaffeine.ssgclone.common.exception.BaseException;
 import com.nocaffeine.ssgclone.like.domain.ProductLike;
-import com.nocaffeine.ssgclone.like.dto.request.LikeProductRequest;
+import com.nocaffeine.ssgclone.like.dto.request.LikeProductAddRequest;
+import com.nocaffeine.ssgclone.like.dto.request.LikeProductRemoveRequest;
 import com.nocaffeine.ssgclone.like.infrastructure.ProductLikeRepository;
 import com.nocaffeine.ssgclone.member.domain.Member;
 import com.nocaffeine.ssgclone.member.infrastructure.MemberRepository;
@@ -31,13 +32,13 @@ public class LikeServiceImp implements LikeService {
      */
     @Override
     @Transactional
-    public void addProductLike(LikeProductRequest likeProductRequest, String memberUuid) {
+    public void addProductLike(LikeProductAddRequest likeProductAddRequest, String memberUuid) {
         log .info("addProductLike memberUuid : {}", memberUuid);
 
         Member member = memberRepository.findByUuid(memberUuid)
                 .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
 
-        Product product = productRepository.findById(likeProductRequest.getProductId())
+        Product product = productRepository.findById(likeProductAddRequest.getProductId())
                 .orElseThrow(() -> new BaseException(NO_PRODUCT));
 
         if(productLikeRepository.findByMemberAndProduct(member, product).isPresent()){
@@ -51,4 +52,24 @@ public class LikeServiceImp implements LikeService {
 
         productLikeRepository.save(productLike);
     }
+
+    /**
+     * 상품 좋아요 취소
+     */
+    @Override
+    @Transactional
+    public void removeProductLike(LikeProductRemoveRequest likeProductRemoveRequest, String memberUuid) {
+        Member member = memberRepository.findByUuid(memberUuid)
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
+
+        Product product = productRepository.findById(likeProductRemoveRequest.getProductId())
+                .orElseThrow(() -> new BaseException(NO_PRODUCT));
+
+        ProductLike productLike = productLikeRepository.findByMemberAndProduct(member, product)
+                .orElseThrow(() -> new BaseException(NO_DATA));
+
+        productLikeRepository.delete(productLike);
+
+    }
+
 }

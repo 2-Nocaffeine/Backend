@@ -8,6 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class LikeProductRequest {
+public class LikeProductRemoveRequest {
     private Long productId;
 }
