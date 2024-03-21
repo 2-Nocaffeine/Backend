@@ -58,7 +58,7 @@ public class CartServiceImp implements CartService {
     @Override
     @Transactional
     public ResponseDto<Void> removeCart(CartRemoveListRequest cartRemoveListRequest, String memberUuid) {
-        List<Long> cartIds = cartRemoveListRequest.getCartId();
+        List<Long> cartIds = cartRemoveListRequest.getCartIdlist();
         for (Long cartId : cartIds) {
             cartRepository.deleteById(cartId);
         }
