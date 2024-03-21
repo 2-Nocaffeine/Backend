@@ -5,6 +5,7 @@ import com.nocaffeine.ssgclone.cart.application.CartService;
 import com.nocaffeine.ssgclone.cart.dto.request.CartAddRequest;
 import com.nocaffeine.ssgclone.cart.dto.request.CartModifyRequest;
 import com.nocaffeine.ssgclone.cart.dto.request.CartRemoveListRequest;
+import com.nocaffeine.ssgclone.cart.dto.response.CartCountResponse;
 import com.nocaffeine.ssgclone.cart.dto.response.CartListResponse;
 import com.nocaffeine.ssgclone.common.CommonResponse;
 import com.nocaffeine.ssgclone.common.security.JwtTokenProvider;
@@ -54,5 +55,12 @@ public class CartController {
     public CommonResponse<String> cartModify(@RequestBody CartModifyRequest cartModifyRequest) {
         cartService.modifyCart(cartModifyRequest);
         return CommonResponse.success("장바구니 상품이 수정되었습니다.");
+    }
+
+    @Operation(summary = "장바구니 상품 개수 조회", description = "장바구니 상품 개수 조회", tags = {"Cart Count"})
+    @GetMapping("/cart/count")
+    public CommonResponse<CartCountResponse> cartCount() {
+        String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
+        return CommonResponse.success("장바구니 상품 개수 조회 성공", cartService.countCart(memberUuid));
     }
 }

@@ -5,6 +5,7 @@ import com.nocaffeine.ssgclone.cart.domain.Cart;
 import com.nocaffeine.ssgclone.cart.dto.request.CartAddRequest;
 import com.nocaffeine.ssgclone.cart.dto.request.CartModifyRequest;
 import com.nocaffeine.ssgclone.cart.dto.request.CartRemoveListRequest;
+import com.nocaffeine.ssgclone.cart.dto.response.CartCountResponse;
 import com.nocaffeine.ssgclone.cart.dto.response.CartListResponse;
 import com.nocaffeine.ssgclone.cart.infrastructure.CartRepository;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
@@ -122,6 +123,21 @@ public class CartServiceImp implements CartService {
 
 
         }
+    }
+
+    @Override
+    public CartCountResponse countCart(String memberUuid) {
+        Member member = memberRepository.findByUuid(memberUuid)
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
+
+        List<Cart> cartList = cartRepository.findByMember(member);
+
+        int cartSize = cartList.size();
+
+        return CartCountResponse.builder()
+                .cartCount(cartSize)
+                .build();
+
     }
 
 

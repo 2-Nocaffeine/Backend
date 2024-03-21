@@ -4,6 +4,7 @@ package com.nocaffeine.ssgclone.cart.application;
 import com.nocaffeine.ssgclone.cart.dto.request.CartAddRequest;
 import com.nocaffeine.ssgclone.cart.dto.request.CartModifyRequest;
 import com.nocaffeine.ssgclone.cart.dto.request.CartRemoveListRequest;
+import com.nocaffeine.ssgclone.cart.dto.response.CartCountResponse;
 import com.nocaffeine.ssgclone.cart.dto.response.CartListResponse;
 
 import java.util.List;
@@ -17,6 +18,8 @@ public interface CartService {
     List<CartListResponse> listCart(String memberUuid);
 
     void modifyCart(CartModifyRequest cartModifyRequest);
+
+    CartCountResponse countCart(String memberUuid);
 
 
 }
