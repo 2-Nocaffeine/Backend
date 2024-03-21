@@ -6,6 +6,7 @@ import com.nocaffeine.ssgclone.cart.dto.request.CartModifyRequest;
 import com.nocaffeine.ssgclone.cart.dto.request.CartRemoveListRequest;
 import com.nocaffeine.ssgclone.cart.dto.response.CartCountResponse;
 import com.nocaffeine.ssgclone.cart.dto.response.CartListResponse;
+import com.nocaffeine.ssgclone.cart.dto.response.CartTotalPriceResponse;
 
 import java.util.List;
 
@@ -20,6 +21,8 @@ public interface CartService {
     void modifyCart(CartModifyRequest cartModifyRequest);
 
     CartCountResponse countCart(String memberUuid);
+
+    CartTotalPriceResponse totalPrice(List<Long> cartId);
 
 
 }

@@ -7,6 +7,7 @@ import com.nocaffeine.ssgclone.cart.dto.request.CartModifyRequest;
 import com.nocaffeine.ssgclone.cart.dto.request.CartRemoveListRequest;
 import com.nocaffeine.ssgclone.cart.dto.response.CartCountResponse;
 import com.nocaffeine.ssgclone.cart.dto.response.CartListResponse;
+import com.nocaffeine.ssgclone.cart.dto.response.CartTotalPriceResponse;
 import com.nocaffeine.ssgclone.cart.infrastructure.CartRepository;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
 import com.nocaffeine.ssgclone.member.domain.Member;
@@ -125,6 +126,9 @@ public class CartServiceImp implements CartService {
         }
     }
 
+    /**
+     * 장바구니 상품 개수 조회.
+     */
     @Override
     public CartCountResponse countCart(String memberUuid) {
         Member member = memberRepository.findByUuid(memberUuid)
@@ -140,5 +144,25 @@ public class CartServiceImp implements CartService {
 
     }
 
+    /**
+     * 장바구니 선택한 상품 가격 조회.
+     */
+    @Override
+    public CartTotalPriceResponse totalPrice(List<Long> cartId) {
+       int totalPrice = 0;
+       int quantity = 0;
+        for (Long cart : cartId) {
+            Cart findCart = cartRepository.findById(cart)
+                    .orElseThrow(() -> new BaseException(NO_DATA));
+
+            totalPrice += findCart.getProductOption().getProduct().getPrice() * findCart.getQuantity();
+            quantity += findCart.getQuantity();
+        }
+
+        return CartTotalPriceResponse.builder()
+                .quantity(quantity)
+                .totalPrice(totalPrice)
+                .build();
+    }
 
 }
