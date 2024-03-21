@@ -3,12 +3,11 @@ package com.nocaffeine.ssgclone.cart.presentation;
 
 import com.nocaffeine.ssgclone.cart.application.CartService;
 import com.nocaffeine.ssgclone.cart.dto.request.CartAddRequest;
-import com.nocaffeine.ssgclone.cart.dto.request.CartCountRequest;
 import com.nocaffeine.ssgclone.cart.dto.request.CartModifyRequest;
 import com.nocaffeine.ssgclone.cart.dto.request.CartRemoveListRequest;
 import com.nocaffeine.ssgclone.cart.dto.response.CartCountResponse;
 import com.nocaffeine.ssgclone.cart.dto.response.CartListResponse;
-import com.nocaffeine.ssgclone.cart.dto.response.CartTotalPriceResponse;
+import com.nocaffeine.ssgclone.cart.dto.response.CartPriceResponse;
 import com.nocaffeine.ssgclone.common.CommonResponse;
 import com.nocaffeine.ssgclone.common.security.JwtTokenProvider;
 import io.swagger.v3.oas.annotations.Operation;
@@ -68,7 +67,7 @@ public class CartController {
 
     @Operation(summary = "장바구니 선택한 상품 가격 조회", description = "장바구니 선택한 상품 가격 조회", tags = {"Cart Price"})
     @GetMapping("/cart/price")
-    public CommonResponse<CartTotalPriceResponse> cartPrice(@RequestParam List<Long> cartId){
+    public CommonResponse<CartPriceResponse> cartPrice(@RequestParam List<Long> cartId){
         return CommonResponse.success("장바구니 선택한 상품 가격 조회 성공", cartService.totalPrice(cartId));
     }
 }

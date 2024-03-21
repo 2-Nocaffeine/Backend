@@ -7,7 +7,7 @@ import com.nocaffeine.ssgclone.cart.dto.request.CartModifyRequest;
 import com.nocaffeine.ssgclone.cart.dto.request.CartRemoveListRequest;
 import com.nocaffeine.ssgclone.cart.dto.response.CartCountResponse;
 import com.nocaffeine.ssgclone.cart.dto.response.CartListResponse;
-import com.nocaffeine.ssgclone.cart.dto.response.CartTotalPriceResponse;
+import com.nocaffeine.ssgclone.cart.dto.response.CartPriceResponse;
 import com.nocaffeine.ssgclone.cart.infrastructure.CartRepository;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
 import com.nocaffeine.ssgclone.member.domain.Member;
@@ -148,7 +148,7 @@ public class CartServiceImp implements CartService {
      * 장바구니 선택한 상품 가격 조회.
      */
     @Override
-    public CartTotalPriceResponse totalPrice(List<Long> cartId) {
+    public CartPriceResponse totalPrice(List<Long> cartId) {
        int totalPrice = 0;
        int quantity = 0;
         for (Long cart : cartId) {
@@ -159,7 +159,7 @@ public class CartServiceImp implements CartService {
             quantity += findCart.getQuantity();
         }
 
-        return CartTotalPriceResponse.builder()
+        return CartPriceResponse.builder()
                 .quantity(quantity)
                 .totalPrice(totalPrice)
                 .build();
