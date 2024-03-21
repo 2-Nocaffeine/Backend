@@ -12,5 +12,5 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class CartRemoveListRequest {
-    List<Long> cartId = new ArrayList<>();
+    private List<Long> cartIdlist;
 }
