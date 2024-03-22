@@ -19,4 +19,5 @@ public interface MemberService {
     MemberDetailResponse findMember(String memberUuid);
 
     void removeMember(String memberUuid);
+
 }
