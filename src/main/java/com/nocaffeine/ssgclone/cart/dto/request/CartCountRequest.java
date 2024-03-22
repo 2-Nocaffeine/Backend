@@ -1,6 +1,5 @@
 package com.nocaffeine.ssgclone.cart.dto.request;
 
-
 import lombok.*;
 
 import java.util.ArrayList;
@@ -11,6 +10,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CartRemoveListRequest {
+public class CartCountRequest {
     private List<Long> cartId = new ArrayList<>();
 }
