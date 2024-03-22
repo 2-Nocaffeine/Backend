@@ -15,6 +15,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -53,22 +54,22 @@ public class ProductServiceImpl implements ProductService{
                 .filter(list -> !list.isEmpty())
                 .orElseThrow(() -> new BaseException(NO_EXISTING_PRODUCT));
 
-        return productOptions.stream()
-                .map(ProductOption::getSizeOption)
-                .map(this::convertToDto)
-                .filter(Objects::nonNull)
-                .distinct()
-                .collect(Collectors.toList());
-    }
+        List<SizeOptionResponse> responses = new ArrayList<>();
 
-    private SizeOptionResponse convertToDto(SizeOption sizeOption) {
-        if (sizeOption == null) {
-            return null;
+        for (ProductOption productOption : productOptions) {
+
+            SizeOption sizeOption = productOption.getSizeOption();
+
+            SizeOptionResponse response = SizeOptionResponse.builder()
+                    .id(sizeOption.getId())
+                    .size(sizeOption.getSize())
+                    .build();
+
+            if (!responses.contains(response)) {
+                responses.add(response);
+            } // 중복 제거
         }
-        return SizeOptionResponse.builder()
-                .id(sizeOption.getId())
-                .size(sizeOption.getSize())
-                .build();
+        return responses;
     }
 
     @Override
@@ -77,46 +78,74 @@ public class ProductServiceImpl implements ProductService{
                 .filter(list -> !list.isEmpty())
                 .orElseThrow(() -> new BaseException(NO_EXISTING_PRODUCT));
 
-        return productOptions.stream()
-                .map(ProductOption::getColorOption)
-                .map(this::convertToDto)
-                .filter(Objects::nonNull)
-                .distinct()
-                .collect(Collectors.toList());
-    }
+        List<ColorOptionResponse> responses = new ArrayList<>();
 
-    private ColorOptionResponse convertToDto(ColorOption colorOption) {
-        if (colorOption == null) {
-            return null;
+        for (ProductOption productOption : productOptions) {
+
+            ColorOption colorOption = productOption.getColorOption();
+
+            ColorOptionResponse response = ColorOptionResponse.builder()
+                    .id(colorOption.getId())
+                    .color(colorOption.getColor())
+                    .build();
+
+            if (!responses.contains(response)) {
+                responses.add(response);
+            } // 중복 제거
         }
-        return ColorOptionResponse.builder()
-                .id(colorOption.getId())
-                .color(colorOption.getColor())
-                .build();
+
+        return responses;
     }
 
     @Override
     public List<AddOptionResponse> getAddOptions(Long id) {
         List<ProductOption> productOptions = Optional.ofNullable(productOptionRepository.findByProductId(id))
-                .filter(List -> !List.isEmpty())
+                .filter(list -> !list.isEmpty())
                 .orElseThrow(() -> new BaseException(NO_EXISTING_PRODUCT));
 
+        List<AddOptionResponse> responses = new ArrayList<>();
 
-        return productOptions.stream()
-                .map(ProductOption::getAddOption)
-                .map(this::convertToDto)
-                .filter(Objects::nonNull)
-                .distinct()
-                .collect(Collectors.toList());
-    }
+        for (ProductOption productOption : productOptions) {
 
-    private AddOptionResponse convertToDto(AddOption addOption) {
-        if (addOption == null) {
-            return null;
+            AddOption addOption = productOption.getAddOption();
+
+            AddOptionResponse response = AddOptionResponse.builder()
+                    .id(addOption.getId())
+                    .optionName(addOption.getOptionName())
+                    .build();
+
+            if (!responses.contains(response)) {
+                responses.add(response);
+            } // 중복 제거
         }
-        return AddOptionResponse.builder()
-                .id(addOption.getId())
-                .optionName(addOption.getOptionName())
-                .build();
+
+        return responses;
     }
+
+
+//    @Override
+//    public List<AddOptionResponse> getAddOptions(Long id) {
+//        List<ProductOption> productOptions = Optional.ofNullable(productOptionRepository.findByProductId(id))
+//                .filter(List -> !List.isEmpty())
+//                .orElseThrow(() -> new BaseException(NO_EXISTING_PRODUCT));
+//
+//
+//        return productOptions.stream()
+//                .map(ProductOption::getAddOption)
+//                .flatMap(addOption -> convertToDto(addOption).stream())
+//                .distinct()
+//                .collect(Collectors.toList());
+//    }
+//
+//    private Optional<AddOptionResponse> convertToDto(AddOption addOption) {
+//        if (addOption == null) {
+//            return Optional.empty();
+//        }
+//        AddOptionResponse response = AddOptionResponse.builder()
+//                .id(addOption.getId())
+//                .optionName(addOption.getOptionName())
+//                .build();
+//
+//        return Optional.of(response);
+//    }
 }
