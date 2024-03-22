@@ -5,5 +5,5 @@ import com.nocaffeine.ssgclone.brandstore.dto.Response.BrandListResponse;
 import java.util.List;
 
 public interface BrandService {
-//    List<BrandListResponse> findBrandName(Long productId);
+    BrandListResponse findBrandName(Long productId);
 }

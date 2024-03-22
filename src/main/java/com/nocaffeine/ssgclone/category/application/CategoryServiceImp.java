@@ -45,7 +45,7 @@ public class CategoryServiceImp implements CategoryService{
 
         List<MediumCategoryResponse> mediumCategoryDtoList = new ArrayList<>();
 
-        for (MediumCategory mediumCategory : mediumCategoryRepository.findByLargeCategory_Id(large_id)) {
+        for (MediumCategory mediumCategory : mediumCategoryRepository.findByLargeCategoryId(large_id)) {
             MediumCategoryResponse mediumCategoryDto = MediumCategoryResponse.builder()
                     .id(mediumCategory.getId())
                     .name(mediumCategory.getName())
@@ -115,3 +115,24 @@ public class CategoryServiceImp implements CategoryService{
         return productListResponse;
     }
 }
+//    이전코드
+
+//    @Override
+//    public List<ProductListResponse> findProductIdToLarge(Long large_id) {        L
+//        ist<ProductListResponse> productListResponseList = new ArrayList<>();
+//        Long mainproductId = null;
+//        for (ProductList productList : productListRepository.findByLargeCategory_Id(large_id)) {
+//            if (mainproductId == null) {
+//                mainproductId = productList.getProduct().getId();       }
+//        }
+//        ProductListResponse productListResponse = ProductListResponse.builder()
+//                .productList_id(productList.getId())
+//                .product_name(productList.getProduct().getName())
+//                .product_price(productList.getProduct().getPrice())
+//                .brand(brandListRepository.findByProductId(mainproductId).getBrand().getName())
+//                .rateAverage(totalRepository.findByProductId(mainproductId).getRateAverage())
+//                .reviewCount(totalRepository.findByProductId(mainproductId).getReviewCount())
+//                .build();            productListResponseList.add(productListResponse);
+//    }
+//         return productListResponseList;
+

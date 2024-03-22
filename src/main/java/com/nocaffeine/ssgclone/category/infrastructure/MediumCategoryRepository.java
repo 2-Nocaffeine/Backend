@@ -11,5 +11,5 @@ import java.util.Optional;
 @Repository
 public interface MediumCategoryRepository extends JpaRepository<MediumCategory, Long> {
 
-    List<MediumCategory> findByLargeCategory_Id(Long largeCategoryId);
+    List<MediumCategory> findByLargeCategoryId(Long largeCategoryId);
 }

@@ -11,4 +11,5 @@ public interface BrandListRepository extends JpaRepository<BrandList, Long>{
 
     BrandList findByProductId(Long productId);
 
+
 }

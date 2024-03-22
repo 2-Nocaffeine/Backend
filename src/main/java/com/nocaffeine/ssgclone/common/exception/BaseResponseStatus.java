@@ -83,7 +83,10 @@ public enum BaseResponseStatus {
     NO_EXISTING_PRODUCT(HttpStatus.NOT_FOUND, false, 8002, "해당 상품이 갖고있지 않는 옵션입니다"),
     NO_SELECTED_OPTION_PRODUCT(HttpStatus.NOT_FOUND, false, 8003, "해당 옵션 선택이 완료된 상품을 조회할 수 없습니다"),
     OUT_OF_STOCK_PRODUCT(HttpStatus.NOT_FOUND, false, 8004, "재고가 없는 상품입니다"),
-    INVALID_STOCK_QUANTITY(HttpStatus.BAD_REQUEST, false, 8005, "유효하지 않은 재고 수량입니다");
+    INVALID_STOCK_QUANTITY(HttpStatus.BAD_REQUEST, false, 8005, "유효하지 않은 재고 수량입니다"),
+
+    //brand
+    NO_BRAND(HttpStatus.NOT_FOUND, false, 9001, "브랜드가 존재하지 않습니다");
 
     private final HttpStatusCode httpStatusCode;
     private final boolean isSuccess;
