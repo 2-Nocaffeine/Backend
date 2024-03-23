@@ -26,6 +26,6 @@ public class CategoryLike {
     @Column(name = "tiny_category_id")
     private Long tinyCategory;
 
-    @Column(name = "folder_id")
-    private Long folder;
+    @Column(name = "like_folder_id")
+    private Long likeFolder;
 }

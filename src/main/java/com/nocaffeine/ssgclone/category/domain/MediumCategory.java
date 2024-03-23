@@ -15,6 +15,7 @@ public class MediumCategory {
     private Long id;
 
     @NotNull
+    @Column(length = 50)
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)

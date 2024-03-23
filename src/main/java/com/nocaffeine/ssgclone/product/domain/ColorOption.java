@@ -16,14 +16,11 @@ public class ColorOption {
     private Long id;
 
     @NotNull
+    @Column(length = 100)
     private String color;
 
     @Builder
     public ColorOption(String color) {
         this.color = color;
     }
-
-//    public String getName() {
-//        return this.color;
-//    }
 }

@@ -1,9 +1,6 @@
 package com.nocaffeine.ssgclone.category.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -15,6 +12,7 @@ public class LargeCategory {
     private Long id;
 
     @NotNull
+    @Column(length = 50)
     private String name;
 
     @Builder

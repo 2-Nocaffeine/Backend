@@ -24,19 +24,25 @@ public class Member extends BaseTimeEntity implements UserDetails{
     private Long id;
 
     @NotNull
+    @Column(length = 100)
     private String email;
 
     @NotNull
+    @Column(length = 255)
     private String password;
 
+    @Column(length = 255)
     private String uuid;
 
     @NotNull
+    @Column(length = 50)
     private String name;
 
     @NotNull
+    @Column(length = 50)
     private String phoneNumber;
 
+    @Column(length = 255)
     private String address;
 
 

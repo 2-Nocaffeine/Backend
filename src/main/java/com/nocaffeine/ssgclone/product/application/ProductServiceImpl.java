@@ -1,25 +1,19 @@
 package com.nocaffeine.ssgclone.product.application;
 
-import com.nocaffeine.ssgclone.common.CommonResponse;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
-import com.nocaffeine.ssgclone.common.exception.BaseResponseStatus;
 import com.nocaffeine.ssgclone.product.domain.*;
 import com.nocaffeine.ssgclone.product.dto.response.AddOptionResponse;
 import com.nocaffeine.ssgclone.product.dto.response.ColorOptionResponse;
 import com.nocaffeine.ssgclone.product.dto.response.ProductResponse;
 import com.nocaffeine.ssgclone.product.dto.response.SizeOptionResponse;
-import com.nocaffeine.ssgclone.product.infrastructure.ProductOptionRepository;
+import com.nocaffeine.ssgclone.product.infrastructure.OptionSelectedProductRepository;
 import com.nocaffeine.ssgclone.product.infrastructure.ProductRepository;
-import jakarta.transaction.Transactional;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.*;
 
@@ -28,7 +22,7 @@ import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.*;
 public class ProductServiceImpl implements ProductService{
 
     private final ProductRepository productRepository;
-    private final ProductOptionRepository productOptionRepository;
+    private final OptionSelectedProductRepository optionSelectedProductRepository;
 
     @Override
     public ProductResponse getProduct(Long id) {
@@ -50,15 +44,15 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public List<SizeOptionResponse> getSizeOptions(Long id) {
-        List<ProductOption> productOptions = Optional.ofNullable(productOptionRepository.findByProductId(id))
+        List<OptionSelectedProduct> optionSelectedProducts = Optional.ofNullable(optionSelectedProductRepository.findByProductId(id))
                 .filter(list -> !list.isEmpty())
                 .orElseThrow(() -> new BaseException(NO_EXISTING_PRODUCT));
 
         List<SizeOptionResponse> responses = new ArrayList<>();
 
-        for (ProductOption productOption : productOptions) {
+        for (OptionSelectedProduct optionSelectedProduct : optionSelectedProducts) {
 
-            SizeOption sizeOption = productOption.getSizeOption();
+            SizeOption sizeOption = optionSelectedProduct.getSizeOption();
 
             SizeOptionResponse response = SizeOptionResponse.builder()
                     .id(sizeOption.getId())
@@ -74,15 +68,15 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public List<ColorOptionResponse> getColorOptions(Long id) {
-        List<ProductOption> productOptions = Optional.ofNullable(productOptionRepository.findByProductId(id))
+        List<OptionSelectedProduct> optionSelectedProducts = Optional.ofNullable(optionSelectedProductRepository.findByProductId(id))
                 .filter(list -> !list.isEmpty())
                 .orElseThrow(() -> new BaseException(NO_EXISTING_PRODUCT));
 
         List<ColorOptionResponse> responses = new ArrayList<>();
 
-        for (ProductOption productOption : productOptions) {
+        for (OptionSelectedProduct optionSelectedProduct : optionSelectedProducts) {
 
-            ColorOption colorOption = productOption.getColorOption();
+            ColorOption colorOption = optionSelectedProduct.getColorOption();
 
             ColorOptionResponse response = ColorOptionResponse.builder()
                     .id(colorOption.getId())
@@ -99,15 +93,15 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public List<AddOptionResponse> getAddOptions(Long id) {
-        List<ProductOption> productOptions = Optional.ofNullable(productOptionRepository.findByProductId(id))
+        List<OptionSelectedProduct> optionSelectedProducts = Optional.ofNullable(optionSelectedProductRepository.findByProductId(id))
                 .filter(list -> !list.isEmpty())
                 .orElseThrow(() -> new BaseException(NO_EXISTING_PRODUCT));
 
         List<AddOptionResponse> responses = new ArrayList<>();
 
-        for (ProductOption productOption : productOptions) {
+        for (OptionSelectedProduct optionSelectedProduct : optionSelectedProducts) {
 
-            AddOption addOption = productOption.getAddOption();
+            AddOption addOption = optionSelectedProduct.getAddOption();
 
             AddOptionResponse response = AddOptionResponse.builder()
                     .id(addOption.getId())

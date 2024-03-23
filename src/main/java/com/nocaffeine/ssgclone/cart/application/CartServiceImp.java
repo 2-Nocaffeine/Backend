@@ -12,7 +12,7 @@ import com.nocaffeine.ssgclone.cart.infrastructure.CartRepository;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
 import com.nocaffeine.ssgclone.member.domain.Member;
 import com.nocaffeine.ssgclone.member.infrastructure.MemberRepository;
-import com.nocaffeine.ssgclone.product.domain.ProductOption;
+import com.nocaffeine.ssgclone.product.domain.OptionSelectedProduct;
 import com.nocaffeine.ssgclone.product.infrastructure.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +33,7 @@ public class CartServiceImp implements CartService {
 
     private final CartRepository cartRepository;
     private final MemberRepository memberRepository;
-    private final ProductOptionRepository productOptionRepository;
+    private final OptionSelectedProductRepository optionSelectedProductRepository;
 
     /**
      * 장바구니 상품 추가.
@@ -44,10 +44,10 @@ public class CartServiceImp implements CartService {
         Member member = memberRepository.findByUuid(memberUuid)
                 .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
 
-        ProductOption productOption = productOptionRepository.findById(cartAddRequest.getProductOptionId())
+        OptionSelectedProduct optionSelectedProduct = optionSelectedProductRepository.findById(cartAddRequest.getProductOptionId())
                 .orElseThrow(() -> new BaseException(NO_SELECTED_OPTION_PRODUCT));
 
-        Optional<Cart> memberCart = cartRepository.findByMemberAndProductOption(member, productOption);
+        Optional<Cart> memberCart = cartRepository.findByMemberAndOptionSelectedProduct(member, optionSelectedProduct);
 
         if (memberCart.isPresent()) {
             // 이미 장바구니에 해당 상품이 존재하는 경우 -> 수량만큼 추가
@@ -56,7 +56,7 @@ public class CartServiceImp implements CartService {
             // 장바구니에 해당 상품이 없는경우
             Cart cart = Cart.builder()
                     .member(member)
-                    .productOption(productOption)
+                    .optionSelectedProduct(optionSelectedProduct)
                     .quantity(cartAddRequest.getQuantity())
                     .pin(false)
                     .checkProduct(false)
@@ -97,9 +97,9 @@ public class CartServiceImp implements CartService {
         for (Cart cart : cartList) {
             CartListResponse response = CartListResponse.builder()
                     .cartId(cart.getId())
-                    .productId(cart.getProductOption().getProduct().getId())
+                    .productId(cart.getOptionSelectedProduct().getProduct().getId())
                     .quantity(cart.getQuantity())
-                    .productOptionId(cart.getProductOption().getId())
+                    .productOptionId(cart.getOptionSelectedProduct().getId())
                     .build();
             responseCartList.add(response);
         }
@@ -155,7 +155,7 @@ public class CartServiceImp implements CartService {
             Cart findCart = cartRepository.findById(cart)
                     .orElseThrow(() -> new BaseException(NO_DATA));
 
-            totalPrice += findCart.getProductOption().getProduct().getPrice() * findCart.getQuantity();
+            totalPrice += findCart.getOptionSelectedProduct().getProduct().getPrice() * findCart.getQuantity();
             quantity += findCart.getQuantity();
         }
 
