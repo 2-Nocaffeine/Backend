@@ -16,15 +16,19 @@ public class Orders extends BaseTimeEntity {
     private Long member;
 
     @NotNull
+    @Column(length = 255)
     private String region;
 
     @NotNull
+    @Column(length = 50)
     private String name;
 
     @NotNull
+    @Column(length = 50)
     private String phoneNumber;
 
     @NotNull
+    @Column(length = 100)
     private String email;
 
     @NotNull
@@ -34,6 +38,7 @@ public class Orders extends BaseTimeEntity {
     private Timestamp orderDate;
 
     @NotNull
-    private int status;
+    @Column(length = 50)
+    private String status;
 
 }

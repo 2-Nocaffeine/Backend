@@ -18,12 +18,14 @@ public class Product {
     private Long id;
 
     @NotNull
+    @Column(length = 255)
     private String name;
 
     @NotNull
     private int price;
 
     @NotNull
+    @Column(length = 10000)
     private String content;
 
     @NotNull

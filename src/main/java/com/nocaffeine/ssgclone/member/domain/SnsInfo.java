@@ -10,11 +10,14 @@ public class SnsInfo extends BaseTimeEntity {
     private Long id;
 
     @NotNull
+    @Column(length = 50)
     private String snsType;
 
     @NotNull
+    @Column(length = 50)
     private String name;
 
+    @Column(length = 255)
     private String profile;
 
 }

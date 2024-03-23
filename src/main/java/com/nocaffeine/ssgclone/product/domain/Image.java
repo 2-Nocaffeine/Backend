@@ -9,8 +9,10 @@ public class Image {
     private Long id;
 
     @NotNull
+    @Column(length = 255)
     private String url;
 
     @NotNull
+    @Column(length = 255)
     private String alt;
 }

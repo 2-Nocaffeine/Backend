@@ -16,6 +16,7 @@ public class AddOption {
     private Long id;
 
     @NotNull
+    @Column(length = 100)
     private String optionName;
 
     @Builder

@@ -18,6 +18,6 @@ public class BrandLike {
     @NotNull
     private Brand brand;
 
-    @Column(name = "folder_id")
-    private Long folder;
+    @Column(name = "like_folder_id")
+    private Long likeFolder;
 }

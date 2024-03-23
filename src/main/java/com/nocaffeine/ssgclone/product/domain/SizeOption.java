@@ -16,6 +16,7 @@ public class SizeOption {
     private Long id;
 
     @NotNull
+    @Column(length = 50)
     private String size;
 
     @Builder

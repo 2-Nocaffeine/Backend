@@ -13,7 +13,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class ProductLike {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -24,14 +26,15 @@ public class ProductLike {
     @NotNull
     private Product product;
 
-    @Column(name ="folder_id")
-    private Long folder;
+    @Column(name = "like_folder_id")
+    private Long likeFolder;
 
 
     @Builder
-    public ProductLike(Member member, Product product, Long folder) {
+    public ProductLike(Member member, Product product, Long likeFolder) {
         this.member = member;
         this.product = product;
-        this.folder = folder;
+        this.likeFolder = likeFolder;
     }
 }
+

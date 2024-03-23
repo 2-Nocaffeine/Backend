@@ -11,6 +11,7 @@ public class SpecialPrice {
     private Long id;
 
     @NotNull
+    @Column(length = 255)
     private String name;
 
     @NotNull
