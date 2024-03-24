@@ -6,7 +6,7 @@ import com.nocaffeine.ssgclone.like.dto.response.ProductLikeListResponse;
 
 import java.util.List;
 
-public interface LikeService {
+public interface ProductLikeService {
 
     void addProductLike(LikeProductAddRequest likeProductAddRequest, String memberUuid);
     void removeProductLike(LikeProductRemoveRequest likeProductRemoveRequest, String memberUuid);

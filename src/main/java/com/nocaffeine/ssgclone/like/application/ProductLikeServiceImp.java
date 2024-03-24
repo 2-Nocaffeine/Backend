@@ -25,7 +25,7 @@ import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.*;
 @RequiredArgsConstructor
 @Slf4j
 @Transactional(readOnly = true)
-public class LikeServiceImp implements LikeService {
+public class ProductLikeServiceImp implements ProductLikeService {
 
     private final MemberRepository memberRepository;
     private final ProductLikeRepository productLikeRepository;
