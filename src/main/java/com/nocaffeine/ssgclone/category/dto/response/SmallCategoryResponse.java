@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class SmallCategoryResponse {
 
-    private Long id;
-    private String name;
+    private Long small_category_id;
+    private String small_category_name;
 }

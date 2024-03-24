@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class MediumCategoryResponse {
-    private Long id;
-    private String name;
+    private Long medium_category_id;
+    private String medium_category_name;
 }

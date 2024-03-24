@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TinyCategoryResponse {
-
-    private Long tiny_category_id;
-    private String tiny_category_name;
+public class LargeCategoryResponse {
+    private Long large_category_id;
+    private String large_category_name;
 }

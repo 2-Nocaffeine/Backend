@@ -19,24 +19,30 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
+    //대분류 조회
+    @GetMapping("/large")
+    public CommonResponse<List<LargeCategoryResponse>> getLargeCategory(){
+        List<LargeCategoryResponse> largecategoryList = categoryService.findLargeCategories();
+        return CommonResponse.success("LargeCategory를 성공적으로 찾았습니다.", largecategoryList);
+    }
 
     //중분류 조회
-    @GetMapping("/mid-category/{large_id}")
-    public CommonResponse<List<MediumCategoryResponse>> getMidCategory(@PathVariable Long large_id) {
-        List<MediumCategoryResponse> mediumCategoryDtoList = categoryService.findLargetoMedium(large_id);
-        return CommonResponse.success("성공", mediumCategoryDtoList);
+    @GetMapping("/{largeId}/medium")
+    public CommonResponse<List<MediumCategoryResponse>> getMidCategory(@PathVariable Long largeId) {
+        List<MediumCategoryResponse> mediumCategoryDtoList = categoryService.findMediumCategories(largeId);
+        return CommonResponse.success("MediumCategory를 성공적으로 찾았습니다.", mediumCategoryDtoList);
     }
     // 소분류 조회
-    @GetMapping("/large-category/{medium_id}")
-    public CommonResponse<List<SmallCategoryResponse>> getSmallCategory(@PathVariable Long medium_id) {
-        List<SmallCategoryResponse> smallCategoryDtoList = categoryService.findMediumtoSmall(medium_id);
-        return CommonResponse.success("성공", smallCategoryDtoList);
+    @GetMapping("/{mediumId}/small")
+    public CommonResponse<List<SmallCategoryResponse>> getSmallCategory(@PathVariable Long mediumId) {
+        List<SmallCategoryResponse> smallCategoryDtoList = categoryService.findSmallCategories(mediumId);
+        return CommonResponse.success("SmallCategory를 성공적으로 찾았습니다.", smallCategoryDtoList);
     }
     // 소분류 + 소소분류
-    @GetMapping("/api/v1/category/medium/{small_id}")
-    public CommonResponse<List<TinyCategoryResponse>> getTinycategory(@PathVariable("small_id") Long small_id) {
-        List<TinyCategoryResponse> tinyCategoryDtoList = categoryService.findSmalltoTiny(small_id);
-        return CommonResponse.success("성공", tinyCategoryDtoList);
+    @GetMapping("/{smallId}/tiny")
+    public CommonResponse<List<TinyCategoryResponse>> getTinycategory(@PathVariable("smallId") Long smallId) {
+        List<TinyCategoryResponse> tinyCategoryDtoList = categoryService.findSmalltoTiny(smallId);
+        return CommonResponse.success("TinyCategory를 성공적으로 찾았습니다.", tinyCategoryDtoList);
     }
 
 
