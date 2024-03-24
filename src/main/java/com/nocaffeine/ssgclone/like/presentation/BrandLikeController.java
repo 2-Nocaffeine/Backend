@@ -6,9 +6,12 @@ import com.nocaffeine.ssgclone.common.security.JwtTokenProvider;
 import com.nocaffeine.ssgclone.like.application.BrandLikeService;
 import com.nocaffeine.ssgclone.like.dto.request.BrandLikeRemoveRequest;
 import com.nocaffeine.ssgclone.like.dto.request.BrandLikeAddRequest;
+import com.nocaffeine.ssgclone.like.dto.response.BrandLikeListResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -31,6 +34,12 @@ public class BrandLikeController {
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
         brandLikeService.removeBrandLike(brandLikeRemoveRequest, memberUuid);
         return CommonResponse.success("브랜드 좋아요 취소 성공");
+    }
+
+    @GetMapping
+    public CommonResponse<List<BrandLikeListResponse>> brandLikeList(){
+        String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
+        return CommonResponse.success("브랜드 좋아요 목록 조회 성공", brandLikeService.findBrandLike(memberUuid));
     }
 
 }

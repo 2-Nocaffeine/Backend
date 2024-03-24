@@ -4,8 +4,11 @@ import com.nocaffeine.ssgclone.brandstore.domain.Brand;
 import com.nocaffeine.ssgclone.brandstore.infrastructure.BrandRepository;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
 import com.nocaffeine.ssgclone.like.domain.BrandLike;
+import com.nocaffeine.ssgclone.like.domain.ProductLike;
 import com.nocaffeine.ssgclone.like.dto.request.BrandLikeRemoveRequest;
 import com.nocaffeine.ssgclone.like.dto.request.BrandLikeAddRequest;
+import com.nocaffeine.ssgclone.like.dto.response.BrandLikeListResponse;
+import com.nocaffeine.ssgclone.like.dto.response.ProductLikeListResponse;
 import com.nocaffeine.ssgclone.like.infrastructure.BrandLikeRepository;
 import com.nocaffeine.ssgclone.member.domain.Member;
 import com.nocaffeine.ssgclone.member.infrastructure.MemberRepository;
@@ -13,6 +16,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.*;
 
@@ -69,8 +75,32 @@ public class BrandLikeServiceImp implements BrandLikeService{
                 .orElseThrow(() -> new BaseException(NO_EXIST_WISH_BRAND));
 
         brandLikeRepository.delete(brandLike);
+    }
 
 
+    /**
+     * 브랜드 좋아요 목록 조회
+     */
+    @Override
+    public List<BrandLikeListResponse> findBrandLike(String memberUuid) {
+        Member member = memberRepository.findByUuid(memberUuid)
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
+
+        List<BrandLike> bradList = brandLikeRepository.findByMember(member);
+
+        List<BrandLikeListResponse> brandLikeListResponses = new ArrayList<>();
+
+
+        for (BrandLike brandLike : bradList) {
+            BrandLikeListResponse response = BrandLikeListResponse.builder()
+                    .brandId(brandLike.getBrand().getId())
+                    .brandName(brandLike.getBrand().getName())
+                    .build();
+
+            brandLikeListResponses.add(response);
+        }
+
+        return brandLikeListResponses;
     }
 
 
