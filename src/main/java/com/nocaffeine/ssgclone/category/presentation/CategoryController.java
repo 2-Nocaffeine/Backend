@@ -1,7 +1,6 @@
 package com.nocaffeine.ssgclone.category.presentation;
 
 import com.nocaffeine.ssgclone.category.application.CategoryService;
-import com.nocaffeine.ssgclone.category.domain.ProductList;
 import com.nocaffeine.ssgclone.category.dto.response.*;
 import com.nocaffeine.ssgclone.common.CommonResponse;
 import lombok.AllArgsConstructor;
