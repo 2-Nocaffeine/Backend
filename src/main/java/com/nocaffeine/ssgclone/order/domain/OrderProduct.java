@@ -1,6 +1,6 @@
 package com.nocaffeine.ssgclone.order.domain;
 
-import com.nocaffeine.ssgclone.product.domain.ProductOption;
+import com.nocaffeine.ssgclone.product.domain.OptionSelectedProduct;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -15,7 +15,7 @@ public class OrderProduct {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
-    private ProductOption productOption;
+    private OptionSelectedProduct optionSelectedProduct;
 
     @NotNull
     private int price;

@@ -25,7 +25,8 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public CommonResponse<ProductResponse> getProduct(@PathVariable Long id) {
-        return CommonResponse.success("상품을 성공적으로 찾았습니다.", productService.getProduct(id));
+        ProductResponse getProduct = productService.getProduct(id);
+        return CommonResponse.success("상품을 성공적으로 찾았습니다.", getProduct);
     }
 
     @GetMapping("/{id}/size")

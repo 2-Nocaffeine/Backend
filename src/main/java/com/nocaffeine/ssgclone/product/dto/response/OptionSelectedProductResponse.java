@@ -13,11 +13,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductOptionResponse {
+public class OptionSelectedProductResponse {
 
     private Product product;
     private SizeOption sizeOption;
     private ColorOption colorOption;
     private AddOption addOption;
-    private int quantity;
+    private int stock;
 }

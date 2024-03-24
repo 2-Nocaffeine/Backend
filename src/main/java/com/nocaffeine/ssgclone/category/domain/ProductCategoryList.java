@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class ProductList {
+public class ProductCategoryList {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,7 +36,7 @@ public class ProductList {
 
 
     @Builder
-    public ProductList(Product product, LargeCategory largeCategory, MediumCategory mediumCategory, SmallCategory smallCategory, Long tinyCategory) {
+    public ProductCategoryList(Product product, LargeCategory largeCategory, MediumCategory mediumCategory, SmallCategory smallCategory, Long tinyCategory) {
         this.product = product;
         this.largeCategory = largeCategory;
         this.mediumCategory = mediumCategory;

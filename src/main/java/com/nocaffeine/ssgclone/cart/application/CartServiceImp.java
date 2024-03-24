@@ -2,23 +2,28 @@ package com.nocaffeine.ssgclone.cart.application;
 
 
 import com.nocaffeine.ssgclone.cart.domain.Cart;
+import com.nocaffeine.ssgclone.cart.dto.request.CartAddRequest;
+import com.nocaffeine.ssgclone.cart.dto.request.CartModifyRequest;
 import com.nocaffeine.ssgclone.cart.dto.request.CartRemoveListRequest;
+import com.nocaffeine.ssgclone.cart.dto.response.CartCountResponse;
+import com.nocaffeine.ssgclone.cart.dto.response.CartListResponse;
+import com.nocaffeine.ssgclone.cart.dto.response.CartPriceResponse;
 import com.nocaffeine.ssgclone.cart.infrastructure.CartRepository;
-import com.nocaffeine.ssgclone.common.CommonResponse;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
 import com.nocaffeine.ssgclone.member.domain.Member;
 import com.nocaffeine.ssgclone.member.infrastructure.MemberRepository;
-import com.nocaffeine.ssgclone.product.domain.ProductOption;
-import com.nocaffeine.ssgclone.product.infrastructure.ProductOptionRepository;
+import com.nocaffeine.ssgclone.product.domain.OptionSelectedProduct;
+import com.nocaffeine.ssgclone.product.infrastructure.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.NO_DATA;
-import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.NO_EXIST_MEMBERS;
+import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.*;
 
 @Service
 @RequiredArgsConstructor
@@ -28,45 +33,136 @@ public class CartServiceImp implements CartService {
 
     private final CartRepository cartRepository;
     private final MemberRepository memberRepository;
-    private final ProductOptionRepository productOptionRepository;
+    private final OptionSelectedProductRepository optionSelectedProductRepository;
 
     /**
      * 장바구니 상품 추가.
      */
     @Override
     @Transactional
-    public CommonResponse<Void> addCart(Long productOptionId, String memberUuid) {
+    public void addCart(CartAddRequest cartAddRequest, String memberUuid) {
         Member member = memberRepository.findByUuid(memberUuid)
                 .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
 
-        ProductOption productOption = productOptionRepository.findById(productOptionId)
-                .orElseThrow(() -> new BaseException(NO_DATA));
+        OptionSelectedProduct optionSelectedProduct = optionSelectedProductRepository.findById(cartAddRequest.getProductOptionId())
+                .orElseThrow(() -> new BaseException(NO_SELECTED_OPTION_PRODUCT));
 
-        Cart cart = Cart.builder()
-                .member(member)
-                .productOption(productOption)
-                .quantity(1) // 최초 수량은 1개
-                .pin(false)
-                .checkProduct(false)
-                .build();
+        Optional<Cart> memberCart = cartRepository.findByMemberAndOptionSelectedProduct(member, optionSelectedProduct);
 
-        cartRepository.save(cart);
+        if (memberCart.isPresent()) {
+            // 이미 장바구니에 해당 상품이 존재하는 경우 -> 수량만큼 추가
+            memberCart.get().addQuantity(cartAddRequest.getQuantity());
+        } else {
+            // 장바구니에 해당 상품이 없는경우
+            Cart cart = Cart.builder()
+                    .member(member)
+                    .optionSelectedProduct(optionSelectedProduct)
+                    .quantity(cartAddRequest.getQuantity())
+                    .pin(false)
+                    .checkProduct(false)
+                    .build();
 
-        return CommonResponse.success("장바구니에 상품을 추가하였습니다.");
+            cartRepository.save(cart);
+        }
     }
+
 
     /**
      * 장바구니 선택 상품 삭제.
      */
     @Override
     @Transactional
-    public CommonResponse<Void> removeCart(CartRemoveListRequest cartRemoveListRequest, String memberUuid) {
+    public void removeCart(CartRemoveListRequest cartRemoveListRequest, String memberUuid) {
         List<Long> cartIds = cartRemoveListRequest.getCartId();
         for (Long cartId : cartIds) {
+            cartRepository.findById(cartId).orElseThrow(()
+                    -> new BaseException(NO_DATA));
+
             cartRepository.deleteById(cartId);
         }
-        return CommonResponse.success("장바구니에서 상품을 삭제하였습니다.");
     }
 
+    /**
+     * 장바구니 목록 조회.
+     */
+    @Override
+    public List<CartListResponse> listCart(String memberUuid) {
+        Member member = memberRepository.findByUuid(memberUuid)
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
+
+        List<Cart> cartList = cartRepository.findByMember(member);
+
+        List<CartListResponse> responseCartList = new ArrayList<>();
+
+        for (Cart cart : cartList) {
+            CartListResponse response = CartListResponse.builder()
+                    .cartId(cart.getId())
+                    .productId(cart.getOptionSelectedProduct().getProduct().getId())
+                    .quantity(cart.getQuantity())
+                    .productOptionId(cart.getOptionSelectedProduct().getId())
+                    .build();
+            responseCartList.add(response);
+        }
+        return responseCartList;
+    }
+
+    /**
+     * 장바구니 상품 수량 수정.
+     */
+    @Override
+    @Transactional
+    public void modifyCart(CartModifyRequest cartModifyRequest){
+        Cart cart = cartRepository.findById(cartModifyRequest.getCartId())
+                .orElseThrow(() -> new BaseException(NO_DATA));
+
+        if(cartModifyRequest.getPm().equals("plus")){
+            cart.plusQuantity();
+        }else if(cartModifyRequest.getPm().equals("minus")){
+            cart.minusQuantity();
+        } else{
+            throw new BaseException(NO_DATA);
+
+
+        }
+    }
+
+    /**
+     * 장바구니 상품 개수 조회.
+     */
+    @Override
+    public CartCountResponse countCart(String memberUuid) {
+        Member member = memberRepository.findByUuid(memberUuid)
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
+
+        List<Cart> cartList = cartRepository.findByMember(member);
+
+        int cartSize = cartList.size();
+
+        return CartCountResponse.builder()
+                .cartCount(cartSize)
+                .build();
+
+    }
+
+    /**
+     * 장바구니 선택한 상품 가격 조회.
+     */
+    @Override
+    public CartPriceResponse totalPrice(List<Long> cartId) {
+       int totalPrice = 0;
+       int quantity = 0;
+        for (Long cart : cartId) {
+            Cart findCart = cartRepository.findById(cart)
+                    .orElseThrow(() -> new BaseException(NO_DATA));
+
+            totalPrice += findCart.getOptionSelectedProduct().getProduct().getPrice() * findCart.getQuantity();
+            quantity += findCart.getQuantity();
+        }
+
+        return CartPriceResponse.builder()
+                .quantity(quantity)
+                .totalPrice(totalPrice)
+                .build();
+    }
 
 }

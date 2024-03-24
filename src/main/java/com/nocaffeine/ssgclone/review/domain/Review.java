@@ -22,6 +22,7 @@ public class Review extends BaseTimeEntity {
     private Member member;
 
     @NotNull
+    @Column(length = 500)
     private String content;
 
     @NotNull

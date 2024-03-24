@@ -5,13 +5,13 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-public class FolderList {
+public class LikeFolderList {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
-    private Folder folder;
+    private LikeFolder likeFolder;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
