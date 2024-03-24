@@ -1,25 +1,14 @@
 package com.nocaffeine.ssgclone.category.application;
 
-import com.nocaffeine.ssgclone.brandstore.infrastructure.BrandListRepository;
-import com.nocaffeine.ssgclone.brandstore.infrastructure.BrandRepository;
 import com.nocaffeine.ssgclone.category.domain.*;
 import com.nocaffeine.ssgclone.category.dto.response.*;
 import com.nocaffeine.ssgclone.category.infrastructure.*;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
-import com.nocaffeine.ssgclone.product.domain.Total;
-import com.nocaffeine.ssgclone.product.infrastructure.ProductImageRepository;
-import com.nocaffeine.ssgclone.product.infrastructure.ProductRepository;
-import com.nocaffeine.ssgclone.product.infrastructure.TotalRepository;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
-import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.NO_PRODUCT;
 import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.No_TINY_CATEGORY;
 
 @Service
@@ -28,7 +17,6 @@ import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.No_TIN
 public class CategoryServiceImp implements CategoryService {
 
     private final LargeCategoryRepository largeCategoryRepository;
-
     private final MediumCategoryRepository mediumCategoryRepository;
     private final SmallCategoryRepository smallCategoryRepository;
     private final TinyCategoryRepository tinyCategoryRepository;
@@ -80,7 +68,7 @@ public class CategoryServiceImp implements CategoryService {
     }
 
     @Override
-    public List<TinyCategoryResponse> findSmalltoTiny(Long smallId) {
+    public List<TinyCategoryResponse> findTinyCategories(Long smallId) {
         List<TinyCategoryResponse> tinyCategoryDtoList = new ArrayList<>();
 
         for (TinyCategory tinyCategory : tinyCategoryRepository.findBySmallCategoryId(smallId)) {

@@ -11,7 +11,7 @@ public interface CategoryService {
 
     List<SmallCategoryResponse> findSmallCategories(Long mediumId);
 
-    List<TinyCategoryResponse> findSmalltoTiny(Long smallId);
+    List<TinyCategoryResponse> findTinyCategories(Long smallId);
 
 
 }

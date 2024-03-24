@@ -40,7 +40,7 @@ public class CategoryController {
     // 소분류 + 소소분류
     @GetMapping("/{smallId}/tiny")
     public CommonResponse<List<TinyCategoryResponse>> TinycategoryList(@PathVariable("smallId") Long smallId) {
-        List<TinyCategoryResponse> tinyCategoryDtoList = categoryService.findSmalltoTiny(smallId);
+        List<TinyCategoryResponse> tinyCategoryDtoList = categoryService.findTinyCategories(smallId);
         return CommonResponse.success("TinyCategory를 성공적으로 찾았습니다.", tinyCategoryDtoList);
     }
 
