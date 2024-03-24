@@ -4,6 +4,7 @@ import com.nocaffeine.ssgclone.brandstore.domain.Brand;
 import com.nocaffeine.ssgclone.brandstore.infrastructure.BrandRepository;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
 import com.nocaffeine.ssgclone.like.domain.BrandLike;
+import com.nocaffeine.ssgclone.like.dto.request.BrandLikeRemoveRequest;
 import com.nocaffeine.ssgclone.like.dto.request.LikeBrandAddRequest;
 import com.nocaffeine.ssgclone.like.infrastructure.BrandLikeRepository;
 import com.nocaffeine.ssgclone.member.domain.Member;
@@ -50,4 +51,27 @@ public class BrandLikeServiceImp implements BrandLikeService{
 
         brandLikeRepository.save(brandLike);
     }
+
+
+    /**
+     * 브랜드 좋아요 취소
+     */
+    @Override
+    @Transactional
+    public void removeBrandLike(BrandLikeRemoveRequest brandLikeRemoveRequest, String memberUuid) {
+        Member member = memberRepository.findByUuid(memberUuid)
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
+
+        Brand brand = brandRepository.findById(brandLikeRemoveRequest.getBrandId())
+                .orElseThrow(() -> new BaseException(NO_EXIST_BRAND));
+
+        BrandLike brandLike = brandLikeRepository.findByMemberAndBrand(member, brand)
+                .orElseThrow(() -> new BaseException(NO_EXIST_WISH_BRAND));
+
+        brandLikeRepository.delete(brandLike);
+
+
+    }
+
+
 }
