@@ -4,8 +4,12 @@ import com.nocaffeine.ssgclone.brandstore.domain.Brand;
 import com.nocaffeine.ssgclone.member.domain.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BrandLike {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,4 +24,11 @@ public class BrandLike {
 
     @Column(name = "like_folder_id")
     private Long likeFolder;
+
+    @Builder
+    public BrandLike(Member member, Brand brand, Long likeFolder) {
+        this.member = member;
+        this.brand = brand;
+        this.likeFolder = likeFolder;
+    }
 }
