@@ -1,10 +1,10 @@
 package com.nocaffeine.ssgclone.like.application;
 
 import com.nocaffeine.ssgclone.like.dto.request.BrandLikeRemoveRequest;
-import com.nocaffeine.ssgclone.like.dto.request.LikeBrandAddRequest;
+import com.nocaffeine.ssgclone.like.dto.request.BrandLikeAddRequest;
 
 public interface BrandLikeService {
 
-    void addBrandLike(LikeBrandAddRequest likeBrandAddRequest, String memberUuid);
+    void addBrandLike(BrandLikeAddRequest brandLikeAddRequest, String memberUuid);
     void removeBrandLike(BrandLikeRemoveRequest brandLikeRemoveRequest, String memberUuid);
 }

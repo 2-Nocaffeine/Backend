@@ -5,7 +5,7 @@ import com.nocaffeine.ssgclone.brandstore.infrastructure.BrandRepository;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
 import com.nocaffeine.ssgclone.like.domain.BrandLike;
 import com.nocaffeine.ssgclone.like.dto.request.BrandLikeRemoveRequest;
-import com.nocaffeine.ssgclone.like.dto.request.LikeBrandAddRequest;
+import com.nocaffeine.ssgclone.like.dto.request.BrandLikeAddRequest;
 import com.nocaffeine.ssgclone.like.infrastructure.BrandLikeRepository;
 import com.nocaffeine.ssgclone.member.domain.Member;
 import com.nocaffeine.ssgclone.member.infrastructure.MemberRepository;
@@ -32,11 +32,11 @@ public class BrandLikeServiceImp implements BrandLikeService{
      */
     @Override
     @Transactional
-    public void addBrandLike(LikeBrandAddRequest likeBrandAddRequest, String memberUuid) {
+    public void addBrandLike(BrandLikeAddRequest brandLikeAddRequest, String memberUuid) {
         Member member = memberRepository.findByUuid(memberUuid)
                 .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
 
-        Brand brand = brandRepository.findById(likeBrandAddRequest.getBrandId())
+        Brand brand = brandRepository.findById(brandLikeAddRequest.getBrandId())
                 .orElseThrow(() -> new BaseException(NO_EXIST_BRAND));
 
         if(brandLikeRepository.findByMemberAndBrand(member, brand).isPresent()){

@@ -1,5 +1,6 @@
 package com.nocaffeine.ssgclone.like.dto.request;
 
+
 import lombok.*;
 
 @Getter
@@ -7,6 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class LikeBrandAddRequest {
-    private Long brandId;
+public class ProductLikeRemoveRequest {
+    private Long productId;
 }

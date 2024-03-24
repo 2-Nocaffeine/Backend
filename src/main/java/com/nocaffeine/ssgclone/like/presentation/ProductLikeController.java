@@ -4,8 +4,8 @@ package com.nocaffeine.ssgclone.like.presentation;
 import com.nocaffeine.ssgclone.common.CommonResponse;
 import com.nocaffeine.ssgclone.common.security.JwtTokenProvider;
 import com.nocaffeine.ssgclone.like.application.ProductLikeService;
-import com.nocaffeine.ssgclone.like.dto.request.LikeProductAddRequest;
-import com.nocaffeine.ssgclone.like.dto.request.LikeProductRemoveRequest;
+import com.nocaffeine.ssgclone.like.dto.request.ProductLikeAddRequest;
+import com.nocaffeine.ssgclone.like.dto.request.ProductLikeRemoveRequest;
 import com.nocaffeine.ssgclone.like.dto.response.ProductLikeListResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -25,17 +25,17 @@ public class ProductLikeController {
 
     @Operation(summary = "상품 좋아요", description = "상품 좋아요", tags = {"Product Like"})
     @PostMapping
-    public CommonResponse<String> addProductLike(@RequestBody LikeProductAddRequest likeProductAddRequest){
+    public CommonResponse<String> addProductLike(@RequestBody ProductLikeAddRequest productLikeAddRequest){
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
-        productLikeService.addProductLike(likeProductAddRequest, memberUuid);
+        productLikeService.addProductLike(productLikeAddRequest, memberUuid);
         return CommonResponse.success("좋아요 성공");
     }
 
     @Operation(summary = "상품 좋아요 취소", description = "상품 좋아요 취소", tags = {"Product Like"})
     @DeleteMapping
-    public CommonResponse<String> removeProductLike(@RequestBody LikeProductRemoveRequest likeProductRemoveRequest){
+    public CommonResponse<String> removeProductLike(@RequestBody ProductLikeRemoveRequest productLikeRemoveRequest){
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
-        productLikeService.removeProductLike(likeProductRemoveRequest, memberUuid);
+        productLikeService.removeProductLike(productLikeRemoveRequest, memberUuid);
         return CommonResponse.success("좋아요 취소 성공");
     }
 

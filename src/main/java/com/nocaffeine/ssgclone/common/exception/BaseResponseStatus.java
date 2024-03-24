@@ -68,10 +68,12 @@ public enum BaseResponseStatus {
      */
     NO_DATA(HttpStatus.BAD_REQUEST, false, 6001, "존재하지 않는 정보입니다"),
     ALREADY_ADDED_PRODUCT(HttpStatus.CONFLICT, false, 6002, "이미 장바구니에 존재하는 상품입니다"),
-    ALREADY_ADDED_WISH_PRODUCT(HttpStatus.CONFLICT, false, 6003, "이미 찜한 상품입니다"),
+    ALREADY_ADDED_WISH_PRODUCT(HttpStatus.CONFLICT, false, 6003, "이미 좋아요한 상품입니다"),
     INVALID_CART_QUANTITY(HttpStatus.BAD_REQUEST, false, 6004, "수량은 1보다 작을 수 없습니다."),
     ALREADY_ADDED_WISH_BRAND(HttpStatus.CONFLICT, false, 6005, "이미 좋아요한 브랜드입니다"),
     NO_EXIST_WISH_BRAND(HttpStatus.NOT_FOUND, false, 6006, "좋아요에 포함되지 않은 브랜드입니다"),
+    NO_EXIST_WISH_PRODUCT(HttpStatus.NOT_FOUND, false, 6007, "좋아요에 포함되지 않은 상품입니다"),
+
 
     //category
     No_Tiny_Category(HttpStatus.NOT_FOUND, false, 7001, "tinycategory가 존재하지 않는 카테고리입니다"),

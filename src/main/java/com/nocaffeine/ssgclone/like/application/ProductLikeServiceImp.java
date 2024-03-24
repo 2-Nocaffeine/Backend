@@ -3,8 +3,8 @@ package com.nocaffeine.ssgclone.like.application;
 
 import com.nocaffeine.ssgclone.common.exception.BaseException;
 import com.nocaffeine.ssgclone.like.domain.ProductLike;
-import com.nocaffeine.ssgclone.like.dto.request.LikeProductAddRequest;
-import com.nocaffeine.ssgclone.like.dto.request.LikeProductRemoveRequest;
+import com.nocaffeine.ssgclone.like.dto.request.ProductLikeAddRequest;
+import com.nocaffeine.ssgclone.like.dto.request.ProductLikeRemoveRequest;
 import com.nocaffeine.ssgclone.like.dto.response.ProductLikeListResponse;
 import com.nocaffeine.ssgclone.like.infrastructure.ProductLikeRepository;
 import com.nocaffeine.ssgclone.member.domain.Member;
@@ -36,11 +36,11 @@ public class ProductLikeServiceImp implements ProductLikeService {
      */
     @Override
     @Transactional
-    public void addProductLike(LikeProductAddRequest likeProductAddRequest, String memberUuid) {
+    public void addProductLike(ProductLikeAddRequest productLikeAddRequest, String memberUuid) {
         Member member = memberRepository.findByUuid(memberUuid)
                 .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
 
-        Product product = productRepository.findById(likeProductAddRequest.getProductId())
+        Product product = productRepository.findById(productLikeAddRequest.getProductId())
                 .orElseThrow(() -> new BaseException(NO_PRODUCT));
 
         if(productLikeRepository.findByMemberAndProduct(member, product).isPresent()){
@@ -61,15 +61,15 @@ public class ProductLikeServiceImp implements ProductLikeService {
      */
     @Override
     @Transactional
-    public void removeProductLike(LikeProductRemoveRequest likeProductRemoveRequest, String memberUuid) {
+    public void removeProductLike(ProductLikeRemoveRequest productLikeRemoveRequest, String memberUuid) {
         Member member = memberRepository.findByUuid(memberUuid)
                 .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
 
-        Product product = productRepository.findById(likeProductRemoveRequest.getProductId())
+        Product product = productRepository.findById(productLikeRemoveRequest.getProductId())
                 .orElseThrow(() -> new BaseException(NO_PRODUCT));
 
         ProductLike productLike = productLikeRepository.findByMemberAndProduct(member, product)
-                .orElseThrow(() -> new BaseException(NO_DATA));
+                .orElseThrow(() -> new BaseException(NO_EXIST_WISH_PRODUCT));
 
         productLikeRepository.delete(productLike);
 
