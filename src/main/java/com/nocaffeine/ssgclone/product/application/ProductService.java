@@ -1,19 +1,18 @@
 package com.nocaffeine.ssgclone.product.application;
 
-import com.nocaffeine.ssgclone.common.CommonResponse;
-import com.nocaffeine.ssgclone.product.dto.response.AddOptionResponse;
-import com.nocaffeine.ssgclone.product.dto.response.ColorOptionResponse;
-import com.nocaffeine.ssgclone.product.dto.response.ProductResponse;
-import com.nocaffeine.ssgclone.product.dto.response.SizeOptionResponse;
+import com.nocaffeine.ssgclone.product.dto.AddOptionDto;
+import com.nocaffeine.ssgclone.product.dto.ColorOptionDto;
+import com.nocaffeine.ssgclone.product.dto.ProductDto;
+import com.nocaffeine.ssgclone.product.dto.SizeOptionDto;
 
 import java.util.List;
 
 public interface ProductService {
 
      // 제품을 찾는 메소드
-     ProductResponse getProduct(Long id);
-     List<SizeOptionResponse> getSizeOptions(Long id);
-     List<ColorOptionResponse> getColorOptions(Long id);
-     List<AddOptionResponse> getAddOptions(Long id);
+     ProductDto getProduct(Long id);
+     List<SizeOptionDto> getSizeOptions(Long id);
+     List<ColorOptionDto> getColorOptions(Long id);
+     List<AddOptionDto> getAddOptions(Long id);
 
 }

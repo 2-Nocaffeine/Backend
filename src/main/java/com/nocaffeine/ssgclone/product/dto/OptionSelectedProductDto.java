@@ -1,4 +1,4 @@
-package com.nocaffeine.ssgclone.product.dto.response;
+package com.nocaffeine.ssgclone.product.dto;
 
 import com.nocaffeine.ssgclone.product.domain.AddOption;
 import com.nocaffeine.ssgclone.product.domain.ColorOption;
@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OptionSelectedProductResponse {
+public class OptionSelectedProductDto {
 
     private Product product;
     private SizeOption sizeOption;

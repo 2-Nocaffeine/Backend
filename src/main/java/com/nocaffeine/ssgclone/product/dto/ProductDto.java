@@ -1,4 +1,4 @@
-package com.nocaffeine.ssgclone.product.dto.response;
+package com.nocaffeine.ssgclone.product.dto;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductResponse {
+public class ProductDto {
 
     private Long id;
     private String name;
