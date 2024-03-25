@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class LargeCategoryResponse {
-    private Long large_category_id;
-    private String large_category_name;
+    private Long largeCategoryId;
+    private String largeCategoryName;
 }

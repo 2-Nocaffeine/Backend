@@ -28,8 +28,8 @@ public class CategoryServiceImp implements CategoryService {
 
         for (LargeCategory largeCategory : largeCategoryRepository.findAll()){
             LargeCategoryResponse largeCategoryDto = LargeCategoryResponse.builder()
-                    .large_category_id(largeCategory.getId())
-                    .large_category_name(largeCategory.getName())
+                    .largeCategoryId(largeCategory.getId())
+                    .largeCategoryName(largeCategory.getName())
                     .build();
             largeCategoryList.add(largeCategoryDto);
         }
@@ -43,8 +43,8 @@ public class CategoryServiceImp implements CategoryService {
 
         for (MediumCategory mediumCategory : mediumCategoryRepository.findByLargeCategoryId(largeId)) {
             MediumCategoryResponse mediumCategoryDto = MediumCategoryResponse.builder()
-                    .medium_category_id(mediumCategory.getId())
-                    .medium_category_name(mediumCategory.getName())
+                    .mediumCategoryId(mediumCategory.getId())
+                    .mediumCategoryName(mediumCategory.getName())
                     .build();
             mediumCategoryDtoList.add(mediumCategoryDto);
         }
@@ -57,8 +57,8 @@ public class CategoryServiceImp implements CategoryService {
 
         for (SmallCategory smallCategory : smallCategoryRepository.findByMediumCategoryId(mediumId)) {
             SmallCategoryResponse smallCategoryDto = SmallCategoryResponse.builder()
-                    .small_category_id(smallCategory.getId())
-                    .small_category_name(smallCategory.getName())
+                    .smallCategoryId(smallCategory.getId())
+                    .smallCategoryName(smallCategory.getName())
                     .build();
             smallCategoryDtoList.add(smallCategoryDto);
 
@@ -73,13 +73,10 @@ public class CategoryServiceImp implements CategoryService {
 
         for (TinyCategory tinyCategory : tinyCategoryRepository.findBySmallCategoryId(smallId)) {
             TinyCategoryResponse tinyCategoryDto = TinyCategoryResponse.builder()
-                    .tiny_category_id(tinyCategory.getId())
-                    .tiny_category_name(tinyCategory.getName())
+                    .tinyCategoryId(tinyCategory.getId())
+                    .tinyCategoryName(tinyCategory.getName())
                     .build();
             tinyCategoryDtoList.add(tinyCategoryDto);
-        }
-        if (tinyCategoryDtoList.isEmpty()) {
-            throw new BaseException(No_TINY_CATEGORY);
         }
 
         return tinyCategoryDtoList;

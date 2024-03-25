@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class TinyCategoryResponse {
 
-    private Long tiny_category_id;
-    private String tiny_category_name;
+    private Long tinyCategoryId;
+    private String tinyCategoryName;
 }
