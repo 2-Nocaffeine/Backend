@@ -1,4 +1,4 @@
-package com.nocaffeine.ssgclone.order.dto;
+package com.nocaffeine.ssgclone.order.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,15 +11,14 @@ import java.sql.Timestamp;
 @Setter
 @AllArgsConstructor
 @ToString
-public class OrderDto {
+public class OrderSaveResponse {
 
     private Long id;
-    private Long member;
     private String regoin;
     private String name;
     private String phoneNumber;
     private String email;
     private int totalPrice;
     private Timestamp orderDate;
-    private int status;
+    private String status;
 }

@@ -1,17 +1,17 @@
 package com.nocaffeine.ssgclone.category.application;
 
-import com.nocaffeine.ssgclone.category.dto.request.MediumCategoryRequest;
-import com.nocaffeine.ssgclone.category.dto.response.MediumCategoryDto;
-import com.nocaffeine.ssgclone.category.dto.response.SmallCategoryDto;
-import com.nocaffeine.ssgclone.category.dto.response.TinyCategoryDto;
+import com.nocaffeine.ssgclone.category.dto.response.*;
 
 import java.util.List;
 
 public interface CategoryService {
 
-    List<MediumCategoryDto> findLargetoMedium(Long large_id);
+    List<LargeCategoryResponse> findLargeCategories();
+    List<MediumCategoryResponse> findMediumCategories(Long largeId);
 
-    List<SmallCategoryDto> findMediumtoSmall(Long medium_id);
+    List<SmallCategoryResponse> findSmallCategories(Long mediumId);
 
-    List<TinyCategoryDto> findSmalltoTiny(Long small_id);
+    List<TinyCategoryResponse> findTinyCategories(Long smallId);
+
+
 }
