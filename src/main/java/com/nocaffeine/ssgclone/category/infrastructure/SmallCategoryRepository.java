@@ -8,7 +8,6 @@ import java.util.List;
 
 @Repository
 public interface SmallCategoryRepository extends JpaRepository<SmallCategory, Long> {
-    List<SmallCategory> findByMediumCategory_Id(Long id);
+    List<SmallCategory> findByMediumCategoryId(Long id);
 
-    SmallCategory findByName(String name);
 }

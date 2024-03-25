@@ -64,7 +64,7 @@ public enum BaseResponseStatus {
 
 
     /**
-     * 5000 : Cart & WishProductList Service Error
+     * 6000 : Cart & WishProductList Service Error
      */
     NO_DATA(HttpStatus.BAD_REQUEST, false, 6001, "존재하지 않는 정보입니다"),
     ALREADY_ADDED_PRODUCT(HttpStatus.CONFLICT, false, 6002, "이미 장바구니에 존재하는 상품입니다"),
@@ -75,8 +75,12 @@ public enum BaseResponseStatus {
     NO_EXIST_WISH_PRODUCT(HttpStatus.NOT_FOUND, false, 6007, "좋아요에 포함되지 않은 상품입니다"),
 
 
-    //category
-    No_Tiny_Category(HttpStatus.NOT_FOUND, false, 7001, "tinycategory가 존재하지 않는 카테고리입니다"),
+
+    /**
+     * 7000 : Category Service Error
+     */
+    NO_TINY_CATEGORY(HttpStatus.NOT_FOUND, false, 7001, "tinycategory가 존재하지 않는 카테고리입니다"),
+
 
     /**
      * 8000 : Product Service Error
@@ -92,6 +96,7 @@ public enum BaseResponseStatus {
      * Brand
      */
     NO_EXIST_BRAND(HttpStatus.NOT_FOUND, false,9001, "브랜드가 존재하지 않습니다");
+
 
 
     private final HttpStatusCode httpStatusCode;

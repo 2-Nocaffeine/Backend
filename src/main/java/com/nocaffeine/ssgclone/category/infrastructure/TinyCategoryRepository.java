@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface TinyCategoryRepository extends JpaRepository<TinyCategory, Long> {
 
-    List<TinyCategory> findBySmallCategory_Id(Long id);
+    List<TinyCategory> findBySmallCategoryId(Long id);
 }
