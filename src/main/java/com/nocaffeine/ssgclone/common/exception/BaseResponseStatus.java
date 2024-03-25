@@ -73,6 +73,8 @@ public enum BaseResponseStatus {
     ALREADY_ADDED_WISH_BRAND(HttpStatus.CONFLICT, false, 6005, "이미 좋아요한 브랜드입니다"),
     NO_EXIST_WISH_BRAND(HttpStatus.NOT_FOUND, false, 6006, "좋아요에 포함되지 않은 브랜드입니다"),
     NO_EXIST_WISH_PRODUCT(HttpStatus.NOT_FOUND, false, 6007, "좋아요에 포함되지 않은 상품입니다"),
+    ALREADY_ADDED_WISH_CATEGORY(HttpStatus.CONFLICT, false, 6008, "이미 좋아요한 카테고리입니다"),
+
 
 
 
