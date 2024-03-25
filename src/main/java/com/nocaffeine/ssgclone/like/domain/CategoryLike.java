@@ -14,9 +14,6 @@ public class CategoryLike {
     @NotNull
     private Member member;
 
-    @Column(name = "large_category_id")
-    private Long largeCategory;
-
     @Column(name = "medium_category_id")
     private Long mediumCategory;
 
