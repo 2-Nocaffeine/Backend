@@ -89,6 +89,7 @@ public enum BaseResponseStatus {
     INVALID_STOCK_QUANTITY(HttpStatus.BAD_REQUEST, false, 8005, "유효하지 않은 재고 수량입니다");
 
 
+
     private final HttpStatusCode httpStatusCode;
     private final boolean isSuccess;
     private final int code;

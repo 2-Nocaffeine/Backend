@@ -1,5 +1,6 @@
 package com.nocaffeine.ssgclone.order.application;
 
+import com.nocaffeine.ssgclone.common.exception.BaseException;
 import com.nocaffeine.ssgclone.order.domain.OrderProduct;
 import com.nocaffeine.ssgclone.order.domain.Orders;
 import com.nocaffeine.ssgclone.order.dto.MemberOrderProductIdDto;
@@ -17,6 +18,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.NO_DATA;
 
 @Service
 @RequiredArgsConstructor
@@ -48,14 +51,14 @@ public class OrderServiceImp implements OrderService{
 //        string list로 아이디값을 받고 그 아이디값으로 orderprodct를 생성해야함
         for (Long productId : memberOrderSaveDto.getOptionSelectedProducts()) {
             OptionSelectedProduct optionSelectedProductId = optionSelectedProductRepository.findById(productId)
-                    .orElseThrow(() -> new IllegalArgumentException("해당 상품이 존재하지 않습니다."));
+                    .orElseThrow(() -> new BaseException(NO_DATA));
 
             OrderProduct orderProduct = OrderProduct.builder()
                     .order(savedOrders)
-                    .optionSelectedProduct(optionSelectedProductId(productId))
+                    .optionSelectedProduct(optionSelectedProductId)
                     .build();
 
-            save();
+            orderProductRepository.save(orderProduct);
         }
 
 
