@@ -3,7 +3,7 @@ package com.nocaffeine.ssgclone.like.vo.request;
 import lombok.Getter;
 
 @Getter
-public class LikeFolderAddVo {
+public class LikeFolderAddRequestVo {
     private String name; // 폴더명
 
 }

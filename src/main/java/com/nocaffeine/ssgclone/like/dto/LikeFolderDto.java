@@ -1,10 +1,7 @@
 package com.nocaffeine.ssgclone.like.dto;
 
-import com.nocaffeine.ssgclone.like.domain.LikeFolder;
-import com.nocaffeine.ssgclone.like.vo.request.LikeFolderAddVo;
+import com.nocaffeine.ssgclone.like.vo.request.LikeFolderAddRequestVo;
 import com.nocaffeine.ssgclone.member.domain.Member;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Getter
@@ -18,9 +15,9 @@ public class LikeFolderDto {
     private Member member;
     private String name;
 
-    public static LikeFolderDto voToDto(LikeFolderAddVo likeFolderAddVo){
+    public static LikeFolderDto voToDto(LikeFolderAddRequestVo likeFolderAddRequestVo){
         return LikeFolderDto.builder()
-                .name(likeFolderAddVo.getName())
+                .name(likeFolderAddRequestVo.getName())
                 .build();
     }
 }
