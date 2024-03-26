@@ -3,12 +3,11 @@ package com.nocaffeine.ssgclone.brandstore.application;
 import com.nocaffeine.ssgclone.brandstore.domain.BrandList;
 import com.nocaffeine.ssgclone.brandstore.dto.BrandResponse;
 import com.nocaffeine.ssgclone.brandstore.infrastructure.BrandListRepository;
-import com.nocaffeine.ssgclone.brandstore.infrastructure.BrandRepository;
+import com.nocaffeine.ssgclone.common.exception.BaseException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
+import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.NO_DATA;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +18,7 @@ public class BrandServiceImp implements BrandService{
     @Override
     public BrandResponse findBrandId(Long productId) {
         BrandList brandID = brandListRepository.findByProductId(productId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 상품의 브랜드가 존재하지 않습니다."));
+                .orElseThrow(() -> new BaseException(NO_DATA));
 
         return BrandResponse.builder()
                 .brandId(brandID.getBrand().getId())
