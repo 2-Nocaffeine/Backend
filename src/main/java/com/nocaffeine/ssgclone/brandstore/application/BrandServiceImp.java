@@ -18,12 +18,12 @@ public class BrandServiceImp implements BrandService{
     private final BrandListRepository brandListRepository;
     @Override
     public BrandResponse findBrandId(Long productId) {
-        Optional<BrandList> brandID = brandListRepository.findById(productId);
+        BrandList brandID = brandListRepository.findByProductId(productId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 상품의 브랜드가 존재하지 않습니다."));
 
-        BrandResponse brandResponse = BrandResponse.builder()
-                .BrandId(brandID.get().getBrand().getId())
-                .BrandName(brandID.get().getBrand().getName())
+        return BrandResponse.builder()
+                .brandId(brandID.getBrand().getId())
+                .brandName(brandID.getBrand().getName())
                 .build();
-        return brandResponse;
     }
 }

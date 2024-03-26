@@ -19,28 +19,28 @@ public class ProductIdListWithCategoryController {
     private final ProductIdListWithCategoryService productIdListWithCategoryService;
 
     //대분류별 상품 조회
-    @GetMapping("/large/{largeId}/productIdlist")
+    @GetMapping("/large/{largeId}/")
     public CommonResponse<List<ProductIdListResponse>> ProductIdWithLargeCategoryList(@PathVariable("largeId") Long largeId){
         List<ProductIdListResponse> productIdListResponseList = productIdListWithCategoryService.getProductIdListWithLargeCategory(largeId);
         return CommonResponse.success("해당 카테고리의 productIdList를 성공적으로 찾았습니다.",productIdListResponseList);
     }
 
     //중분류별 상품 조회
-    @GetMapping("/medium/{mediumId}/productIdlist")
+    @GetMapping("/medium/{mediumId}/")
     public CommonResponse<List<ProductIdListResponse>> ProductIdWithMediumCategoryList(@PathVariable("mediumId") Long mediumId){
         List<ProductIdListResponse> productIdListResponseList = productIdListWithCategoryService.getProductIdListWithMediumCategory(mediumId);
         return CommonResponse.success("해당 카테고리의 productIdList를 성공적으로 찾았습니다.",productIdListResponseList);
     }
 
     //소분류별 상품 조회
-    @GetMapping("/small/{smallId}/productIdlist")
+    @GetMapping("/small/{smallId}/")
     public CommonResponse<List<ProductIdListResponse>> ProductIdWithSmallCategoryList(@PathVariable("smallId") Long smallId){
         List<ProductIdListResponse> productIdListResponseList = productIdListWithCategoryService.getProductIdListWithSmallCategory(smallId);
         return CommonResponse.success("해당 카테고리의 productIdList를 성공적으로 찾았습니다.",productIdListResponseList);
     }
 
     //소소분류별 상품 조회
-    @GetMapping("/tiny/{tinyId}/productIdlist")
+    @GetMapping("/tiny/{tinyId}/")
     public CommonResponse<List<ProductIdListResponse>> ProductIdWithTinyCategoryList(@PathVariable("tinyId") Long tinyId){
         List<ProductIdListResponse> productIdListResponseList = productIdListWithCategoryService.getProductIdListWithTinyCategory(tinyId);
         return CommonResponse.success("해당 카테고리의 productIdList를 성공적으로 찾았습니다.",productIdListResponseList);

@@ -8,6 +8,6 @@ import lombok.*;
 @Builder
 public class BrandResponse {
 
-    private Long BrandId;
-    private String BrandName;
+    private Long brandId;
+    private String brandName;
 }
