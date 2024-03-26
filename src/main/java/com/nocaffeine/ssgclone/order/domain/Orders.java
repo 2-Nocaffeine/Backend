@@ -3,17 +3,25 @@ package com.nocaffeine.ssgclone.order.domain;
 import com.nocaffeine.ssgclone.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
 public class Orders extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "member_id")
-    private Long member;
+    @Column(length = 255)
+    private String uuid;
 
     @NotNull
     @Column(length = 255)
@@ -39,6 +47,11 @@ public class Orders extends BaseTimeEntity {
 
     @NotNull
     @Column(length = 50)
-    private String status;
+    private OrderStatus status;
+
+
+    public enum OrderStatus {
+        ORDERED, PREPARING, DELIVERING, DETERMINING, CANCEL
+    }
 
 }
