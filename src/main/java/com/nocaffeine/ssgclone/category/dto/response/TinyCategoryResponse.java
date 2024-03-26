@@ -1,4 +1,4 @@
-package com.nocaffeine.ssgclone.category.dto.request;
+package com.nocaffeine.ssgclone.category.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MediumCategoryRequest {
-    private Long id;
-    private String name;
+public class TinyCategoryResponse {
+
+    private Long tinyCategoryId;
+    private String tinyCategoryName;
 }

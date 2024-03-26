@@ -9,9 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SmallCategoryDto {
+public class SmallCategoryResponse {
 
-    private Long id;
-    private String name;
-    private Long mediumCategoryId;
+    private Long smallCategoryId;
+    private String smallCategoryName;
 }

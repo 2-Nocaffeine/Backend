@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MediumCategoryDto {
-    private Long id;
-    private String name;
-    private Long largeCategoryId;
+public class MediumCategoryResponse {
+    private Long mediumCategoryId;
+    private String mediumCategoryName;
 }
