@@ -32,6 +32,3 @@ public class OrderController {
 
 
 }
-//        String token = jwtTokenProvider.getHeader();
-//        String memberUuid = jwtTokenProvider.validateAndGetUserUuid(token);
-//        List<ViewHistoryDto> viewHistory = viewHistoryService.getViewHistory(memberUuid);
