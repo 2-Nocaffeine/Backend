@@ -3,7 +3,7 @@ package com.nocaffeine.ssgclone.product.application;
 import com.nocaffeine.ssgclone.category.domain.ProductCategoryList;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
 import com.nocaffeine.ssgclone.product.dto.response.ProductIdListResponse;
-import com.nocaffeine.ssgclone.product.infrastructure.ProductIdListWithCategoryRepository;
+import com.nocaffeine.ssgclone.product.infrastructure.ProductCategoryListRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,19 +16,19 @@ import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.NO_PRO
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class ProductIdListWithCategoryServiceImpl implements ProductIdListWithCategoryService {
+public class ProductCategoryListServiceImpl implements ProductCategoryListService {
 
-    private final ProductIdListWithCategoryRepository ProductIdListWithCategoryRepository;
+    private final ProductCategoryListRepository productCategoryListRepository;
 
     @Override
     public List<ProductIdListResponse> getProductIdListWithLargeCategory(Long largeId) {
         List<ProductIdListResponse> productIdListResponseList = new ArrayList<>();
         int sequenceId = 1;
 
-        for (ProductCategoryList productCategoryList : ProductIdListWithCategoryRepository.findByLargeCategoryId(largeId)){
+        for (ProductCategoryList productCategoryList : productCategoryListRepository.findByLargeCategoryId(largeId)){
             ProductIdListResponse productIdListResponse = ProductIdListResponse.builder()
                     .id(sequenceId++)
-                    .ProductId(productCategoryList.getProduct().getId())
+                    .productId(productCategoryList.getProduct().getId())
                     .build();
             productIdListResponseList.add(productIdListResponse);
         }
@@ -43,10 +43,10 @@ public class ProductIdListWithCategoryServiceImpl implements ProductIdListWithCa
         List<ProductIdListResponse> productIdListResponseList = new ArrayList<>();
         int sequenceId = 1;
 
-        for (ProductCategoryList productCategoryList : ProductIdListWithCategoryRepository.findByMediumCategoryId(mediumId)){
+        for (ProductCategoryList productCategoryList : productCategoryListRepository.findByMediumCategoryId(mediumId)){
             ProductIdListResponse productIdListResponse = ProductIdListResponse.builder()
                     .id(sequenceId++)
-                    .ProductId(productCategoryList.getProduct().getId())
+                    .productId(productCategoryList.getProduct().getId())
                     .build();
             productIdListResponseList.add(productIdListResponse);
         }
@@ -61,10 +61,10 @@ public class ProductIdListWithCategoryServiceImpl implements ProductIdListWithCa
         List<ProductIdListResponse> productIdListResponseList = new ArrayList<>();
         int sequenceId = 1;
 
-        for (ProductCategoryList productCategoryList : ProductIdListWithCategoryRepository.findBySmallCategoryId(smallId)){
+        for (ProductCategoryList productCategoryList : productCategoryListRepository.findBySmallCategoryId(smallId)){
             ProductIdListResponse productIdListResponse = ProductIdListResponse.builder()
                     .id(sequenceId++)
-                    .ProductId(productCategoryList.getProduct().getId())
+                    .productId(productCategoryList.getProduct().getId())
                     .build();
             productIdListResponseList.add(productIdListResponse);
         }
@@ -77,7 +77,7 @@ public class ProductIdListWithCategoryServiceImpl implements ProductIdListWithCa
     @Override
     public List<ProductIdListResponse> getProductIdListWithTinyCategory(Long tinyId) {
 
-        List<ProductCategoryList> productCategoryLists = ProductIdListWithCategoryRepository.findByTinyCategory(tinyId);
+        List<ProductCategoryList> productCategoryLists = productCategoryListRepository.findByTinyCategory(tinyId);
         if (productCategoryLists.isEmpty()){
                 throw new BaseException(NO_PRODUCT);
         }
@@ -87,7 +87,7 @@ public class ProductIdListWithCategoryServiceImpl implements ProductIdListWithCa
         for (ProductCategoryList productCategoryList : productCategoryLists){
             ProductIdListResponse productIdListResponse = ProductIdListResponse.builder()
                     .id(sequenceId++)
-                    .ProductId(productCategoryList.getProduct().getId())
+                    .productId(productCategoryList.getProduct().getId())
                     .build();
             productIdList.add(productIdListResponse);
         }

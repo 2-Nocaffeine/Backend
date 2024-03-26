@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface ProductIdListWithCategoryRepository extends JpaRepository<ProductCategoryList,Long> {
+public interface ProductCategoryListRepository extends JpaRepository<ProductCategoryList,Long> {
     List<ProductCategoryList> findByLargeCategoryId(Long largeId);
 
     List<ProductCategoryList> findByMediumCategoryId(Long mediumId);

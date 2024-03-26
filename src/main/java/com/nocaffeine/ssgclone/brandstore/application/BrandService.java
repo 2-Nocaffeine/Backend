@@ -4,5 +4,5 @@ import com.nocaffeine.ssgclone.brandstore.dto.BrandResponse;
 
 public interface BrandService {
 
-    BrandResponse findBrandId(Long productId);
+    BrandResponse findBrand(Long productId);
 }

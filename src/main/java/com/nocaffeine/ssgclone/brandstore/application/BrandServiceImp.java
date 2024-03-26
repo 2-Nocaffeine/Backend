@@ -16,13 +16,13 @@ public class BrandServiceImp implements BrandService{
 
     private final BrandListRepository brandListRepository;
     @Override
-    public BrandResponse findBrandId(Long productId) {
-        BrandList brandID = brandListRepository.findByProductId(productId)
+    public BrandResponse findBrand(Long productId) {
+        BrandList brandId = brandListRepository.findByProductId(productId)
                 .orElseThrow(() -> new BaseException(NO_DATA));
 
         return BrandResponse.builder()
-                .brandId(brandID.getBrand().getId())
-                .brandName(brandID.getBrand().getName())
+                .brandId(brandId.getBrand().getId())
+                .brandName(brandId.getBrand().getName())
                 .build();
     }
 }

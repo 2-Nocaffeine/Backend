@@ -12,5 +12,6 @@ import lombok.NoArgsConstructor;
 public class ProductIdListResponse {
 
     private int id;
-    private Long ProductId;
+    private Long productId;
+
 }
