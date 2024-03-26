@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.NO_DATA;
 import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.NO_EXIST_MEMBERS;
 
 @Service
@@ -26,6 +27,9 @@ public class LikeFolderServiceImpl implements LikeFolderService{
     private final LikeFolderRepository likeFolderRepository;
     private final MemberRepository memberRepository;
 
+    /**
+     * 좋아요 폴더 추가
+     */
     @Override
     @Transactional
     public void addLikeFolder(LikeFolderDto likeFolderDto, String memberUuid) {
@@ -40,6 +44,24 @@ public class LikeFolderServiceImpl implements LikeFolderService{
         likeFolderRepository.save(likeFolder);
     }
 
+    /**
+     * 좋아요 폴더 삭제
+     */
+    @Override
+    @Transactional
+    public void removeLikeFolder(LikeFolderDto likeFolderDto, String memberUuid) {
+        memberRepository.findByUuid(memberUuid)
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
+
+        LikeFolder likeFolder = likeFolderRepository.findById(likeFolderDto.getId())
+                .orElseThrow(() -> new BaseException(NO_DATA));
+
+        likeFolderRepository.delete(likeFolder);
+    }
+
+    /**
+     * 좋아요 폴더 조회
+     */
     @Override
     public List<LikeFolderDto> findLikeFolderList(String memberUuid) {
         Member member = memberRepository.findByUuid(memberUuid)
@@ -57,8 +79,6 @@ public class LikeFolderServiceImpl implements LikeFolderService{
 
             responses.add(likeFolderDto);
         }
-
-
         return responses;
     }
 

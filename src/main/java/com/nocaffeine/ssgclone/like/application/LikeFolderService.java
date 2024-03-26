@@ -7,7 +7,10 @@ import java.util.List;
 public interface LikeFolderService {
 
     void addLikeFolder(LikeFolderDto likeFolderDto, String memberUuid);
+    void removeLikeFolder(LikeFolderDto likeFolderDto, String memberUuid);
+
     List<LikeFolderDto> findLikeFolderList(String memberUuid);
+
 
 }
 
