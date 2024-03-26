@@ -93,6 +93,7 @@ public enum BaseResponseStatus {
     NO_SELECTED_OPTION_PRODUCT(HttpStatus.NOT_FOUND, false, 8003, "해당 옵션 선택이 완료된 상품을 조회할 수 없습니다"),
     OUT_OF_STOCK_PRODUCT(HttpStatus.NOT_FOUND, false, 8004, "재고가 없는 상품입니다"),
     INVALID_STOCK_QUANTITY(HttpStatus.BAD_REQUEST, false, 8005, "유효하지 않은 재고 수량입니다"),
+    NO_VIEW_HISTORY(HttpStatus.NOT_FOUND, false, 8006, "해당 유저의 최근 상품 조회 기록이 없습니다");
 
     /**
      * Brand
