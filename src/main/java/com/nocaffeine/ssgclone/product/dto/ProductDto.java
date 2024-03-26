@@ -1,5 +1,6 @@
 package com.nocaffeine.ssgclone.product.dto;
 
+import com.nocaffeine.ssgclone.product.domain.Product;
 import lombok.*;
 
 
@@ -14,4 +15,14 @@ public class ProductDto {
     private int price;
     private String content;
     private int discount;
+
+    public static ProductDto fromProduct(Product product) {
+        return ProductDto.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .price(product.getPrice())
+                .content(product.getContent())
+                .discount(product.getDiscount())
+                .build();
+    }
 }

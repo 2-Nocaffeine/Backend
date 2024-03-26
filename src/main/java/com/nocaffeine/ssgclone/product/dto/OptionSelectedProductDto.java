@@ -1,9 +1,6 @@
 package com.nocaffeine.ssgclone.product.dto;
 
-import com.nocaffeine.ssgclone.product.domain.AddOption;
-import com.nocaffeine.ssgclone.product.domain.ColorOption;
-import com.nocaffeine.ssgclone.product.domain.Product;
-import com.nocaffeine.ssgclone.product.domain.SizeOption;
+import com.nocaffeine.ssgclone.product.domain.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,4 +17,14 @@ public class OptionSelectedProductDto {
     private ColorOption colorOption;
     private AddOption addOption;
     private int stock;
+
+    public static OptionSelectedProductDto fromOptionSelectedProduct(OptionSelectedProduct optionSelectedProduct) {
+        return OptionSelectedProductDto.builder()
+                .product(optionSelectedProduct.getProduct())
+                .sizeOption(optionSelectedProduct.getSizeOption())
+                .colorOption(optionSelectedProduct.getColorOption())
+                .addOption(optionSelectedProduct.getAddOption())
+                .stock(optionSelectedProduct.getStock())
+                .build();
+    }
 }

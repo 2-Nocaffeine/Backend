@@ -29,17 +29,7 @@ public class ProductServiceImpl implements ProductService{
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new BaseException(NO_PRODUCT));
 
-        return convertToDto(product);
-    }
-
-    private ProductDto convertToDto(Product product) {
-        return ProductDto.builder()
-                .id(product.getId())
-                .name(product.getName())
-                .price(product.getPrice())
-                .content(product.getContent())
-                .discount(product.getDiscount())
-                .build();
+        return ProductDto.fromProduct(product);
     }
 
     @Override

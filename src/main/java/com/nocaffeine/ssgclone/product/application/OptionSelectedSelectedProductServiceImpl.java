@@ -16,21 +16,11 @@ public class OptionSelectedSelectedProductServiceImpl implements OptionSelectedP
     private final OptionSelectedProductRepository optionSelectedProductRepository;
 
     @Override
-    public OptionSelectedProductDto getProductOptionSelected(Long id) {
+    public OptionSelectedProductDto getOptionSelectedProduct(Long id) {
         OptionSelectedProduct optionSelectedProduct = optionSelectedProductRepository.findById(id)
                 .orElseThrow(() -> new BaseException(NO_SELECTED_OPTION_PRODUCT));
 
-        return convertToDto(optionSelectedProduct);
-    }
-
-    private OptionSelectedProductDto convertToDto(OptionSelectedProduct optionSelectedProduct) {
-        return OptionSelectedProductDto.builder()
-                .product(optionSelectedProduct.getProduct())
-                .sizeOption(optionSelectedProduct.getSizeOption())
-                .colorOption(optionSelectedProduct.getColorOption())
-                .addOption(optionSelectedProduct.getAddOption())
-                .stock(optionSelectedProduct.getStock())
-                .build();
+        return OptionSelectedProductDto.fromOptionSelectedProduct(optionSelectedProduct);
     }
 
 }
