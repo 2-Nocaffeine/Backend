@@ -2,10 +2,10 @@ package com.nocaffeine.ssgclone.product.application;
 
 import com.nocaffeine.ssgclone.common.exception.BaseException;
 import com.nocaffeine.ssgclone.product.domain.*;
-import com.nocaffeine.ssgclone.product.dto.response.AddOptionResponse;
-import com.nocaffeine.ssgclone.product.dto.response.ColorOptionResponse;
-import com.nocaffeine.ssgclone.product.dto.response.ProductResponse;
-import com.nocaffeine.ssgclone.product.dto.response.SizeOptionResponse;
+import com.nocaffeine.ssgclone.product.dto.AddOptionDto;
+import com.nocaffeine.ssgclone.product.dto.ColorOptionDto;
+import com.nocaffeine.ssgclone.product.dto.ProductDto;
+import com.nocaffeine.ssgclone.product.dto.SizeOptionDto;
 import com.nocaffeine.ssgclone.product.infrastructure.OptionSelectedProductRepository;
 import com.nocaffeine.ssgclone.product.infrastructure.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,36 +25,26 @@ public class ProductServiceImpl implements ProductService{
     private final OptionSelectedProductRepository optionSelectedProductRepository;
 
     @Override
-    public ProductResponse getProduct(Long id) {
+    public ProductDto getProduct(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new BaseException(NO_PRODUCT));
 
-        return convertToDto(product);
-    }
-
-    private ProductResponse convertToDto(Product product) {
-        return ProductResponse.builder()
-                .id(product.getId())
-                .name(product.getName())
-                .price(product.getPrice())
-                .content(product.getContent())
-                .discount(product.getDiscount())
-                .build();
+        return ProductDto.fromProduct(product);
     }
 
     @Override
-    public List<SizeOptionResponse> getSizeOptions(Long id) {
+    public List<SizeOptionDto> getSizeOptions(Long id) {
         List<OptionSelectedProduct> optionSelectedProducts = Optional.ofNullable(optionSelectedProductRepository.findByProductId(id))
                 .filter(list -> !list.isEmpty())
                 .orElseThrow(() -> new BaseException(NO_EXISTING_PRODUCT));
 
-        List<SizeOptionResponse> responses = new ArrayList<>();
+        List<SizeOptionDto> responses = new ArrayList<>();
 
         for (OptionSelectedProduct optionSelectedProduct : optionSelectedProducts) {
 
             SizeOption sizeOption = optionSelectedProduct.getSizeOption();
 
-            SizeOptionResponse response = SizeOptionResponse.builder()
+            SizeOptionDto response = SizeOptionDto.builder()
                     .id(sizeOption.getId())
                     .size(sizeOption.getSize())
                     .build();
@@ -67,18 +57,18 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public List<ColorOptionResponse> getColorOptions(Long id) {
+    public List<ColorOptionDto> getColorOptions(Long id) {
         List<OptionSelectedProduct> optionSelectedProducts = Optional.ofNullable(optionSelectedProductRepository.findByProductId(id))
                 .filter(list -> !list.isEmpty())
                 .orElseThrow(() -> new BaseException(NO_EXISTING_PRODUCT));
 
-        List<ColorOptionResponse> responses = new ArrayList<>();
+        List<ColorOptionDto> responses = new ArrayList<>();
 
         for (OptionSelectedProduct optionSelectedProduct : optionSelectedProducts) {
 
             ColorOption colorOption = optionSelectedProduct.getColorOption();
 
-            ColorOptionResponse response = ColorOptionResponse.builder()
+            ColorOptionDto response = ColorOptionDto.builder()
                     .id(colorOption.getId())
                     .color(colorOption.getColor())
                     .build();
@@ -92,18 +82,18 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public List<AddOptionResponse> getAddOptions(Long id) {
+    public List<AddOptionDto> getAddOptions(Long id) {
         List<OptionSelectedProduct> optionSelectedProducts = Optional.ofNullable(optionSelectedProductRepository.findByProductId(id))
                 .filter(list -> !list.isEmpty())
                 .orElseThrow(() -> new BaseException(NO_EXISTING_PRODUCT));
 
-        List<AddOptionResponse> responses = new ArrayList<>();
+        List<AddOptionDto> responses = new ArrayList<>();
 
         for (OptionSelectedProduct optionSelectedProduct : optionSelectedProducts) {
 
             AddOption addOption = optionSelectedProduct.getAddOption();
 
-            AddOptionResponse response = AddOptionResponse.builder()
+            AddOptionDto response = AddOptionDto.builder()
                     .id(addOption.getId())
                     .optionName(addOption.getOptionName())
                     .build();
@@ -115,31 +105,4 @@ public class ProductServiceImpl implements ProductService{
 
         return responses;
     }
-
-
-//    @Override
-//    public List<AddOptionResponse> getAddOptions(Long id) {
-//        List<ProductOption> productOptions = Optional.ofNullable(productOptionRepository.findByProductId(id))
-//                .filter(List -> !List.isEmpty())
-//                .orElseThrow(() -> new BaseException(NO_EXISTING_PRODUCT));
-//
-//
-//        return productOptions.stream()
-//                .map(ProductOption::getAddOption)
-//                .flatMap(addOption -> convertToDto(addOption).stream())
-//                .distinct()
-//                .collect(Collectors.toList());
-//    }
-//
-//    private Optional<AddOptionResponse> convertToDto(AddOption addOption) {
-//        if (addOption == null) {
-//            return Optional.empty();
-//        }
-//        AddOptionResponse response = AddOptionResponse.builder()
-//                .id(addOption.getId())
-//                .optionName(addOption.getOptionName())
-//                .build();
-//
-//        return Optional.of(response);
-//    }
 }
