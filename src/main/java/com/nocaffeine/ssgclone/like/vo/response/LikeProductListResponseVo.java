@@ -5,15 +5,17 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@Builder
 public class LikeProductListResponseVo {
     private Long productLikeId;
     private Long productId;
 
-    public static LikeProductListResponseVo dtoToVo(ProductLikeListDto productLikeListDto){
-        return LikeProductListResponseVo.builder()
-                .productLikeId(productLikeListDto.getProductLikeId())
-                .productId(productLikeListDto.getProductId())
-                .build();
+    public LikeProductListResponseVo(ProductLikeListDto productLikeListDto) {
+        this.productLikeId = productLikeListDto.getProductLikeId();
+        this.productId = productLikeListDto.getProductId();
     }
+
+    public static LikeProductListResponseVo dtoToVo(ProductLikeListDto productLikeListDto){
+        return new LikeProductListResponseVo(productLikeListDto);
+    }
+
 }

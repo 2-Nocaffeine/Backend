@@ -97,9 +97,9 @@ public class LikeFolderController {
 
     @Operation(summary = "폴더에 담긴 상품 좋아요 삭제", description = "폴더 담긴 상품 좋아요 삭제", tags = {"product like folder remove"})
     @DeleteMapping("/product")
-    public CommonResponse<String> productLikeRemove(@RequestBody ProductRemoveRequestVo productRemoveRequestVo){
+    public CommonResponse<String> productLikeRemove(@RequestBody ProductLikeRemoveRequestVo productLikeRemoveRequestVo){
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
-        ProductLikeRemoveDto productLikeRemoveDto = ProductLikeRemoveDto.voToDto(productRemoveRequestVo);
+        ProductLikeRemoveDto productLikeRemoveDto = ProductLikeRemoveDto.voToDto(productLikeRemoveRequestVo);
         likeFolderService.removeProductLike(productLikeRemoveDto, memberUuid);
         return CommonResponse.success("폴더 삭제 성공");
     }

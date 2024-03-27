@@ -5,15 +5,16 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@Builder
 public class LikeFolderListResponseVo {
     private Long folderId;
     private String name;
 
+    public LikeFolderListResponseVo(LikeFolderDto likeFolderDto) {
+        this.folderId = likeFolderDto.getLikeFolderId();
+        this.name = likeFolderDto.getName();
+    }
+
     public static LikeFolderListResponseVo dtoToVo(LikeFolderDto likeFolderDto){
-        return LikeFolderListResponseVo.builder()
-                .folderId(likeFolderDto.getLikeFolderId())
-                .name(likeFolderDto.getName())
-                .build();
+        return new LikeFolderListResponseVo(likeFolderDto);
     }
 }

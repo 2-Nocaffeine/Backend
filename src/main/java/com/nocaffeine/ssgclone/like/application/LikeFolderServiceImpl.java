@@ -33,7 +33,7 @@ public class LikeFolderServiceImpl implements LikeFolderService{
     private final ProductLikeRepository productLikeRepository;
 
     /**
-     * 좋아요 폴더 추가
+     * 폴더 추가
      */
     @Override
     @Transactional
@@ -55,10 +55,10 @@ public class LikeFolderServiceImpl implements LikeFolderService{
     @Override
     @Transactional
     public void removeLikeFolder(LikeFolderDto likeFolderDto, String memberUuid) {
-        memberRepository.findByUuid(memberUuid)
+        Member member = memberRepository.findByUuid(memberUuid)
                 .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
 
-        LikeFolder likeFolder = likeFolderRepository.findById(likeFolderDto.getLikeFolderId())
+        LikeFolder likeFolder = likeFolderRepository.findByIdAndMember(likeFolderDto.getLikeFolderId(), member)
                 .orElseThrow(() -> new BaseException(NO_DATA));
 
         likeFolderRepository.delete(likeFolder);
@@ -94,10 +94,10 @@ public class LikeFolderServiceImpl implements LikeFolderService{
     @Override
     @Transactional
     public void modifyLikeFolder(LikeFolderDto likeFolderDto, String memberUuid) {
-        memberRepository.findByUuid(memberUuid)
+        Member member = memberRepository.findByUuid(memberUuid)
                 .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
 
-        LikeFolder likeFolder = likeFolderRepository.findById(likeFolderDto.getLikeFolderId())
+        LikeFolder likeFolder = likeFolderRepository.findByIdAndMember(likeFolderDto.getLikeFolderId(), member)
                 .orElseThrow(() -> new BaseException(NO_DATA));
 
         likeFolder.changeName(likeFolderDto.getName());
@@ -147,13 +147,7 @@ public class LikeFolderServiceImpl implements LikeFolderService{
      */
     @Override
     public List<ProductLikeListDto> findProductLike(Long likeFolderId, String memberUuid) {
-        Member member = memberRepository.findByUuid(memberUuid)
-                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
-
-        LikeFolder likeFolder = likeFolderRepository.findById(likeFolderId)
-                .orElseThrow(() -> new BaseException(NO_EXIST_WISH_FOLDER));
-
-        List<ProductLike> productLike = productLikeRepository.findByLikeFolder(likeFolder.getId());
+        List<ProductLike> productLike = productLikeRepository.findByLikeFolder(likeFolderId);
 
         List<ProductLikeListDto> responses = new ArrayList<>();
 

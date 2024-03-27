@@ -1,6 +1,6 @@
 package com.nocaffeine.ssgclone.like.dto;
 
-import com.nocaffeine.ssgclone.like.vo.request.ProductRemoveRequestVo;
+import com.nocaffeine.ssgclone.like.vo.request.ProductLikeRemoveRequestVo;
 import lombok.*;
 
 import java.util.List;
@@ -15,10 +15,10 @@ public class ProductLikeRemoveDto {
     private Long likeFolderId;
     private List<Long> productLikeId;
 
-    public static ProductLikeRemoveDto voToDto(ProductRemoveRequestVo productRemoveRequestVo){
+    public static ProductLikeRemoveDto voToDto(ProductLikeRemoveRequestVo productLikeRemoveRequestVo){
         return ProductLikeRemoveDto.builder()
-                .likeFolderId(productRemoveRequestVo.getLikeFolderId())
-                .productLikeId(productRemoveRequestVo.getProductLikeId())
+                .likeFolderId(productLikeRemoveRequestVo.getLikeFolderId())
+                .productLikeId(productLikeRemoveRequestVo.getProductLikeId())
                 .build();
     }
 }
