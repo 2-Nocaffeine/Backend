@@ -14,6 +14,8 @@ public interface OptionSelectedProductRepository extends JpaRepository<OptionSel
 
     List<OptionSelectedProduct> findByProductId(Long id);
 
+    Optional<OptionSelectedProduct> findByProductIdAndSizeOptionIdAndColorOptionIdAndAddOptionId(Long productId, Long sizeOptionId, Long colorOptionId, Long addOptionId);
+
     @Query("SELECT po FROM OptionSelectedProduct po JOIN FETCH po.product JOIN FETCH po.sizeOption JOIN FETCH po.colorOption JOIN FETCH po.addOption WHERE po.id = :id")
     Optional<OptionSelectedProduct> findById(@Param("id") Long id);
 }

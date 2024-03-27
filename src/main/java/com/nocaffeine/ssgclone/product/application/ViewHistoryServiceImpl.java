@@ -24,9 +24,10 @@ public class ViewHistoryServiceImpl implements ViewHistoryService {
     // 최근 본 상품 목록을 조회하는 메소드
     @Override
     public List<ViewHistoryDto> getViewHistory(String memberUuid) {
-        List<ViewHistory> viewHistories = Optional.ofNullable(viewHistoryRepository.findByMemberUuid(memberUuid))
-                .filter(list -> !list.isEmpty())
-                .orElseThrow(() -> new BaseException(NO_VIEW_HISTORY));
+        List<ViewHistory> viewHistories = viewHistoryRepository.findByMemberUuid(memberUuid);
+        if (viewHistories.isEmpty()) {
+            throw new BaseException(NO_VIEW_HISTORY);
+        }
 
         List<ViewHistoryDto> responses = new ArrayList<>();
 
