@@ -2,12 +2,12 @@ package com.nocaffeine.ssgclone.cart.application;
 
 
 import com.nocaffeine.ssgclone.cart.domain.Cart;
-import com.nocaffeine.ssgclone.cart.dto.request.CartAddRequest;
-import com.nocaffeine.ssgclone.cart.dto.request.CartModifyRequest;
-import com.nocaffeine.ssgclone.cart.dto.request.CartRemoveListRequest;
-import com.nocaffeine.ssgclone.cart.dto.response.CartCountResponse;
-import com.nocaffeine.ssgclone.cart.dto.response.CartListResponse;
-import com.nocaffeine.ssgclone.cart.dto.response.CartPriceResponse;
+import com.nocaffeine.ssgclone.cart.dto.request.CartAddRequestDto;
+import com.nocaffeine.ssgclone.cart.dto.request.CartModifyRequestDto;
+import com.nocaffeine.ssgclone.cart.dto.request.CartRemoveListRequestDto;
+import com.nocaffeine.ssgclone.cart.dto.response.CartCountResponseDto;
+import com.nocaffeine.ssgclone.cart.dto.response.CartListResponseDto;
+import com.nocaffeine.ssgclone.cart.dto.response.CartPriceResponseDto;
 import com.nocaffeine.ssgclone.cart.infrastructure.CartRepository;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
 import com.nocaffeine.ssgclone.member.domain.Member;
@@ -40,24 +40,24 @@ public class CartServiceImp implements CartService {
      */
     @Override
     @Transactional
-    public void addCart(CartAddRequest cartAddRequest, String memberUuid) {
+    public void addCart(CartAddRequestDto cartAddRequestDto, String memberUuid) {
         Member member = memberRepository.findByUuid(memberUuid)
                 .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
 
-        OptionSelectedProduct optionSelectedProduct = optionSelectedProductRepository.findById(cartAddRequest.getProductOptionId())
+        OptionSelectedProduct optionSelectedProduct = optionSelectedProductRepository.findById(cartAddRequestDto.getOptionSelectedProductId())
                 .orElseThrow(() -> new BaseException(NO_SELECTED_OPTION_PRODUCT));
 
         Optional<Cart> memberCart = cartRepository.findByMemberAndOptionSelectedProduct(member, optionSelectedProduct);
 
         if (memberCart.isPresent()) {
             // 이미 장바구니에 해당 상품이 존재하는 경우 -> 수량만큼 추가
-            memberCart.get().addQuantity(cartAddRequest.getQuantity());
+            memberCart.get().addQuantity(cartAddRequestDto.getQuantity());
         } else {
             // 장바구니에 해당 상품이 없는경우
             Cart cart = Cart.builder()
                     .member(member)
                     .optionSelectedProduct(optionSelectedProduct)
-                    .quantity(cartAddRequest.getQuantity())
+                    .quantity(cartAddRequestDto.getQuantity())
                     .pin(false)
                     .checkProduct(false)
                     .build();
@@ -72,8 +72,8 @@ public class CartServiceImp implements CartService {
      */
     @Override
     @Transactional
-    public void removeCart(CartRemoveListRequest cartRemoveListRequest, String memberUuid) {
-        List<Long> cartIds = cartRemoveListRequest.getCartId();
+    public void removeCart(CartRemoveListRequestDto cartRemoveRequestDto, String memberUuid) {
+        List<Long> cartIds = cartRemoveRequestDto.getCartId();
         for (Long cartId : cartIds) {
             cartRepository.findById(cartId).orElseThrow(()
                     -> new BaseException(NO_DATA));
@@ -86,20 +86,20 @@ public class CartServiceImp implements CartService {
      * 장바구니 목록 조회.
      */
     @Override
-    public List<CartListResponse> listCart(String memberUuid) {
+    public List<CartListResponseDto> findCart(String memberUuid) {
         Member member = memberRepository.findByUuid(memberUuid)
                 .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
 
         List<Cart> cartList = cartRepository.findByMember(member);
 
-        List<CartListResponse> responseCartList = new ArrayList<>();
+        List<CartListResponseDto> responseCartList = new ArrayList<>();
 
         for (Cart cart : cartList) {
-            CartListResponse response = CartListResponse.builder()
+            CartListResponseDto response = CartListResponseDto.builder()
                     .cartId(cart.getId())
                     .productId(cart.getOptionSelectedProduct().getProduct().getId())
+                    .optionSelectedProduct(cart.getOptionSelectedProduct().getId())
                     .quantity(cart.getQuantity())
-                    .productOptionId(cart.getOptionSelectedProduct().getId())
                     .build();
             responseCartList.add(response);
         }
@@ -111,13 +111,13 @@ public class CartServiceImp implements CartService {
      */
     @Override
     @Transactional
-    public void modifyCart(CartModifyRequest cartModifyRequest){
-        Cart cart = cartRepository.findById(cartModifyRequest.getCartId())
+    public void modifyCart(CartModifyRequestDto cartModifyRequestDto){
+        Cart cart = cartRepository.findById(cartModifyRequestDto.getCartId())
                 .orElseThrow(() -> new BaseException(NO_DATA));
 
-        if(cartModifyRequest.getPm().equals("plus")){
+        if(cartModifyRequestDto.getPm().equals("plus")){
             cart.plusQuantity();
-        }else if(cartModifyRequest.getPm().equals("minus")){
+        }else if(cartModifyRequestDto.getPm().equals("minus")){
             cart.minusQuantity();
         } else{
             throw new BaseException(NO_DATA);
@@ -130,7 +130,7 @@ public class CartServiceImp implements CartService {
      * 장바구니 상품 개수 조회.
      */
     @Override
-    public CartCountResponse countCart(String memberUuid) {
+    public CartCountResponseDto totalCountCart(String memberUuid) {
         Member member = memberRepository.findByUuid(memberUuid)
                 .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
 
@@ -138,7 +138,7 @@ public class CartServiceImp implements CartService {
 
         int cartSize = cartList.size();
 
-        return CartCountResponse.builder()
+        return CartCountResponseDto.builder()
                 .cartCount(cartSize)
                 .build();
 
@@ -148,7 +148,7 @@ public class CartServiceImp implements CartService {
      * 장바구니 선택한 상품 가격 조회.
      */
     @Override
-    public CartPriceResponse totalPrice(List<Long> cartId) {
+    public CartPriceResponseDto findTotalPrice(List<Long> cartId) {
        int totalPrice = 0;
        int quantity = 0;
         for (Long cart : cartId) {
@@ -159,7 +159,7 @@ public class CartServiceImp implements CartService {
             quantity += findCart.getQuantity();
         }
 
-        return CartPriceResponse.builder()
+        return CartPriceResponseDto.builder()
                 .quantity(quantity)
                 .totalPrice(totalPrice)
                 .build();
