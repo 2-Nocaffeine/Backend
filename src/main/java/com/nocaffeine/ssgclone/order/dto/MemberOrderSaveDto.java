@@ -1,10 +1,10 @@
 package com.nocaffeine.ssgclone.order.dto;
 
-import com.nocaffeine.ssgclone.order.domain.Orders;
-import com.nocaffeine.ssgclone.order.vo.request.MemberOrderSaveRequestVo;
-import com.nocaffeine.ssgclone.product.domain.OptionSelectedProduct;
+import com.nocaffeine.ssgclone.order.vo.request.MemberOrderProductRequestVo;
+import com.nocaffeine.ssgclone.order.vo.request.OrderedProductVo;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -14,7 +14,7 @@ import java.util.List;
 @Builder
 public class MemberOrderSaveDto {
 
-        private List<Long> optionSelectedProducts;
+        private List<OrderedProductDto> orderProducts;
         private String uuid;
         private String region;
         private String name;
@@ -24,19 +24,22 @@ public class MemberOrderSaveDto {
         private String orderDate;
         private String status;
 
-        public static MemberOrderSaveDto convertToDto(String memberUuid,MemberOrderSaveRequestVo vo) {
+        public static MemberOrderSaveDto convertToDto(String memberUuid,MemberOrderProductRequestVo memberOrderProductRequestVo) {
+            List<OrderedProductDto> OrderedProductDtoList = new ArrayList<>();
 
-                MemberOrderSaveDto dto = MemberOrderSaveDto.builder()
+            for (OrderedProductVo orderProducts : memberOrderProductRequestVo.getOrderProducts()){
+                OrderedProductDtoList.add(OrderedProductDto.convertToDto(orderProducts));
+            }
 
-                        .optionSelectedProducts(vo.getOptionSelectedProducts())
-                        .uuid(memberUuid)
-                        .region(vo.getRegion())
-                        .name(vo.getName())
-                        .phoneNumber(vo.getPhoneNumber())
-                        .email(vo.getEmail())
-                        .totalPrice(vo.getTotalPrice())
-                        .build();
-                return dto;
+            return MemberOrderSaveDto.builder()
+                    .orderProducts(OrderedProductDtoList)
+                    .uuid(memberUuid)
+                    .region(memberOrderProductRequestVo.getRegion())
+                    .name(memberOrderProductRequestVo.getName())
+                    .phoneNumber(memberOrderProductRequestVo.getPhoneNumber())
+                    .email(memberOrderProductRequestVo.getEmail())
+                    .totalPrice(memberOrderProductRequestVo.getTotalPrice())
+                    .build();
         }
 }
 

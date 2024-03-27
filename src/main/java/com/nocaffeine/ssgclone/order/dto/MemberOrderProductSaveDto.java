@@ -6,7 +6,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MemberOrderProductIdDto {
+public class MemberOrderProductSaveDto {
 
     private Long orderId;
     private Long optionSelectedProductId;

@@ -1,10 +1,11 @@
 package com.nocaffeine.ssgclone.order.application;
 
 import com.nocaffeine.ssgclone.common.exception.BaseException;
+import com.nocaffeine.ssgclone.member.infrastructure.MemberRepository;
 import com.nocaffeine.ssgclone.order.domain.OrderProduct;
 import com.nocaffeine.ssgclone.order.domain.Orders;
-import com.nocaffeine.ssgclone.order.dto.MemberOrderProductIdDto;
 import com.nocaffeine.ssgclone.order.dto.MemberOrderSaveDto;
+import com.nocaffeine.ssgclone.order.dto.OrderedProductDto;
 import com.nocaffeine.ssgclone.order.infrastructure.OrderProductRepository;
 import com.nocaffeine.ssgclone.order.infrastructure.OrderRepository;
 import com.nocaffeine.ssgclone.product.domain.OptionSelectedProduct;
@@ -15,11 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
-import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.NO_DATA;
+import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.NO_PRODUCT;
+import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.OUT_OF_STOCK_PRODUCT;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +33,14 @@ public class OrderServiceImp implements OrderService{
     @Transactional
     public void addMemberOrder(MemberOrderSaveDto memberOrderSaveDto) {
 
+        //재고 확인
+        for (OrderedProductDto orderedProductDto : memberOrderSaveDto.getOrderProducts()) {
+            OptionSelectedProduct optionSelectedProduct = optionSelectedProductRepository.findById(orderedProductDto.getOptionSelectedProductId())
+                    .orElseThrow(() -> new BaseException(NO_PRODUCT));
+
+            optionSelectedProduct.decreaseStock(orderedProductDto.getCount());
+        }
+        //주문 저장
         Orders Order = Orders.builder()
                 .uuid(memberOrderSaveDto.getUuid())
                 .region(memberOrderSaveDto.getRegion())
@@ -47,15 +54,16 @@ public class OrderServiceImp implements OrderService{
 
         Orders savedOrders = orderRepository.save(Order);
 
-
-//        string list로 아이디값을 받고 그 아이디값으로 orderprodct를 생성해야함
-        for (Long productId : memberOrderSaveDto.getOptionSelectedProducts()) {
-            OptionSelectedProduct optionSelectedProductId = optionSelectedProductRepository.findById(productId)
-                    .orElseThrow(() -> new BaseException(NO_DATA));
+        //주문상품 저장
+        for (OrderedProductDto orderedProductDto : memberOrderSaveDto.getOrderProducts()) {
+            OptionSelectedProduct optionSelectedProduct = optionSelectedProductRepository.findById(orderedProductDto.getOptionSelectedProductId())
+                    .orElseThrow(() -> new BaseException(NO_PRODUCT));
 
             OrderProduct orderProduct = OrderProduct.builder()
                     .order(savedOrders)
-                    .optionSelectedProduct(optionSelectedProductId)
+                    .optionSelectedProduct(optionSelectedProduct)
+                    .price(orderedProductDto.getPrice())
+                    .quantity(orderedProductDto.getCount())
                     .build();
 
             orderProductRepository.save(orderProduct);

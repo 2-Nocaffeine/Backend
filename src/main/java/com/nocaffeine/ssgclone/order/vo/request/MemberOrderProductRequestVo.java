@@ -1,14 +1,14 @@
 package com.nocaffeine.ssgclone.order.vo.request;
 
-import com.nocaffeine.ssgclone.product.domain.OptionSelectedProduct;
+import com.nocaffeine.ssgclone.order.dto.OrderedProductDto;
 import lombok.Getter;
 
 import java.util.List;
 
 @Getter
-public class MemberOrderSaveRequestVo {
+public class MemberOrderProductRequestVo {
 
-    private List<Long> optionSelectedProducts;
+    private List<OrderedProductVo> orderProducts;
     private String region;
     private String name;
     private String phoneNumber;
