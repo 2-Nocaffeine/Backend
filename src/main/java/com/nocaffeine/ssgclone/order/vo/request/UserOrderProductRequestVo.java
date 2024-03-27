@@ -1,12 +1,11 @@
 package com.nocaffeine.ssgclone.order.vo.request;
 
-import com.nocaffeine.ssgclone.order.dto.OrderedProductDto;
 import lombok.Getter;
 
 import java.util.List;
 
 @Getter
-public class MemberOrderProductRequestVo {
+public class UserOrderProductRequestVo {
 
     private List<OrderedProductVo> orderProducts;
     private String region;

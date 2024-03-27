@@ -1,10 +1,9 @@
 package com.nocaffeine.ssgclone.order.application;
 
 import com.nocaffeine.ssgclone.common.exception.BaseException;
-import com.nocaffeine.ssgclone.member.infrastructure.MemberRepository;
 import com.nocaffeine.ssgclone.order.domain.OrderProduct;
 import com.nocaffeine.ssgclone.order.domain.Orders;
-import com.nocaffeine.ssgclone.order.dto.MemberOrderSaveDto;
+import com.nocaffeine.ssgclone.order.dto.UserOrderSaveDto;
 import com.nocaffeine.ssgclone.order.dto.OrderedProductDto;
 import com.nocaffeine.ssgclone.order.infrastructure.OrderProductRepository;
 import com.nocaffeine.ssgclone.order.infrastructure.OrderRepository;
@@ -18,7 +17,6 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.NO_PRODUCT;
-import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.OUT_OF_STOCK_PRODUCT;
 
 @Service
 @RequiredArgsConstructor
@@ -31,10 +29,10 @@ public class OrderServiceImp implements OrderService{
 
     @Override
     @Transactional
-    public void addMemberOrder(MemberOrderSaveDto memberOrderSaveDto) {
+    public void addMemberOrder(UserOrderSaveDto userOrderSaveDto) {
 
         //재고 확인
-        for (OrderedProductDto orderedProductDto : memberOrderSaveDto.getOrderProducts()) {
+        for (OrderedProductDto orderedProductDto : userOrderSaveDto.getOrderProducts()) {
             OptionSelectedProduct optionSelectedProduct = optionSelectedProductRepository.findById(orderedProductDto.getOptionSelectedProductId())
                     .orElseThrow(() -> new BaseException(NO_PRODUCT));
 
@@ -42,12 +40,12 @@ public class OrderServiceImp implements OrderService{
         }
         //주문 저장
         Orders Order = Orders.builder()
-                .uuid(memberOrderSaveDto.getUuid())
-                .region(memberOrderSaveDto.getRegion())
-                .name(memberOrderSaveDto.getName())
-                .phoneNumber(memberOrderSaveDto.getPhoneNumber())
-                .email(memberOrderSaveDto.getEmail())
-                .totalPrice(memberOrderSaveDto.getTotalPrice())
+                .uuid(userOrderSaveDto.getUuid())
+                .region(userOrderSaveDto.getRegion())
+                .name(userOrderSaveDto.getName())
+                .phoneNumber(userOrderSaveDto.getPhoneNumber())
+                .email(userOrderSaveDto.getEmail())
+                .totalPrice(userOrderSaveDto.getTotalPrice())
                 .orderDate(Timestamp.valueOf(LocalDateTime.now()))
                 .status(Orders.OrderStatus.ORDERED)
                 .build();
@@ -55,7 +53,7 @@ public class OrderServiceImp implements OrderService{
         Orders savedOrders = orderRepository.save(Order);
 
         //주문상품 저장
-        for (OrderedProductDto orderedProductDto : memberOrderSaveDto.getOrderProducts()) {
+        for (OrderedProductDto orderedProductDto : userOrderSaveDto.getOrderProducts()) {
             OptionSelectedProduct optionSelectedProduct = optionSelectedProductRepository.findById(orderedProductDto.getOptionSelectedProductId())
                     .orElseThrow(() -> new BaseException(NO_PRODUCT));
 

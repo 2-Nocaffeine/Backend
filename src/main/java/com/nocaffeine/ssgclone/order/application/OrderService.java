@@ -1,10 +1,8 @@
 package com.nocaffeine.ssgclone.order.application;
 
-import com.nocaffeine.ssgclone.order.dto.MemberOrderSaveDto;
-
-import java.util.List;
+import com.nocaffeine.ssgclone.order.dto.UserOrderSaveDto;
 
 public interface OrderService {
 
-    void addMemberOrder (MemberOrderSaveDto memberOrderSaveDto);
+    void addMemberOrder (UserOrderSaveDto userOrderSaveDto);
 }
