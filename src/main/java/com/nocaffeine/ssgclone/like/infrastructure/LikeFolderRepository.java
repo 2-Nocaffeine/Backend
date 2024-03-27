@@ -6,9 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface LikeFolderRepository extends JpaRepository<LikeFolder, Long> {
     List<LikeFolder> findByMember(Member member);
 
+    List<LikeFolder> findByIdAndMember(Long id, Member member);
 }

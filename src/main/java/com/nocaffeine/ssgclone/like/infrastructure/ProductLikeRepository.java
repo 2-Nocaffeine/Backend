@@ -12,4 +12,6 @@ public interface ProductLikeRepository extends JpaRepository<ProductLike, Long> 
     Optional<ProductLike> findByMemberAndProduct(Member member, Product product);
 
     List<ProductLike> findByMember(Member member);
+
+    Optional<ProductLike> findByProductAndLikeFolder(Product product, Long id);
 }

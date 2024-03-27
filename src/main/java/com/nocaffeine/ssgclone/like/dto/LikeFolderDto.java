@@ -2,9 +2,12 @@ package com.nocaffeine.ssgclone.like.dto;
 
 import com.nocaffeine.ssgclone.like.vo.request.LikeFolderAddRequestVo;
 import com.nocaffeine.ssgclone.like.vo.request.LikeFolderModifyRequestVo;
-import com.nocaffeine.ssgclone.like.vo.request.LikeFolderRemoveVo;
+import com.nocaffeine.ssgclone.like.vo.request.LikeFolderRemoveRequestVo;
+import com.nocaffeine.ssgclone.like.vo.request.ProductLikeMoveRequestVo;
 import com.nocaffeine.ssgclone.member.domain.Member;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -13,9 +16,10 @@ import lombok.*;
 @Builder
 public class LikeFolderDto {
 
-    private Long id;
+    private Long likeFolderId;
     private Member member;
     private String name;
+
 
     public static LikeFolderDto voToDto(LikeFolderAddRequestVo likeFolderAddRequestVo){
         return LikeFolderDto.builder()
@@ -25,14 +29,14 @@ public class LikeFolderDto {
 
     public static LikeFolderDto voToDto(LikeFolderModifyRequestVo likeFolderModifyRequestVo){
         return LikeFolderDto.builder()
-                .id(likeFolderModifyRequestVo.getFolderId())
+                .likeFolderId(likeFolderModifyRequestVo.getFolderId())
                 .name(likeFolderModifyRequestVo.getName())
                 .build();
     }
 
-    public static LikeFolderDto voToDto(LikeFolderRemoveVo likeFolderRemoveVo){
+    public static LikeFolderDto voToDto(LikeFolderRemoveRequestVo likeFolderRemoveRequestVo){
         return LikeFolderDto.builder()
-                .id(likeFolderRemoveVo.getFolderId())
+                .likeFolderId(likeFolderRemoveRequestVo.getFolderId())
                 .build();
     }
 }

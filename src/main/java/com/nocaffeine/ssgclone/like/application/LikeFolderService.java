@@ -1,5 +1,6 @@
 package com.nocaffeine.ssgclone.like.application;
 
+import com.nocaffeine.ssgclone.like.dto.LikeAddFolderDto;
 import com.nocaffeine.ssgclone.like.dto.LikeFolderDto;
 
 import java.util.List;
@@ -12,6 +13,7 @@ public interface LikeFolderService {
     List<LikeFolderDto> findLikeFolderList(String memberUuid);
     void modifyLikeFolder(LikeFolderDto likeFolderDto, String memberUuid);
 
+    void addProductToLikeFolder(LikeAddFolderDto likeAddFolderDto, String memberUuid);
 
 }
 

@@ -12,7 +12,7 @@ public class LikeFolderListResponseVo {
 
     public static LikeFolderListResponseVo dtoToVo(LikeFolderDto likeFolderDto){
         return LikeFolderListResponseVo.builder()
-                .folderId(likeFolderDto.getId())
+                .folderId(likeFolderDto.getLikeFolderId())
                 .name(likeFolderDto.getName())
                 .build();
     }
