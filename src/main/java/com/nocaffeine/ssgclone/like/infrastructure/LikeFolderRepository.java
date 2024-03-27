@@ -12,5 +12,5 @@ import java.util.Optional;
 public interface LikeFolderRepository extends JpaRepository<LikeFolder, Long> {
     List<LikeFolder> findByMember(Member member);
 
-    List<LikeFolder> findByIdAndMember(Long id, Member member);
+    Optional<LikeFolder> findByIdAndMember(Long id, Member member);
 }

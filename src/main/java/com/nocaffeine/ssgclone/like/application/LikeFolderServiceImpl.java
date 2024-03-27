@@ -4,8 +4,9 @@ package com.nocaffeine.ssgclone.like.application;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
 import com.nocaffeine.ssgclone.like.domain.LikeFolder;
 import com.nocaffeine.ssgclone.like.domain.ProductLike;
-import com.nocaffeine.ssgclone.like.dto.LikeAddFolderDto;
+import com.nocaffeine.ssgclone.like.dto.ProductLikeDto;
 import com.nocaffeine.ssgclone.like.dto.LikeFolderDto;
+import com.nocaffeine.ssgclone.like.dto.LikeProductListDto;
 import com.nocaffeine.ssgclone.like.infrastructure.LikeFolderRepository;
 import com.nocaffeine.ssgclone.like.infrastructure.ProductLikeRepository;
 import com.nocaffeine.ssgclone.member.domain.Member;
@@ -107,15 +108,15 @@ public class LikeFolderServiceImpl implements LikeFolderService{
      */
     @Override
     @Transactional
-    public void addProductToLikeFolder(LikeAddFolderDto likeAddFolderDto, String memberUuid) {
+    public void addProductLike(ProductLikeDto productLikeDto, String memberUuid) {
         Member member = memberRepository.findByUuid(memberUuid)
                 .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
 
-        for (Long likeFolderId : likeAddFolderDto.getLikeFolderId()){
+        for (Long likeFolderId : productLikeDto.getLikeFolderId()){
             LikeFolder likeFolder = likeFolderRepository.findById(likeFolderId)
                     .orElseThrow(() -> new BaseException(NO_EXIST_WISH_FOLDER));
 
-            for (Long productLikeId : likeAddFolderDto.getProductLikeId()) {
+            for (Long productLikeId : productLikeDto.getProductLikeId()) {
                 ProductLike productLike = productLikeRepository.findById(productLikeId)
                         .orElseThrow(() -> new BaseException(NO_DATA));
 
@@ -139,4 +140,33 @@ public class LikeFolderServiceImpl implements LikeFolderService{
             }
         }
     }
+
+    /**
+     * 폴더에 있는 상품 조회
+     */
+    @Override
+    public List<LikeProductListDto> findProductList(Long likeFolderId, String memberUuid) {
+        Member member = memberRepository.findByUuid(memberUuid)
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
+
+        LikeFolder likeFolder = likeFolderRepository.findById(likeFolderId)
+                .orElseThrow(() -> new BaseException(NO_EXIST_WISH_FOLDER));
+
+        List<ProductLike> productLike = productLikeRepository.findByLikeFolder(likeFolder.getId());
+
+        List<LikeProductListDto> responses = new ArrayList<>();
+
+        for (ProductLike like : productLike) {
+            LikeProductListDto likeProductListDto = LikeProductListDto.builder()
+                    .productLikeId(like.getId())
+                    .productId(like.getProduct().getId())
+                    .build();
+
+            responses.add(likeProductListDto);
+        }
+        return responses;
+    }
+
+
+
 }

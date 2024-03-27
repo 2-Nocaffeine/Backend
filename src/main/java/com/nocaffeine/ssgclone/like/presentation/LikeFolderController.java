@@ -4,13 +4,15 @@ package com.nocaffeine.ssgclone.like.presentation;
 import com.nocaffeine.ssgclone.common.CommonResponse;
 import com.nocaffeine.ssgclone.common.security.JwtTokenProvider;
 import com.nocaffeine.ssgclone.like.application.LikeFolderService;
-import com.nocaffeine.ssgclone.like.dto.LikeAddFolderDto;
+import com.nocaffeine.ssgclone.like.dto.ProductLikeDto;
 import com.nocaffeine.ssgclone.like.dto.LikeFolderDto;
+import com.nocaffeine.ssgclone.like.dto.LikeProductListDto;
 import com.nocaffeine.ssgclone.like.vo.request.LikeFolderAddRequestVo;
 import com.nocaffeine.ssgclone.like.vo.request.LikeFolderModifyRequestVo;
 import com.nocaffeine.ssgclone.like.vo.request.LikeFolderRemoveRequestVo;
 import com.nocaffeine.ssgclone.like.vo.request.ProductLikeMoveRequestVo;
 import com.nocaffeine.ssgclone.like.vo.response.LikeFolderListResponseVo;
+import com.nocaffeine.ssgclone.like.vo.response.LikeProductListResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -62,24 +64,38 @@ public class LikeFolderController {
         return CommonResponse.success("폴더 삭제 성공");
     }
 
-    @Operation(summary = "폴더 수정", description = "폴더 수정", tags = {"like folder modify"})
+    @Operation(summary = "폴더 이름 수정", description = "폴더 이름 수정", tags = {"like folder name modify"})
     @PatchMapping
     public CommonResponse<String> folderModify(@RequestBody LikeFolderModifyRequestVo likeFolderModifyRequestVo){
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
         LikeFolderDto likeFolderDto = LikeFolderDto.voToDto(likeFolderModifyRequestVo);
         likeFolderService.modifyLikeFolder(likeFolderDto, memberUuid);
-        return CommonResponse.success("폴더 수정 성공");
+        return CommonResponse.success("폴더 이름 수정 성공");
     }
 
     @Operation(summary = "선택한 폴더에 좋아요 상품 추가", description = "선택한 폴더에 좋아요 상품 추가", tags = {"product like add folder"})
     @PostMapping("/product")
     public CommonResponse<String> productLikeAddFolder(@RequestBody ProductLikeMoveRequestVo productLikeMoveRequestVo){
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
-        LikeAddFolderDto likeAddFolderDto = LikeAddFolderDto.voToDto(productLikeMoveRequestVo);
-        likeFolderService.addProductToLikeFolder(likeAddFolderDto, memberUuid);
+        ProductLikeDto productLikeDto = ProductLikeDto.voToDto(productLikeMoveRequestVo);
+        likeFolderService.addProductLike(productLikeDto, memberUuid);
         return CommonResponse.success("폴더 추가 성공");
     }
 
+    @Operation(summary = "폴더에 담긴 상품 좋아요 조회", description = "폴더 담긴 상품 좋아요 조회", tags = {"product like folder list"})
+    @GetMapping("/{likeFolderId}/product")
+    public CommonResponse<List<LikeProductListResponseVo>> folderProductList(@PathVariable Long likeFolderId){
+        String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
+
+        List<LikeProductListDto> likeFolderProductList = likeFolderService.findProductList(likeFolderId, memberUuid);
+
+        List<LikeProductListResponseVo> likeFolderListResponseVo = new ArrayList<>();
+        for (LikeProductListDto likeProductListDto : likeFolderProductList) {
+            likeFolderListResponseVo.add(LikeProductListResponseVo.dtoToVo(likeProductListDto));
+        }
+
+        return CommonResponse.success("폴더 상품 조회 성공", likeFolderListResponseVo);
+    }
 
 
 
