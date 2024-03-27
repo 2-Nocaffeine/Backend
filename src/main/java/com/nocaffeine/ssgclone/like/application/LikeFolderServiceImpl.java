@@ -82,4 +82,22 @@ public class LikeFolderServiceImpl implements LikeFolderService{
         return responses;
     }
 
+
+    /**
+     * 좋아요 폴더 이름 수정
+     */
+    @Override
+    @Transactional
+    public void modifyLikeFolder(LikeFolderDto likeFolderDto, String memberUuid) {
+        memberRepository.findByUuid(memberUuid)
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
+
+        LikeFolder likeFolder = likeFolderRepository.findById(likeFolderDto.getId())
+                .orElseThrow(() -> new BaseException(NO_DATA));
+
+        likeFolder.changeName(likeFolderDto.getName());
+    }
+
+
+
 }

@@ -6,6 +6,7 @@ import com.nocaffeine.ssgclone.common.security.JwtTokenProvider;
 import com.nocaffeine.ssgclone.like.application.LikeFolderService;
 import com.nocaffeine.ssgclone.like.dto.LikeFolderDto;
 import com.nocaffeine.ssgclone.like.vo.request.LikeFolderAddRequestVo;
+import com.nocaffeine.ssgclone.like.vo.request.LikeFolderModifyRequestVo;
 import com.nocaffeine.ssgclone.like.vo.request.LikeFolderRemoveVo;
 import com.nocaffeine.ssgclone.like.vo.response.LikeFolderListResponseVo;
 import lombok.RequiredArgsConstructor;
@@ -55,4 +56,11 @@ public class LikeFolderController {
         return CommonResponse.success("폴더 삭제 성공");
     }
 
+    @PatchMapping
+    public CommonResponse<String> modifyFolder(@RequestBody LikeFolderModifyRequestVo likeFolderModifyRequestVo){
+        String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
+        LikeFolderDto likeFolderDto = LikeFolderDto.voToDto(likeFolderModifyRequestVo);
+        likeFolderService.modifyLikeFolder(likeFolderDto, memberUuid);
+        return CommonResponse.success("폴더 수정 성공");
+    }
 }

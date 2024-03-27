@@ -10,6 +10,7 @@ public interface LikeFolderService {
     void removeLikeFolder(LikeFolderDto likeFolderDto, String memberUuid);
 
     List<LikeFolderDto> findLikeFolderList(String memberUuid);
+    void modifyLikeFolder(LikeFolderDto likeFolderDto, String memberUuid);
 
 
 }
