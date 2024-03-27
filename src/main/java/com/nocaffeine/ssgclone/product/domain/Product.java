@@ -31,6 +31,7 @@ public class Product {
     @NotNull
     private int discount;
 
+    // Builder 는 객체를 생성할 때 사용하는 디자인 패턴 중 하나로, 객체를 생성할 때 사용하는 코드를 더 간결하게 만들어준다.
     @Builder
     public Product(String name, int price, String content, int discount) {
         this.name = name;
@@ -38,4 +39,5 @@ public class Product {
         this.content = content;
         this.discount = discount;
     }
+
 }

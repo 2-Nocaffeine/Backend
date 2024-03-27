@@ -26,4 +26,5 @@ public class TinyCategory {
         this.name = name;
         this.smallCategory = smallCategory;
     }
+
 }

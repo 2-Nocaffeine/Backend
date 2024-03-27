@@ -1,16 +1,17 @@
-package com.nocaffeine.ssgclone.category.dto.response;
+package com.nocaffeine.ssgclone.product.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class MediumCategoryDto {
+public class SizeOptionDto {
+
+    // SizeOption 엔티티의 필드들을 가져온다.
     private Long id;
-    private String name;
-    private Long largeCategoryId;
+    private String size;
 }

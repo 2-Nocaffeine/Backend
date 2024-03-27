@@ -1,41 +1,51 @@
 package com.nocaffeine.ssgclone.category.presentation;
 
 import com.nocaffeine.ssgclone.category.application.CategoryService;
-import com.nocaffeine.ssgclone.category.dto.response.MediumCategoryDto;
-import com.nocaffeine.ssgclone.category.dto.response.SmallCategoryDto;
-import com.nocaffeine.ssgclone.category.dto.response.TinyCategoryDto;
+import com.nocaffeine.ssgclone.category.dto.response.*;
 import com.nocaffeine.ssgclone.common.CommonResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
+@RequestMapping("/api/v1/category")
 public class CategoryController {
 
     private final CategoryService categoryService;
 
-    //대분류 + 중분류
-    @GetMapping("/api/v1/category/{large_id}")
-    public CommonResponse<List<MediumCategoryDto>> getMediumcategory(@PathVariable Long large_id) {
-        List<MediumCategoryDto> mediumCategoryDtoList = categoryService.findLargetoMedium(large_id);
-        return CommonResponse.success("성공", mediumCategoryDtoList);
+    //대분류 조회
+    @GetMapping("/large")
+    public CommonResponse<List<LargeCategoryResponse>> LargeCategoryList(){
+        List<LargeCategoryResponse> largecategoryList = categoryService.findLargeCategories();
+        return CommonResponse.success("LargeCategory를 성공적으로 찾았습니다.", largecategoryList);
     }
 
-    @GetMapping("/api/v1/category/{large_id}/{medium_id}")
-    public CommonResponse<List<SmallCategoryDto>> getSmallcategory(@PathVariable Long large_id, Long medium_id) {
-        List<SmallCategoryDto> smallCategoryDtoList = categoryService.findMediumtoSmall(medium_id);
-        return CommonResponse.success("성공", smallCategoryDtoList);
+    //중분류 조회
+    @GetMapping("/{largeId}/medium")
+    public CommonResponse<List<MediumCategoryResponse>> MidCategoryList(@PathVariable Long largeId) {
+        List<MediumCategoryResponse> mediumCategoryDtoList = categoryService.findMediumCategories(largeId);
+        return CommonResponse.success("MediumCategory를 성공적으로 찾았습니다.", mediumCategoryDtoList);
+    }
+    // 소분류 조회
+    @GetMapping("/{mediumId}/small")
+    public CommonResponse<List<SmallCategoryResponse>> SmallCategoryList(@PathVariable Long mediumId) {
+        List<SmallCategoryResponse> smallCategoryDtoList = categoryService.findSmallCategories(mediumId);
+        return CommonResponse.success("SmallCategory를 성공적으로 찾았습니다.", smallCategoryDtoList);
+    }
+    // 소분류 + 소소분류
+    @GetMapping("/{smallId}/tiny")
+    public CommonResponse<List<TinyCategoryResponse>> TinycategoryList(@PathVariable("smallId") Long smallId) {
+        List<TinyCategoryResponse> tinyCategoryDtoList = categoryService.findTinyCategories(smallId);
+        return CommonResponse.success("TinyCategory를 성공적으로 찾았습니다.", tinyCategoryDtoList);
     }
 
-    @GetMapping("/api/v1/category/{large_id}/{medium_id}/{tiny_id}")
-    public CommonResponse<List<TinyCategoryDto>> getTinycategory(@PathVariable Long large_id, Long medium_id, Long small_id) {
-        List<TinyCategoryDto> tinyCategoryDtoList = categoryService.findSmalltoTiny(small_id);
-        return CommonResponse.success("성공", tinyCategoryDtoList);
-    }
+
 
 
 }
