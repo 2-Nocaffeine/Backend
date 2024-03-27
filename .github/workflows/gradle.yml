@@ -71,5 +71,5 @@ jobs:
           sudo docker stop nocaffeine-container
           sudo docker rm nocaffeine-container
           sudo docker pull ${{ secrets.DOCKER_USERNAME }}/nocaffeine
-          sudo docker run -d —name nocaffeine-container -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/nocaffeine
+          sudo docker run -d --name nocaffeine-container -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/nocaffeine
           sudo docker image prune -f
