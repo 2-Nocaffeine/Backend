@@ -23,11 +23,10 @@ public class ProductCategoryListServiceImpl implements ProductCategoryListServic
     @Override
     public List<ProductIdListResponse> getProductIdListWithLargeCategory(Long largeId) {
         List<ProductIdListResponse> productIdListResponseList = new ArrayList<>();
-        int sequenceId = 1;
 
         for (ProductCategoryList productCategoryList : productCategoryListRepository.findByLargeCategoryId(largeId)){
             ProductIdListResponse productIdListResponse = ProductIdListResponse.builder()
-                    .id(sequenceId++)
+                    .id(productCategoryList.getId())
                     .productId(productCategoryList.getProduct().getId())
                     .build();
             productIdListResponseList.add(productIdListResponse);
@@ -41,11 +40,10 @@ public class ProductCategoryListServiceImpl implements ProductCategoryListServic
     @Override
     public List<ProductIdListResponse> getProductIdListWithMediumCategory(Long mediumId) {
         List<ProductIdListResponse> productIdListResponseList = new ArrayList<>();
-        int sequenceId = 1;
 
         for (ProductCategoryList productCategoryList : productCategoryListRepository.findByMediumCategoryId(mediumId)){
             ProductIdListResponse productIdListResponse = ProductIdListResponse.builder()
-                    .id(sequenceId++)
+                    .id(productCategoryList.getId())
                     .productId(productCategoryList.getProduct().getId())
                     .build();
             productIdListResponseList.add(productIdListResponse);
@@ -59,11 +57,10 @@ public class ProductCategoryListServiceImpl implements ProductCategoryListServic
     @Override
     public List<ProductIdListResponse> getProductIdListWithSmallCategory(Long smallId) {
         List<ProductIdListResponse> productIdListResponseList = new ArrayList<>();
-        int sequenceId = 1;
 
         for (ProductCategoryList productCategoryList : productCategoryListRepository.findBySmallCategoryId(smallId)){
             ProductIdListResponse productIdListResponse = ProductIdListResponse.builder()
-                    .id(sequenceId++)
+                    .id(productCategoryList.getId())
                     .productId(productCategoryList.getProduct().getId())
                     .build();
             productIdListResponseList.add(productIdListResponse);
@@ -83,10 +80,10 @@ public class ProductCategoryListServiceImpl implements ProductCategoryListServic
         }
 
         List<ProductIdListResponse> productIdList = new ArrayList<>();
-        int sequenceId = 1;
+
         for (ProductCategoryList productCategoryList : productCategoryLists){
             ProductIdListResponse productIdListResponse = ProductIdListResponse.builder()
-                    .id(sequenceId++)
+                    .id(productCategoryList.getId())
                     .productId(productCategoryList.getProduct().getId())
                     .build();
             productIdList.add(productIdListResponse);
