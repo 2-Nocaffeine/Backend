@@ -4,9 +4,10 @@ package com.nocaffeine.ssgclone.like.application;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
 import com.nocaffeine.ssgclone.like.domain.LikeFolder;
 import com.nocaffeine.ssgclone.like.domain.ProductLike;
-import com.nocaffeine.ssgclone.like.dto.ProductLikeDto;
+import com.nocaffeine.ssgclone.like.dto.ProductLikeAddDto;
 import com.nocaffeine.ssgclone.like.dto.LikeFolderDto;
-import com.nocaffeine.ssgclone.like.dto.LikeProductListDto;
+import com.nocaffeine.ssgclone.like.dto.ProductLikeListDto;
+import com.nocaffeine.ssgclone.like.dto.ProductLikeRemoveDto;
 import com.nocaffeine.ssgclone.like.infrastructure.LikeFolderRepository;
 import com.nocaffeine.ssgclone.like.infrastructure.ProductLikeRepository;
 import com.nocaffeine.ssgclone.member.domain.Member;
@@ -67,7 +68,7 @@ public class LikeFolderServiceImpl implements LikeFolderService{
      * 좋아요 폴더 조회
      */
     @Override
-    public List<LikeFolderDto> findLikeFolderList(String memberUuid) {
+    public List<LikeFolderDto> findLikeFolder(String memberUuid) {
         Member member = memberRepository.findByUuid(memberUuid)
                 .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
 
@@ -108,15 +109,15 @@ public class LikeFolderServiceImpl implements LikeFolderService{
      */
     @Override
     @Transactional
-    public void addProductLike(ProductLikeDto productLikeDto, String memberUuid) {
+    public void addProductLike(ProductLikeAddDto productLikeAddDto, String memberUuid) {
         Member member = memberRepository.findByUuid(memberUuid)
                 .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
 
-        for (Long likeFolderId : productLikeDto.getLikeFolderId()){
+        for (Long likeFolderId : productLikeAddDto.getLikeFolderId()){
             LikeFolder likeFolder = likeFolderRepository.findById(likeFolderId)
                     .orElseThrow(() -> new BaseException(NO_EXIST_WISH_FOLDER));
 
-            for (Long productLikeId : productLikeDto.getProductLikeId()) {
+            for (Long productLikeId : productLikeAddDto.getProductLikeId()) {
                 ProductLike productLike = productLikeRepository.findById(productLikeId)
                         .orElseThrow(() -> new BaseException(NO_DATA));
 
@@ -145,7 +146,7 @@ public class LikeFolderServiceImpl implements LikeFolderService{
      * 폴더에 있는 상품 조회
      */
     @Override
-    public List<LikeProductListDto> findProductList(Long likeFolderId, String memberUuid) {
+    public List<ProductLikeListDto> findProductLike(Long likeFolderId, String memberUuid) {
         Member member = memberRepository.findByUuid(memberUuid)
                 .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
 
@@ -154,19 +155,33 @@ public class LikeFolderServiceImpl implements LikeFolderService{
 
         List<ProductLike> productLike = productLikeRepository.findByLikeFolder(likeFolder.getId());
 
-        List<LikeProductListDto> responses = new ArrayList<>();
+        List<ProductLikeListDto> responses = new ArrayList<>();
 
         for (ProductLike like : productLike) {
-            LikeProductListDto likeProductListDto = LikeProductListDto.builder()
+            ProductLikeListDto productLikeListDto = ProductLikeListDto.builder()
                     .productLikeId(like.getId())
                     .productId(like.getProduct().getId())
                     .build();
 
-            responses.add(likeProductListDto);
+            responses.add(productLikeListDto);
         }
         return responses;
     }
 
+    /**
+     * 폴더에 있는 상품 삭제
+     */
+    @Override
+    @Transactional
+    public void removeProductLike(ProductLikeRemoveDto productLikeRemoveDto, String memberUuid) {
+        memberRepository.findByUuid(memberUuid)
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
 
+        for (Long productLikeId : productLikeRemoveDto.getProductLikeId()) {
+            ProductLike productLike = productLikeRepository.findByIdAndLikeFolder(productLikeId, productLikeRemoveDto.getLikeFolderId())
+                    .orElseThrow(() -> new BaseException(NO_DATA));
+            productLikeRepository.delete(productLike);
+        }
+    }
 
 }

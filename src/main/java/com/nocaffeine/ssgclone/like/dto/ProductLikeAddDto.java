@@ -11,14 +11,14 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ProductLikeDto {
+public class ProductLikeAddDto {
 
     private List<Long> likeFolderId;
     private List<Long> productLikeId;
 
 
-    public static ProductLikeDto voToDto(ProductLikeMoveRequestVo productLikeMoveRequestVo){
-        return ProductLikeDto.builder()
+    public static ProductLikeAddDto voToDto(ProductLikeMoveRequestVo productLikeMoveRequestVo){
+        return ProductLikeAddDto.builder()
                 .likeFolderId(productLikeMoveRequestVo.getLikeFolderId())
                 .productLikeId(productLikeMoveRequestVo.getProductLikeId())
                 .build();

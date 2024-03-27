@@ -4,13 +4,11 @@ package com.nocaffeine.ssgclone.like.presentation;
 import com.nocaffeine.ssgclone.common.CommonResponse;
 import com.nocaffeine.ssgclone.common.security.JwtTokenProvider;
 import com.nocaffeine.ssgclone.like.application.LikeFolderService;
-import com.nocaffeine.ssgclone.like.dto.ProductLikeDto;
+import com.nocaffeine.ssgclone.like.dto.ProductLikeAddDto;
 import com.nocaffeine.ssgclone.like.dto.LikeFolderDto;
-import com.nocaffeine.ssgclone.like.dto.LikeProductListDto;
-import com.nocaffeine.ssgclone.like.vo.request.LikeFolderAddRequestVo;
-import com.nocaffeine.ssgclone.like.vo.request.LikeFolderModifyRequestVo;
-import com.nocaffeine.ssgclone.like.vo.request.LikeFolderRemoveRequestVo;
-import com.nocaffeine.ssgclone.like.vo.request.ProductLikeMoveRequestVo;
+import com.nocaffeine.ssgclone.like.dto.ProductLikeListDto;
+import com.nocaffeine.ssgclone.like.dto.ProductLikeRemoveDto;
+import com.nocaffeine.ssgclone.like.vo.request.*;
 import com.nocaffeine.ssgclone.like.vo.response.LikeFolderListResponseVo;
 import com.nocaffeine.ssgclone.like.vo.response.LikeProductListResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
@@ -45,7 +43,7 @@ public class LikeFolderController {
     public CommonResponse<List<LikeFolderListResponseVo>> folderList(){
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
 
-        List<LikeFolderDto> likeFolderListDto = likeFolderService.findLikeFolderList(memberUuid);
+        List<LikeFolderDto> likeFolderListDto = likeFolderService.findLikeFolder(memberUuid);
 
         List<LikeFolderListResponseVo> likeFolderListResponseVo = new ArrayList<>();
         for (LikeFolderDto likeFolderDto : likeFolderListDto) {
@@ -75,26 +73,35 @@ public class LikeFolderController {
 
     @Operation(summary = "선택한 폴더에 좋아요 상품 추가", description = "선택한 폴더에 좋아요 상품 추가", tags = {"product like add folder"})
     @PostMapping("/product")
-    public CommonResponse<String> productLikeAddFolder(@RequestBody ProductLikeMoveRequestVo productLikeMoveRequestVo){
+    public CommonResponse<String> productLikeAdd(@RequestBody ProductLikeMoveRequestVo productLikeMoveRequestVo){
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
-        ProductLikeDto productLikeDto = ProductLikeDto.voToDto(productLikeMoveRequestVo);
-        likeFolderService.addProductLike(productLikeDto, memberUuid);
+        ProductLikeAddDto productLikeAddDto = ProductLikeAddDto.voToDto(productLikeMoveRequestVo);
+        likeFolderService.addProductLike(productLikeAddDto, memberUuid);
         return CommonResponse.success("폴더 추가 성공");
     }
 
     @Operation(summary = "폴더에 담긴 상품 좋아요 조회", description = "폴더 담긴 상품 좋아요 조회", tags = {"product like folder list"})
     @GetMapping("/{likeFolderId}/product")
-    public CommonResponse<List<LikeProductListResponseVo>> folderProductList(@PathVariable Long likeFolderId){
+    public CommonResponse<List<LikeProductListResponseVo>> productLikeList(@PathVariable Long likeFolderId){
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
 
-        List<LikeProductListDto> likeFolderProductList = likeFolderService.findProductList(likeFolderId, memberUuid);
+        List<ProductLikeListDto> likeFolderProductList = likeFolderService.findProductLike(likeFolderId, memberUuid);
 
         List<LikeProductListResponseVo> likeFolderListResponseVo = new ArrayList<>();
-        for (LikeProductListDto likeProductListDto : likeFolderProductList) {
-            likeFolderListResponseVo.add(LikeProductListResponseVo.dtoToVo(likeProductListDto));
+        for (ProductLikeListDto productLikeListDto : likeFolderProductList) {
+            likeFolderListResponseVo.add(LikeProductListResponseVo.dtoToVo(productLikeListDto));
         }
 
         return CommonResponse.success("폴더 상품 조회 성공", likeFolderListResponseVo);
+    }
+
+    @Operation(summary = "폴더에 담긴 상품 좋아요 삭제", description = "폴더 담긴 상품 좋아요 삭제", tags = {"product like folder remove"})
+    @DeleteMapping("/product")
+    public CommonResponse<String> productLikeRemove(@RequestBody ProductRemoveRequestVo productRemoveRequestVo){
+        String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
+        ProductLikeRemoveDto productLikeRemoveDto = ProductLikeRemoveDto.voToDto(productRemoveRequestVo);
+        likeFolderService.removeProductLike(productLikeRemoveDto, memberUuid);
+        return CommonResponse.success("폴더 삭제 성공");
     }
 
 
