@@ -9,6 +9,7 @@ import com.nocaffeine.ssgclone.like.vo.request.LikeFolderAddRequestVo;
 import com.nocaffeine.ssgclone.like.vo.request.LikeFolderModifyRequestVo;
 import com.nocaffeine.ssgclone.like.vo.request.LikeFolderRemoveVo;
 import com.nocaffeine.ssgclone.like.vo.response.LikeFolderListResponseVo;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,7 @@ public class LikeFolderController {
     private final JwtTokenProvider jwtTokenProvider;
     private final LikeFolderService likeFolderService;
 
+    @Operation(summary = "폴더 추가", description = "폴더 추가", tags = {"like folder add"})
     @PostMapping
     public CommonResponse<String> addFolder(@RequestBody LikeFolderAddRequestVo likeFolderAddRequestVo){
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
@@ -34,6 +36,7 @@ public class LikeFolderController {
 
     }
 
+    @Operation(summary = "폴더 조회", description = "폴더 조회", tags = {"like folder find"})
     @GetMapping
     public CommonResponse<List<LikeFolderListResponseVo>> getFolderList(){
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
@@ -48,6 +51,7 @@ public class LikeFolderController {
         return CommonResponse.success("폴더 조회 성공",likeFolderListResponseVo);
     }
 
+    @Operation(summary = "폴더 삭제", description = "폴더 삭제", tags = {"like folder remove"})
     @DeleteMapping
     public CommonResponse<String> removeFolder(@RequestBody LikeFolderRemoveVo likeFolderRemoveVo){
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
@@ -56,6 +60,7 @@ public class LikeFolderController {
         return CommonResponse.success("폴더 삭제 성공");
     }
 
+    @Operation(summary = "폴더 수정", description = "폴더 수정", tags = {"like folder modify"})
     @PatchMapping
     public CommonResponse<String> modifyFolder(@RequestBody LikeFolderModifyRequestVo likeFolderModifyRequestVo){
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
