@@ -1,7 +1,7 @@
 package com.nocaffeine.ssgclone.order.dto;
 
 import com.nocaffeine.ssgclone.order.vo.request.UserOrderProductRequestVo;
-import com.nocaffeine.ssgclone.order.vo.request.OrderedProductVo;
+import com.nocaffeine.ssgclone.order.vo.request.OrderedProductRequestVo;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class UserOrderSaveDto {
         public static UserOrderSaveDto convertToDto(String memberUuid, UserOrderProductRequestVo userOrderProductRequestVo) {
             List<OrderedProductDto> OrderedProductDtoList = new ArrayList<>();
 
-            for (OrderedProductVo orderProducts : userOrderProductRequestVo.getOrderProducts()){
+            for (OrderedProductRequestVo orderProducts : userOrderProductRequestVo.getOrderProducts()){
                 OrderedProductDtoList.add(OrderedProductDto.convertToDto(orderProducts));
             }
 

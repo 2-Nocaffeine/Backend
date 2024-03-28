@@ -3,10 +3,7 @@ package com.nocaffeine.ssgclone.order.domain;
 import com.nocaffeine.ssgclone.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.sql.Timestamp;
 
@@ -45,9 +42,14 @@ public class Orders extends BaseTimeEntity {
     @NotNull
     private Timestamp orderDate;
 
+//    @Enumerated(EnumType.STRING)
     @NotNull
     @Column(length = 50)
     private OrderStatus status;
+
+    public void changeStatus(OrderStatus status){
+        this.status = status;
+    }
 
 
     public enum OrderStatus {

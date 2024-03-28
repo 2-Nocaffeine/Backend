@@ -96,12 +96,16 @@ public enum BaseResponseStatus {
     NO_VIEW_HISTORY(HttpStatus.NOT_FOUND, false, 8006, "해당 유저의 최근 상품 조회 기록이 없습니다"),
 
     /**
-     * Brand
+     * 9000 : Brand Service Error
      */
-    NO_EXIST_BRAND(HttpStatus.NOT_FOUND, false,9001, "브랜드가 존재하지 않습니다");
+    NO_EXIST_BRAND(HttpStatus.NOT_FOUND, false,9001, "브랜드가 존재하지 않습니다"),
 
 
-
+    /**
+     * 10000 : Order Service Error
+     */
+    NO_EXIST_ORDER(HttpStatus.NOT_FOUND, false, 10000, "존재하지 않는 주문입니다"),
+    NO_ORDER_HISTORY(HttpStatus.NOT_FOUND, false, 10001, "주문내역이 존재하지 않습니다");
 
     private final HttpStatusCode httpStatusCode;
     private final boolean isSuccess;

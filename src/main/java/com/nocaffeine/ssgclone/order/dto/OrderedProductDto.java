@@ -1,10 +1,12 @@
 package com.nocaffeine.ssgclone.order.dto;
 
-import com.nocaffeine.ssgclone.order.vo.request.OrderedProductVo;
+import com.nocaffeine.ssgclone.order.vo.request.OrderedProductRequestVo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -16,7 +18,7 @@ public class OrderedProductDto {
     private int count;
     private int price;
 
-    public static OrderedProductDto convertToDto(OrderedProductVo orderProducts) {
+    public static OrderedProductDto convertToDto(OrderedProductRequestVo orderProducts) {
 
         return OrderedProductDto.builder()
                 .optionSelectedProductId(orderProducts.getOptionSelectedProductId())

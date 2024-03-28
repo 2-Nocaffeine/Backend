@@ -7,7 +7,7 @@ import java.util.List;
 @Getter
 public class UserOrderProductRequestVo {
 
-    private List<OrderedProductVo> orderProducts;
+    private List<OrderedProductRequestVo> orderProducts;
     private String region;
     private String name;
     private String phoneNumber;
