@@ -10,6 +10,7 @@ import com.nocaffeine.ssgclone.product.infrastructure.ProductRepository;
 import com.nocaffeine.ssgclone.product.infrastructure.ViewHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.*;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ViewHistoryServiceImpl implements ViewHistoryService {
 
     private final ViewHistoryRepository viewHistoryRepository;
@@ -48,9 +50,10 @@ public class ViewHistoryServiceImpl implements ViewHistoryService {
     }
 
     @Override
+    @Transactional
     public void saveViewHistory(String memberUuid, Long productId) {
         Member member = memberRepository.findByUuid(memberUuid)
-                .orElseThrow(() -> new BaseException(TOKEN_NOT_VALID));
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new BaseException(NO_PRODUCT));
 
