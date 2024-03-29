@@ -6,6 +6,7 @@ import com.nocaffeine.ssgclone.member.infrastructure.MemberRepository;
 import com.nocaffeine.ssgclone.product.domain.Product;
 import com.nocaffeine.ssgclone.product.domain.ViewHistory;
 import com.nocaffeine.ssgclone.product.dto.ViewHistoryDto;
+import com.nocaffeine.ssgclone.product.dto.ViewHistoryListDto;
 import com.nocaffeine.ssgclone.product.infrastructure.ProductRepository;
 import com.nocaffeine.ssgclone.product.infrastructure.ViewHistoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -56,10 +57,10 @@ public class ViewHistoryServiceImpl implements ViewHistoryService {
 
     @Override
     @Transactional
-    public void saveViewHistory(String memberUuid, Long productId) {
+    public void addViewHistory(String memberUuid, ViewHistoryDto viewHistoryDto) {
         Member member = memberRepository.findByUuid(memberUuid)
                 .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
-        Product product = productRepository.findById(productId)
+        Product product = productRepository.findById(viewHistoryDto.getProductId())
                 .orElseThrow(() -> new BaseException(NO_PRODUCT));
 
         // 기존의 view history 에 해당 상품이 있다면 삭제
@@ -74,5 +75,22 @@ public class ViewHistoryServiceImpl implements ViewHistoryService {
         viewHistoryRepository.save(viewHistory);
     }
 
+    @Override
+    @Transactional
+    public void removeViewHistorys(String memberUuid, ViewHistoryListDto viewHistoryListDto) {
+        Member member = memberRepository.findByUuid(memberUuid)
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
+
+        for (Long productId : viewHistoryListDto.getProductIds()) {
+
+            Product product = productRepository.findById(productId)
+                    .orElseThrow(() -> new BaseException(NO_PRODUCT));
+
+            ViewHistory viewHistory = viewHistoryRepository.findByMemberAndProduct(member, product)
+                    .orElseThrow(() -> new BaseException(NO_EXIST_VIEW_HISTORY_PRODUCT));
+
+            viewHistoryRepository.delete(viewHistory);
+        }
+    }
 
 }
