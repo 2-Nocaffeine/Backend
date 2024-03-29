@@ -17,16 +17,7 @@ public class ProductImage{
     @NotNull
     private Product product;
 
-    @NotNull
-    private Long imageMain;
 
-    private Long image1;
-
-    private Long image2;
-
-    private Long image3;
-
-    private Long image4;
 
 
 }
