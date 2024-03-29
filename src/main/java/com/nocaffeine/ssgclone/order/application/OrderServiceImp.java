@@ -4,7 +4,6 @@ import com.nocaffeine.ssgclone.common.exception.BaseException;
 import com.nocaffeine.ssgclone.order.domain.OrderProduct;
 import com.nocaffeine.ssgclone.order.domain.Orders;
 import com.nocaffeine.ssgclone.order.dto.OrderIdDto;
-import com.nocaffeine.ssgclone.order.dto.OrderListDto;
 import com.nocaffeine.ssgclone.order.dto.UserOrderSaveDto;
 import com.nocaffeine.ssgclone.order.dto.OrderedProductDto;
 import com.nocaffeine.ssgclone.order.infrastructure.OrderProductRepository;
@@ -17,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.*;
@@ -34,15 +34,8 @@ public class OrderServiceImp implements OrderService{
     @Transactional
     public void addMemberOrder(UserOrderSaveDto userOrderSaveDto) {
 
-        //재고 확인
-        for (OrderedProductDto orderedProductDto : userOrderSaveDto.getOrderProducts()) {
-            OptionSelectedProduct optionSelectedProduct = optionSelectedProductRepository.findById(orderedProductDto.getOptionSelectedProductId())
-                    .orElseThrow(() -> new BaseException(NO_PRODUCT));
-
-            optionSelectedProduct.decreaseStock(orderedProductDto.getCount());
-        }
         //주문 저장
-        Orders Order = Orders.builder()
+        Orders order = Orders.builder()
                 .uuid(userOrderSaveDto.getUuid())
                 .region(userOrderSaveDto.getRegion())
                 .name(userOrderSaveDto.getName())
@@ -52,12 +45,14 @@ public class OrderServiceImp implements OrderService{
                 .status(Orders.OrderStatus.ORDERED)
                 .build();
 
-        Orders savedOrders = orderRepository.save(Order);
+        Orders savedOrders = orderRepository.save(order);
 
-        //주문상품 저장
+        //재고 확인 후 주문상품 저장
         for (OrderedProductDto orderedProductDto : userOrderSaveDto.getOrderProducts()) {
             OptionSelectedProduct optionSelectedProduct = optionSelectedProductRepository.findById(orderedProductDto.getOptionSelectedProductId())
                     .orElseThrow(() -> new BaseException(NO_PRODUCT));
+
+            optionSelectedProduct.decreaseStock(orderedProductDto.getCount());
 
             OrderProduct orderProduct = OrderProduct.builder()
                     .order(savedOrders)
@@ -77,18 +72,23 @@ public class OrderServiceImp implements OrderService{
         Orders order = orderRepository.findById(orderIdDto.getOrderId())
                 .orElseThrow(() -> new BaseException(NO_EXIST_ORDER));
 
+        //주문 취소 이력 확인
+        if (order.getStatus() == Orders.OrderStatus.CANCEL){
+            throw new BaseException(ALREADY_CANCEL_ORDER);
+        }
+
         order.changeStatus(Orders.OrderStatus.CANCEL);
 
+        //재고 복구
+        //주문한 상품 id 리스트
+        List<OrderProduct> orderProductIdList = orderProductRepository.findByOrder(order);
+
+        for (OrderProduct orderProduct : orderProductIdList){
+            OptionSelectedProduct optionSelectedProduct = orderProduct.getOptionSelectedProduct();
+            optionSelectedProduct.increaseStock(orderProduct.getQuantity());
+        }
     }
 
-//    @Override
-//    public List<OrderListDto> findOrderList(String memberUuid) {
-////        Orders order = orderRepository.findByUuid(memberUuid)
-////                .orElseThrow(() -> new BaseException(NO_ORDER_HISTORY));
-//
-//
-//
-//    }
 
 
 }

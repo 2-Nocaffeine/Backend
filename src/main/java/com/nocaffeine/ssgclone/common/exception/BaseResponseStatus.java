@@ -105,7 +105,9 @@ public enum BaseResponseStatus {
      * 10000 : Order Service Error
      */
     NO_EXIST_ORDER(HttpStatus.NOT_FOUND, false, 10000, "존재하지 않는 주문입니다"),
-    NO_ORDER_HISTORY(HttpStatus.NOT_FOUND, false, 10001, "주문내역이 존재하지 않습니다");
+    NO_ORDER_HISTORY(HttpStatus.NOT_FOUND, false, 10001, "주문내역이 존재하지 않습니다"),
+    NO_EXIST_ORDER_PRODUCT(HttpStatus.NOT_FOUND, false, 10002, "존재하지 않는 주문상품입니다"),
+    ALREADY_CANCEL_ORDER(HttpStatus.BAD_REQUEST, false, 10003, "이미 취소된 주문입니다");
 
     private final HttpStatusCode httpStatusCode;
     private final boolean isSuccess;

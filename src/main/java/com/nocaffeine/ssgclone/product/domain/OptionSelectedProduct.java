@@ -2,6 +2,7 @@ package com.nocaffeine.ssgclone.product.domain;
 
 import com.nocaffeine.ssgclone.common.BaseTimeEntity;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
+import com.nocaffeine.ssgclone.order.domain.Orders;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -46,11 +47,15 @@ public class OptionSelectedProduct extends BaseTimeEntity { // BaseTimeEntity를
         this.stock = stock;
     }
 
+
     public void decreaseStock(int quantity) {
         int restStock = this.stock - quantity;
         if (restStock < 0) {
             throw new BaseException(OUT_OF_STOCK_PRODUCT);
         }
         this.stock = restStock;
+    }
+    public void increaseStock(int quantity) {
+        this.stock = this.stock + quantity;;
     }
 }
