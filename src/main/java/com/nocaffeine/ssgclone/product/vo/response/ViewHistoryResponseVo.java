@@ -9,11 +9,9 @@ import java.util.List;
 @Getter
 public class ViewHistoryResponseVo {
 
-    private final Long id;
     private final Long productId;
 
-    public ViewHistoryResponseVo(Long id, Long productId) {
-        this.id = id;
+    public ViewHistoryResponseVo(Long productId) {
         this.productId = productId;
     }
 
@@ -23,7 +21,6 @@ public class ViewHistoryResponseVo {
 
         for (ViewHistoryDto viewHistoryDto : getViewHistory) {
             viewHistoryResponseVo.add(new ViewHistoryResponseVo(
-                    viewHistoryDto.getId(),
                     viewHistoryDto.getProductId()
             ));
         }
