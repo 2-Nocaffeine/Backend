@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +31,11 @@ public class ViewHistoryServiceImpl implements ViewHistoryService {
     // 최근 본 상품 목록을 조회하는 메소드
     @Override
     public List<ViewHistoryDto> getViewHistory(String memberUuid) {
-        List<ViewHistory> viewHistories = viewHistoryRepository.findByMemberUuid(memberUuid);
+        Member member = memberRepository.findByUuid(memberUuid)
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
+
+        List<ViewHistory> viewHistories = viewHistoryRepository.findByMemberOrderByCreatedAtDesc(member);
+
         if (viewHistories.isEmpty()) {
             throw new BaseException(NO_VIEW_HISTORY);
         }
@@ -57,6 +62,10 @@ public class ViewHistoryServiceImpl implements ViewHistoryService {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new BaseException(NO_PRODUCT));
 
+        // 기존의 view history 에 해당 상품이 있다면 삭제
+        viewHistoryRepository.deleteByMemberAndProduct(member, product);
+
+        // 새롭게 view history 에 최근 본 상품 추가
         ViewHistory viewHistory = ViewHistory.builder()
                 .member(member)
                 .product(product)
