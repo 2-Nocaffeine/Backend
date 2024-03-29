@@ -49,7 +49,6 @@ public class OrderServiceImp implements OrderService{
                 .phoneNumber(userOrderSaveDto.getPhoneNumber())
                 .email(userOrderSaveDto.getEmail())
                 .totalPrice(userOrderSaveDto.getTotalPrice())
-                .orderDate(Timestamp.valueOf(LocalDateTime.now()))
                 .status(Orders.OrderStatus.ORDERED)
                 .build();
 

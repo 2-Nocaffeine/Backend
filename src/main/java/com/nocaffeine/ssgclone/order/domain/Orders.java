@@ -39,9 +39,6 @@ public class Orders extends BaseTimeEntity {
     @NotNull
     private int totalPrice;
 
-    @NotNull
-    private Timestamp orderDate;
-
 //    @Enumerated(EnumType.STRING)
     @NotNull
     @Column(length = 50)

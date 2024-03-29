@@ -18,10 +18,15 @@ public class ProductImage extends BaseTimeEntity {
     private Product product;
 
     @NotNull
-    private boolean thumbnail;
+    private Long imageMain;
 
-    @NotNull
-    private int imageNumber;
+    private Long image1;
+
+    private Long image2;
+
+    private Long image3;
+
+    private Long image4;
 
 
 }
