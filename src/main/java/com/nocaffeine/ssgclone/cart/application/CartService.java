@@ -1,28 +1,28 @@
 package com.nocaffeine.ssgclone.cart.application;
 
 
-import com.nocaffeine.ssgclone.cart.dto.request.CartAddRequest;
-import com.nocaffeine.ssgclone.cart.dto.request.CartModifyRequest;
-import com.nocaffeine.ssgclone.cart.dto.request.CartRemoveListRequest;
-import com.nocaffeine.ssgclone.cart.dto.response.CartCountResponse;
-import com.nocaffeine.ssgclone.cart.dto.response.CartListResponse;
-import com.nocaffeine.ssgclone.cart.dto.response.CartPriceResponse;
+import com.nocaffeine.ssgclone.cart.dto.request.CartAddRequestDto;
+import com.nocaffeine.ssgclone.cart.dto.request.CartModifyRequestDto;
+import com.nocaffeine.ssgclone.cart.dto.request.CartRemoveListRequestDto;
+import com.nocaffeine.ssgclone.cart.dto.response.CartCountResponseDto;
+import com.nocaffeine.ssgclone.cart.dto.response.CartListResponseDto;
+import com.nocaffeine.ssgclone.cart.dto.response.CartPriceResponseDto;
 
 import java.util.List;
 
 
 public interface CartService {
 
-    void addCart(CartAddRequest cartAddRequest, String memberUuid);
-    void removeCart(CartRemoveListRequest cartRemoveListRequest, String memberUuid);
+    void addCart(CartAddRequestDto cartAddRequestDto, String memberUuid);
+    void removeCart(CartRemoveListRequestDto cartRemoveRequestDto, String memberUuid);
 
-    List<CartListResponse> listCart(String memberUuid);
+    List<CartListResponseDto> findCart(String memberUuid);
 
-    void modifyCart(CartModifyRequest cartModifyRequest);
+    void modifyCart(CartModifyRequestDto cartModifyRequestDto);
 
-    CartCountResponse countCart(String memberUuid);
+    CartCountResponseDto totalCountCart(String memberUuid);
 
-    CartPriceResponse totalPrice(List<Long> cartId);
+    CartPriceResponseDto findTotalPrice(List<Long> cartId);
 
 
 }
