@@ -28,7 +28,5 @@ public class Review extends BaseTimeEntity {
     @NotNull
     private int rate;
 
-    @NotNull
-    private Timestamp date;
 
 }
