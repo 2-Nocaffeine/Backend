@@ -14,12 +14,12 @@ public class EmailProvider {
 
     private final String SUBJECT = "[NoCaffeine SSG] 회원가입 인증 메일입니다.";
 
-    public boolean sendCertificationMail(String email, String certificationNumber) {
+    public boolean sendAuthMail(String email, String certificationNumber) {
         try{
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper messageHelper = new MimeMessageHelper(message, true);
 
-            String htmlContent = getCertificationMessage(certificationNumber);
+            String htmlContent = createAuthMessage(certificationNumber);
 
             messageHelper.setTo(email);
             messageHelper.setSubject(SUBJECT);
@@ -34,7 +34,7 @@ public class EmailProvider {
         return true;
     }
 
-    private String getCertificationMessage(String certificationNumber) {
+    private String createAuthMessage(String certificationNumber) {
         String certificationMessage = "";
 
         certificationMessage += "<h1 style='text-align: center;'>[NoCaffeine SSG] 인증메일</h1>";

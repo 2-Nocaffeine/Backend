@@ -3,6 +3,7 @@ package com.nocaffeine.ssgclone.member.vo.request;
 import lombok.Getter;
 
 @Getter
-public class EmailRequestVo {
+public class AuthCheckRequestVo {
     private String email;
+    private String authCode;
 }
