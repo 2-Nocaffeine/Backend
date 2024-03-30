@@ -1,5 +1,6 @@
 package com.nocaffeine.ssgclone.member.application;
 
+import com.nocaffeine.ssgclone.common.EmailProvider;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
 import com.nocaffeine.ssgclone.member.domain.Member;
 import com.nocaffeine.ssgclone.member.dto.request.MemberLoginRequestDto;
@@ -9,6 +10,7 @@ import com.nocaffeine.ssgclone.member.dto.response.MemberDetailResponseDto;
 import com.nocaffeine.ssgclone.member.dto.response.TokenResponseDto;
 import com.nocaffeine.ssgclone.member.infrastructure.MemberRepository;
 import com.nocaffeine.ssgclone.common.security.JwtTokenProvider;
+import com.nocaffeine.ssgclone.member.vo.request.EmailRequestVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,6 +31,8 @@ public class MemberServiceImp implements MemberService {
     private final MemberRepository memberRepository;
     private final AuthenticationManager authenticateManager;
     private final JwtTokenProvider jwtTokenProvider;
+    private final EmailProvider emailProvider;
+
 
     /**
      * 아이디 중복 확인
@@ -55,6 +59,23 @@ public class MemberServiceImp implements MemberService {
         createMember(memberSaveRequestDto);
     }
 
+    private void createMember(MemberSaveRequestDto memberSaveRequestDto) {
+        String uuid = UUID.randomUUID().toString();
+
+        Member member = Member.builder()
+                .email(memberSaveRequestDto.getEmail())
+                .password(memberSaveRequestDto.getPassword())
+                .uuid(uuid)
+                .name(memberSaveRequestDto.getName())
+                .phoneNumber(memberSaveRequestDto.getPhoneNumber())
+                .build();
+
+        // 비밀번호 암호화
+        member.hashPassword(memberSaveRequestDto.getPassword());
+
+        memberRepository.save(member);
+    }
+
     /**
      * 로그인
      */
@@ -78,6 +99,12 @@ public class MemberServiceImp implements MemberService {
                                 .accessToken(token)
                                 .build();
     }
+
+
+    private String createToken(Member member) {
+        return jwtTokenProvider.generateToken(member);
+    }
+
 
     /**
      * 비밀번호 변경
@@ -126,27 +153,32 @@ public class MemberServiceImp implements MemberService {
     }
 
 
+    /**
+     * 이메일 인증코드 발송
+     */
+    @Override
+    public void emailAuth(EmailRequestVo emailRequestVo) {
 
-    private void createMember(MemberSaveRequestDto memberSaveRequestDto) {
-        String uuid = UUID.randomUUID().toString();
+        duplicationEmail(emailRequestVo.getEmail());
 
-        Member member = Member.builder()
-                .email(memberSaveRequestDto.getEmail())
-                .password(memberSaveRequestDto.getPassword())
-                .uuid(uuid)
-                .name(memberSaveRequestDto.getName())
-                .phoneNumber(memberSaveRequestDto.getPhoneNumber())
-                .build();
+        String certificationNumber = getCertificationNumber();
 
-        // 비밀번호 암호화
-        member.hashPassword(memberSaveRequestDto.getPassword());
+        boolean isSuccess = emailProvider.sendCertificationMail(emailRequestVo.getEmail(), certificationNumber);
 
-        memberRepository.save(member);
+        if(!isSuccess){
+            log.error("이메일 전송 실패");
+            throw new BaseException(MASSAGE_SEND_FAILED);
+        }
     }
 
+    public static String getCertificationNumber() {
+        String certificationNumber = "";
 
-    private String createToken(Member member) {
-        return jwtTokenProvider.generateToken(member);
+        for(int count = 0; count < 4; count++){
+            certificationNumber += (int)(Math.random() * 10);
+        }
+
+        return certificationNumber;
     }
 }
 

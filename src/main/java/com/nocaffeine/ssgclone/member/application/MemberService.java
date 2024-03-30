@@ -6,6 +6,7 @@ import com.nocaffeine.ssgclone.member.dto.request.MemberPasswordRequestDto;
 import com.nocaffeine.ssgclone.member.dto.request.MemberSaveRequestDto;
 import com.nocaffeine.ssgclone.member.dto.response.MemberDetailResponseDto;
 import com.nocaffeine.ssgclone.member.dto.response.TokenResponseDto;
+import com.nocaffeine.ssgclone.member.vo.request.EmailRequestVo;
 
 public interface MemberService {
 
@@ -19,5 +20,7 @@ public interface MemberService {
     MemberDetailResponseDto findMember(String memberUuid);
 
     void removeMember(String memberUuid);
+
+    void emailAuth(EmailRequestVo emailRequestVo);
 
 }
