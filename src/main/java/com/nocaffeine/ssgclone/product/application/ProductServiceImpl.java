@@ -107,4 +107,19 @@ public class ProductServiceImpl implements ProductService{
 
         return responses;
     }
+
+    @Override
+    public List<ProductDto> getSearchProducts(String keyword) {
+        List<Product> products = Optional.ofNullable(productRepository.findByNameContaining(keyword))
+                .filter(list -> !list.isEmpty())
+                .orElseThrow(() -> new BaseException(NO_SEARCH_PRODUCT));
+
+        List<ProductDto> responses = new ArrayList<>();
+
+        for (Product product : products) {
+            responses.add(ProductDto.fromProduct(product));
+        }
+
+        return responses;
+    }
 }

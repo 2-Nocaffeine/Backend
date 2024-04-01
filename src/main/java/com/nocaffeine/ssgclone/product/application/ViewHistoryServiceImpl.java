@@ -78,9 +78,14 @@ public class ViewHistoryServiceImpl implements ViewHistoryService {
     @Override
     @Transactional
     public void removeViewHistorys(String memberUuid, ViewHistoryListDto viewHistoryListDto) {
+        // 회원이 존재하는지 확인
+        // orElseThrow 를 사용하여 선언 타입을 Optional 을 쓰지않고 바로 Member 객체로 받을 수 있음
         Member member = memberRepository.findByUuid(memberUuid)
                 .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
 
+        // view history 에서 삭제할 상품이 존재하는지 확인
+        // ViewHistoryListDto 에서 리스트 형식으로 받은 productIds 를 하나씩 조회하여 삭제
+        // for-each 문은 리스트에서 하나씩 꺼내와서 사용할 때 사용
         for (Long productId : viewHistoryListDto.getProductIds()) {
 
             Product product = productRepository.findById(productId)

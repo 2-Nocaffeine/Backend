@@ -99,6 +99,7 @@ public enum BaseResponseStatus {
     INVALID_STOCK_QUANTITY(HttpStatus.BAD_REQUEST, false, 8005, "유효하지 않은 재고 수량입니다"),
     NO_VIEW_HISTORY(HttpStatus.NOT_FOUND, false, 8006, "해당 유저의 최근 상품 조회 기록이 없습니다"),
     NO_EXIST_VIEW_HISTORY_PRODUCT(HttpStatus.NOT_FOUND, false, 8007, "해당 유저의 최근 본 상품에는 없는 상품입니다"),
+    NO_SEARCH_PRODUCT(HttpStatus.NOT_FOUND, false, 8008, "검색 결과가 없습니다"),
 
     /**
      * 9000 : Brand Service Error

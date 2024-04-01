@@ -5,6 +5,7 @@ import com.nocaffeine.ssgclone.product.application.OptionSelectedProductService;
 import com.nocaffeine.ssgclone.product.domain.OptionSelectedProduct;
 import com.nocaffeine.ssgclone.product.dto.OptionSelectedProductDto;
 import com.nocaffeine.ssgclone.product.vo.response.OptionSelectedProductResponseVo;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,7 @@ public class OptionSelectedProductController {
         return CommonResponse.success("옵션 선택 완료 최종 상품을 성공적으로 찾았습니다.", getOptionSelectedProduct);
     } // 옵션 선택 완료 최종 상품을 조회하는 메소드
 
+    @Operation(summary = "상품 ID와 옵션 ID를 통해 옵션 선택 완료 최종 상품을 조회", description = "상품 ID와 옵션 ID를 통해 옵션 선택 완료 최종 상품을 조회", tags = {"Option Selected Product"})
     @GetMapping
     public CommonResponse<OptionSelectedProductResponseVo> getOptionSelectedProductByProductIdAndOptions(
             @RequestParam("product") Long productId,

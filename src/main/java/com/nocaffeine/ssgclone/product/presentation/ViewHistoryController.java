@@ -8,6 +8,7 @@ import com.nocaffeine.ssgclone.product.dto.ViewHistoryListDto;
 import com.nocaffeine.ssgclone.product.vo.request.ViewHistoryDeleteRequestVo;
 import com.nocaffeine.ssgclone.product.vo.request.ViewHistoryRequestVo;
 import com.nocaffeine.ssgclone.product.vo.response.ViewHistoryResponseVo;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,7 @@ public class ViewHistoryController {
     private final JwtTokenProvider jwtTokenProvider;
 
     // 최근 본 상품 목록을 조회하는 메소드
+    @Operation(summary = "최근 본 상품 목록 조회", description = "최근 본 상품 목록 조회", tags = {"View History"})
     @GetMapping
     public CommonResponse<List<ViewHistoryResponseVo>> getViewHistory() {
         String token = jwtTokenProvider.getHeader();
@@ -36,6 +38,7 @@ public class ViewHistoryController {
     }
 
     // 최근 본 상품을 추가하는 메소드
+    @Operation(summary = "최근 본 상품 추가", description = "최근 본 상품 추가", tags = {"Add View History"})
     @PostMapping
     public CommonResponse<Void> addViewHistory(@RequestBody ViewHistoryRequestVo viewHistoryRequestVo) {
         String token = jwtTokenProvider.getHeader();
@@ -49,6 +52,7 @@ public class ViewHistoryController {
     }
 
     // 최근 본 상품을 리스트의 형태로 받아 삭제하는 메소드
+    @Operation(summary = "최근 본 상품 삭제", description = "최근 본 상품 삭제", tags = {"Remove View History"})
     @DeleteMapping
     public CommonResponse<List<Void>> deleteViewHistoryProducts(@RequestBody ViewHistoryDeleteRequestVo viewHistoryDeleteRequestVo) {
         String token = jwtTokenProvider.getHeader();
