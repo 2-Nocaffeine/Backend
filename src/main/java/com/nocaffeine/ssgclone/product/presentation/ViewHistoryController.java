@@ -32,9 +32,9 @@ public class ViewHistoryController {
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(token);
 
         List<ViewHistoryDto> viewHistory = viewHistoryService.getViewHistory(memberUuid);
-        List<ViewHistoryResponseVo> getViewHistory = ViewHistoryResponseVo.viewHistoryDtoToVo(viewHistory);
 
-        return CommonResponse.success("최근 본 상품 목록을 성공적으로 가져왔습니다.", getViewHistory);
+        return CommonResponse.success("최근 본 상품 목록을 성공적으로 가져왔습니다.",
+                ViewHistoryResponseVo.viewHistoryDtoToVo(viewHistory));
     }
 
     // 최근 본 상품을 추가하는 메소드

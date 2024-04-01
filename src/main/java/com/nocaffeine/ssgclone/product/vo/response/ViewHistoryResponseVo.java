@@ -2,14 +2,16 @@ package com.nocaffeine.ssgclone.product.vo.response;
 
 import com.nocaffeine.ssgclone.product.dto.ViewHistoryDto;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@NoArgsConstructor
 public class ViewHistoryResponseVo {
 
-    private final Long productId;
+    private Long productId;
 
     public ViewHistoryResponseVo(Long productId) {
         this.productId = productId;

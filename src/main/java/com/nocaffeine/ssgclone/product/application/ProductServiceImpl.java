@@ -110,9 +110,7 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public List<ProductDto> getSearchProducts(String keyword) {
-        List<Product> products = Optional.ofNullable(productRepository.findByNameContaining(keyword))
-                .filter(list -> !list.isEmpty())
-                .orElseThrow(() -> new BaseException(NO_SEARCH_PRODUCT));
+        List<Product> products = productRepository.findByNameContaining(keyword);
 
         List<ProductDto> responses = new ArrayList<>();
 

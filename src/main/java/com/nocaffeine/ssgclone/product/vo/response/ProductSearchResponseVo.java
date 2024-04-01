@@ -2,14 +2,16 @@ package com.nocaffeine.ssgclone.product.vo.response;
 
 import com.nocaffeine.ssgclone.product.dto.ProductDto;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@NoArgsConstructor
 public class ProductSearchResponseVo {
 
-    private final Long productId;
+    private Long productId;
 
     public ProductSearchResponseVo(Long productId) {
         this.productId = productId;

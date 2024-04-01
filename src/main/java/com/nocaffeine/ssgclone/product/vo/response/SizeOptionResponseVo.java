@@ -2,15 +2,17 @@ package com.nocaffeine.ssgclone.product.vo.response;
 
 import com.nocaffeine.ssgclone.product.dto.SizeOptionDto;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@NoArgsConstructor
 public class SizeOptionResponseVo {
 
-    private final Long id;
-    private final String size;
+    private Long id;
+    private String size;
 
     public SizeOptionResponseVo(Long id, String size) {
         this.id = id;

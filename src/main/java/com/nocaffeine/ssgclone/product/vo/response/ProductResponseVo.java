@@ -2,15 +2,17 @@ package com.nocaffeine.ssgclone.product.vo.response;
 
 import com.nocaffeine.ssgclone.product.dto.ProductDto;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class ProductResponseVo {
 
-    private final Long id;
-    private final String name;
-    private final int price;
-    private final String content;
-    private final int discount;
+    private Long id;
+    private String name;
+    private int price;
+    private String content;
+    private int discount;
 
     public ProductResponseVo(Long id, String name, int price, String content, int discount) {
         this.id = id;

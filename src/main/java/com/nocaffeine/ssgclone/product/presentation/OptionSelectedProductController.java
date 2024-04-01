@@ -22,8 +22,9 @@ public class OptionSelectedProductController {
     @GetMapping("/{option-selected-product-id}")
     public CommonResponse<OptionSelectedProductResponseVo> getOptionSelectedProduct(@PathVariable("option-selected-product-id") Long id) {
         OptionSelectedProductDto getOptionSelectedProductDto = optionSelectedProductService.getOptionSelectedProduct(id);
-        OptionSelectedProductResponseVo getOptionSelectedProduct = OptionSelectedProductResponseVo.optionSelectedProductDtoToVo(getOptionSelectedProductDto);
-        return CommonResponse.success("옵션 선택 완료 최종 상품을 성공적으로 찾았습니다.", getOptionSelectedProduct);
+
+        return CommonResponse.success("옵션 선택 완료 최종 상품을 성공적으로 찾았습니다.",
+                OptionSelectedProductResponseVo.optionSelectedProductDtoToVo(getOptionSelectedProductDto));
     } // 옵션 선택 완료 최종 상품을 조회하는 메소드
 
     @Operation(summary = "상품 ID와 옵션 ID를 통해 옵션 선택 완료 최종 상품을 조회", description = "상품 ID와 옵션 ID를 통해 옵션 선택 완료 최종 상품을 조회", tags = {"Option Selected Product"})
@@ -35,8 +36,8 @@ public class OptionSelectedProductController {
             @RequestParam("addOption") Long addOptionId) {
 
         OptionSelectedProductDto optionSelectedProductDto = optionSelectedProductService.getOptionSelectedProductByProductIdAndOptions(productId, sizeOptionId, colorOptionId, addOptionId);
-        OptionSelectedProductResponseVo responseVo = OptionSelectedProductResponseVo.optionSelectedProductDtoToVo(optionSelectedProductDto);
 
-        return CommonResponse.success("옵션 선택 완료 최종 상품을 성공적으로 찾았습니다.", responseVo);
+        return CommonResponse.success("옵션 선택 완료 최종 상품을 성공적으로 찾았습니다.",
+                OptionSelectedProductResponseVo.optionSelectedProductDtoToVo(optionSelectedProductDto));
     } // 상품 ID와 옵션 ID를 통해 옵션 선택 완료 최종 상품을 조회하는 메소드
 }
