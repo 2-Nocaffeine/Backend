@@ -1,8 +1,11 @@
 package com.nocaffeine.ssgclone.order.application;
 
 import com.nocaffeine.ssgclone.common.exception.BaseException;
+import com.nocaffeine.ssgclone.member.domain.Member;
+import com.nocaffeine.ssgclone.member.infrastructure.MemberRepository;
 import com.nocaffeine.ssgclone.order.domain.OrderProduct;
 import com.nocaffeine.ssgclone.order.domain.Orders;
+import com.nocaffeine.ssgclone.order.dto.MemberOrderInfoDto;
 import com.nocaffeine.ssgclone.order.dto.OrderIdDto;
 import com.nocaffeine.ssgclone.order.dto.UserOrderSaveDto;
 import com.nocaffeine.ssgclone.order.dto.OrderedProductDto;
@@ -13,10 +16,6 @@ import com.nocaffeine.ssgclone.product.infrastructure.OptionSelectedProductRepos
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.*;
@@ -29,6 +28,7 @@ public class OrderServiceImp implements OrderService{
     private final OrderRepository orderRepository;
     private final OrderProductRepository orderProductRepository;
     private final OptionSelectedProductRepository optionSelectedProductRepository;
+    private final MemberRepository memberRepository;
 
     @Override
     @Transactional
@@ -110,6 +110,17 @@ public class OrderServiceImp implements OrderService{
         }
     }
 
+    @Override
+    public MemberOrderInfoDto findOrderInfo(String memberUuid) {
+        Member member =  memberRepository.findByUuid(memberUuid)
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
+
+        return MemberOrderInfoDto.builder()
+                .orderName(member.getName())
+                .phoneNumber(member.getPhoneNumber())
+                .email(member.getEmail())
+                .build();
+    }
 
 
 }

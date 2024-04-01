@@ -3,12 +3,14 @@ package com.nocaffeine.ssgclone.order.presentation;
 import com.nocaffeine.ssgclone.common.CommonResponse;
 import com.nocaffeine.ssgclone.common.security.JwtTokenProvider;
 import com.nocaffeine.ssgclone.order.application.OrderService;
+import com.nocaffeine.ssgclone.order.dto.MemberOrderInfoDto;
 import com.nocaffeine.ssgclone.order.dto.OrderIdDto;
 import com.nocaffeine.ssgclone.order.dto.OrderListDto;
 import com.nocaffeine.ssgclone.order.dto.UserOrderSaveDto;
 import com.nocaffeine.ssgclone.order.vo.request.OrderIdRequestVo;
 import com.nocaffeine.ssgclone.order.vo.request.UserOrderProductRequestVo;
 import com.nocaffeine.ssgclone.order.vo.response.OrderListResponseVo;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +25,7 @@ public class OrderController {
     private final JwtTokenProvider jwtTokenProvider;
 
     //회원 주문
+    @Operation(summary = "회원 주문", description = "회원 주문", tags = {"Member Order"})
     @PostMapping("/member")
     public CommonResponse<String> memberOrderAdd(@RequestBody UserOrderProductRequestVo userOrderProductRequestVo) {
 
@@ -39,6 +42,7 @@ public class OrderController {
     }
 
     //비회원 주문
+    @Operation(summary = "비회원 주문", description = "비회원 주문", tags = {"Non-Member Order"})
     @PostMapping("/guest")
     public CommonResponse<String> nonMemberOrderAdd(@RequestBody UserOrderProductRequestVo userOrderProductRequestVo) {
 
@@ -51,6 +55,7 @@ public class OrderController {
     }
 
     // 주문 취소
+    @Operation(summary = "주문 취소", description = "주문 취소", tags = {"Order Cancel"})
     @DeleteMapping
     public CommonResponse<String> orderRemove(@RequestBody OrderIdRequestVo orderIdRequestVo) {
 
@@ -61,17 +66,18 @@ public class OrderController {
 
     }
 
-    //주문자 정보 조회
-//    @GetMapping("/member")
-//    public CommonResponse<List> orderList(){
-//        String token = jwtTokenProvider.getHeader();
-//        String memberUuid = jwtTokenProvider.validateAndGetUserUuid(token);
-//
-//
-//
-//
-//
-//    }
+    // 주문자 정보 조회
+    @Operation(summary = "주문자 정보 조회", description = "주문자 정보 조회", tags = {"Order Info"})
+    @GetMapping("/memberInfo")
+    public CommonResponse<MemberOrderInfoDto> orderList(){
+        String token = jwtTokenProvider.getHeader();
+        String memberUuid = jwtTokenProvider.validateAndGetUserUuid(token);
+
+        return CommonResponse.success("주문자 정보를 불러왔습니다.",orderService.findOrderInfo(memberUuid));
+
+
+
+    }
     //회원 주문 조회
 //    @GetMapping
 //    public CommonResponse<List<OrderListResponseVo>> orderList(){

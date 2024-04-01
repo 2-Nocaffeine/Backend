@@ -1,5 +1,6 @@
 package com.nocaffeine.ssgclone.order.application;
 
+import com.nocaffeine.ssgclone.order.dto.MemberOrderInfoDto;
 import com.nocaffeine.ssgclone.order.dto.OrderIdDto;
 import com.nocaffeine.ssgclone.order.dto.OrderListDto;
 import com.nocaffeine.ssgclone.order.dto.UserOrderSaveDto;
@@ -12,5 +13,6 @@ public interface OrderService {
 
     void removeOrder(OrderIdDto orderIdDto);
 
-//    List<OrderListDto> findOrderList(String memberUuid);
+    MemberOrderInfoDto findOrderInfo(String memberUuid);
+
 }
