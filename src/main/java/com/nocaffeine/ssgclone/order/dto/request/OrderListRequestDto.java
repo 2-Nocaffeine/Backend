@@ -1,4 +1,4 @@
-package com.nocaffeine.ssgclone.order.dto;
+package com.nocaffeine.ssgclone.order.dto.request;
 
 import com.nocaffeine.ssgclone.order.vo.response.OrderListResponseVo;
 import com.nocaffeine.ssgclone.order.vo.response.OrderProductListResponseVo;
@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OrderListDto {
+public class OrderListRequestDto {
 
     private LocalDateTime orderDate;
     private Long orderId;
@@ -22,8 +22,8 @@ public class OrderListDto {
     private String Name;
     private List<OrderProductListResponseVo> orderProductListResponseVo;
 
-    public static OrderListResponseVo convertToVo(OrderListDto orderListDto){
-        return new OrderListResponseVo(orderListDto.orderDate, orderListDto.orderId,
-                orderListDto.totalPrice, orderListDto.Name, orderListDto.orderProductListResponseVo);
+    public static OrderListResponseVo convertToVo(OrderListRequestDto orderListRequestDto){
+        return new OrderListResponseVo(orderListRequestDto.orderDate, orderListRequestDto.orderId,
+                orderListRequestDto.totalPrice, orderListRequestDto.Name, orderListRequestDto.orderProductListResponseVo);
     }
 }

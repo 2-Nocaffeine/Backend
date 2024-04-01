@@ -20,8 +20,8 @@ public class ProductCategoryListController {
     private final ProductCategoryListService productCategoryListService;
 
     //대분류별 상품 조회
-    @Operation(summary = "대카테고리 상품 id 조회", description = "대카테고리 상품 id 조회", tags = {"Large Category Product List"})
-    @GetMapping("/largeCategory/{largeId}")
+    @Operation(summary = "대카테고리 상품 id 조회", description = "대카테고리 상품 id 조회", tags = {"Category Product List"})
+    @GetMapping("/large-category/{largeId}")
     public CommonResponse<List<ProductIdListResponse>> productIdWithLargeCategoryList(@PathVariable("largeId") Long largeId){
 
         return CommonResponse.success("해당 카테고리의 productIdList 를 성공적으로 찾았습니다.",
@@ -30,8 +30,8 @@ public class ProductCategoryListController {
 
     //중분류별 상품 조회
 
-    @Operation(summary = "중카테고리 상품 id 조회", description = "중카테고리 상품 id 조회", tags = {"Medium Category Product List"})
-    @GetMapping("/mediumCategory/{mediumId}")
+    @Operation(summary = "중카테고리 상품 id 조회", description = "중카테고리 상품 id 조회", tags = {"Category Product List"})
+    @GetMapping("/medium-category/{mediumId}")
     public CommonResponse<List<ProductIdListResponse>> productIdWithMediumCategoryList(@PathVariable("mediumId") Long mediumId){
 
         return CommonResponse.success("해당 카테고리의 productIdList 를 성공적으로 찾았습니다.",
@@ -39,8 +39,8 @@ public class ProductCategoryListController {
     }
 
     //소분류별 상품 조회
-    @Operation(summary = "소카테고리 상품 id 조회", description = "소카테고리 상품 id 조회", tags = {"Small Category Product List"})
-    @GetMapping("/smallCategory/{smallId}")
+    @Operation(summary = "소카테고리 상품 id 조회", description = "소카테고리 상품 id 조회", tags = {"Category Product List"})
+    @GetMapping("/small-category/{smallId}")
     public CommonResponse<List<ProductIdListResponse>> productIdWithSmallCategoryList(@PathVariable("smallId") Long smallId){
 
         return CommonResponse.success("해당 카테고리의 productIdList 를 성공적으로 찾았습니다.",
@@ -48,8 +48,8 @@ public class ProductCategoryListController {
     }
 
     //소소분류별 상품 조회
-    @Operation(summary = "소소카테고리 상품 id 조회", description = "소소카테고리 상품 id 조회", tags = {"Tiny Category Product List"})
-    @GetMapping("/tinyCategory/{tinyId}")
+    @Operation(summary = "소소카테고리 상품 id 조회", description = "소소카테고리 상품 id 조회", tags = {"Category Product List"})
+    @GetMapping("/tiny-category/{tinyId}")
     public CommonResponse<List<ProductIdListResponse>> productIdWithTinyCategoryList(@PathVariable("tinyId") Long tinyId){
 
         return CommonResponse.success("해당 카테고리의 productIdList 를 성공적으로 찾았습니다.",

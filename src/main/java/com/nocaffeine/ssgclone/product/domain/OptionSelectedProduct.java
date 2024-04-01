@@ -1,17 +1,12 @@
 package com.nocaffeine.ssgclone.product.domain;
 
 import com.nocaffeine.ssgclone.common.BaseTimeEntity;
-import com.nocaffeine.ssgclone.common.exception.BaseException;
-import com.nocaffeine.ssgclone.order.domain.Orders;
-import com.nocaffeine.ssgclone.order.dto.OrderedProductDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.OUT_OF_STOCK_PRODUCT;
 
 @Entity
 @Getter

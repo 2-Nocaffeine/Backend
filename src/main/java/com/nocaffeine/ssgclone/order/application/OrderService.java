@@ -1,18 +1,20 @@
 package com.nocaffeine.ssgclone.order.application;
 
-import com.nocaffeine.ssgclone.order.dto.MemberOrderInfoDto;
-import com.nocaffeine.ssgclone.order.dto.OrderIdDto;
-import com.nocaffeine.ssgclone.order.dto.OrderListDto;
-import com.nocaffeine.ssgclone.order.dto.UserOrderSaveDto;
+import com.nocaffeine.ssgclone.order.dto.response.MemberOrderInfoResponseDto;
+import com.nocaffeine.ssgclone.order.dto.request.OrderIdRequestDto;
+import com.nocaffeine.ssgclone.order.dto.request.UserOrderSaveRequestDto;
+import com.nocaffeine.ssgclone.order.dto.response.OrderIdListResponseDto;
+import com.nocaffeine.ssgclone.order.vo.response.OrderListResponseVo;
 
 import java.util.List;
 
 public interface OrderService {
 
-    void addMemberOrder (UserOrderSaveDto userOrderSaveDto);
+    void addMemberOrder (UserOrderSaveRequestDto userOrderSaveRequestDto);
 
-    void removeOrder(OrderIdDto orderIdDto);
+    void removeOrder(OrderIdRequestDto orderIdRequestDto);
 
-    MemberOrderInfoDto findOrderInfo(String memberUuid);
+    MemberOrderInfoResponseDto findOrderInfo(String memberUuid);
 
+    OrderIdListResponseDto findOrderIdList(String memberUuid);
 }

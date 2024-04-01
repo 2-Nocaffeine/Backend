@@ -1,4 +1,4 @@
-package com.nocaffeine.ssgclone.order.dto;
+package com.nocaffeine.ssgclone.order.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MemberOrderInfoDto {
+public class MemberOrderInfoResponseDto {
 
     private String orderName;
     private String phoneNumber;
     private String email;
+
 }

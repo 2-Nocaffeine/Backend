@@ -1,4 +1,4 @@
-package com.nocaffeine.ssgclone.order.dto;
+package com.nocaffeine.ssgclone.order.dto.request;
 
 import com.nocaffeine.ssgclone.order.vo.request.OrderIdRequestVo;
 import lombok.AllArgsConstructor;
@@ -10,12 +10,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OrderIdDto {
+public class OrderIdRequestDto {
 
     private Long orderId;
 
-    public static OrderIdDto convertToDto(OrderIdRequestVo orderIdRequestVo){
-        return OrderIdDto.builder()
+    public static OrderIdRequestDto convertToDto(OrderIdRequestVo orderIdRequestVo){
+        return OrderIdRequestDto.builder()
                 .orderId(orderIdRequestVo.getOrderId())
                 .build();
     }

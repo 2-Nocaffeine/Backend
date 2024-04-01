@@ -22,7 +22,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     //대분류 조회
-    @Operation(summary = "대카테고리 조회", description = "대카테고리 조회", tags = {"Large Category List"})
+    @Operation(summary = "대카테고리 조회", description = "대카테고리 조회", tags = {"Category"})
     @GetMapping("/large")
     public CommonResponse<List<LargeCategoryResponse>> largeCategoryList(){
 ;
@@ -30,21 +30,21 @@ public class CategoryController {
     }
 
     //중분류 조회
-    @Operation(summary = "중카테고리 조회", description = "중카테고리 조회", tags = {"Medium Category List"})
+    @Operation(summary = "중카테고리 조회", description = "중카테고리 조회", tags = {"Category"})
     @GetMapping("/{largeId}/medium")
     public CommonResponse<List<MediumCategoryResponse>> midCategoryList(@PathVariable Long largeId) {
 ;
         return CommonResponse.success("MediumCategory를 성공적으로 찾았습니다.", categoryService.findMediumCategories(largeId));
     }
     // 소분류 조회
-    @Operation(summary = "소카테고리 조회", description = "소카테고리 조회", tags = {"Small Category List"})
+    @Operation(summary = "소카테고리 조회", description = "소카테고리 조회", tags = {"Category"})
     @GetMapping("/{mediumId}/small")
     public CommonResponse<List<SmallCategoryResponse>> smallCategoryList(@PathVariable Long mediumId) {
 
         return CommonResponse.success("SmallCategory를 성공적으로 찾았습니다.", categoryService.findSmallCategories(mediumId));
     }
     // 소분류 + 소소분류
-    @Operation(summary = "소소카테고리 조회", description = "소소카테고리 조회", tags = {"Tiny Category List"})
+    @Operation(summary = "소소카테고리 조회", description = "소소카테고리 조회", tags = {"Category"})
     @GetMapping("/{smallId}/tiny")
     public CommonResponse<List<TinyCategoryResponse>> tinyCategoryList(@PathVariable("smallId") Long smallId) {
 

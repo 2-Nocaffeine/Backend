@@ -1,12 +1,10 @@
 package com.nocaffeine.ssgclone.order.domain;
 
 import com.nocaffeine.ssgclone.common.BaseTimeEntity;
-import com.nocaffeine.ssgclone.order.dto.UserOrderSaveDto;
+import com.nocaffeine.ssgclone.order.dto.request.UserOrderSaveRequestDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-
-import java.sql.Timestamp;
 
 @Entity
 @Builder
@@ -50,14 +48,14 @@ public class Orders extends BaseTimeEntity {
         ORDERED, PREPARING, DELIVERING, DETERMINING, CANCEL
     }
 
-    public static Orders toEntity(UserOrderSaveDto userOrderSaveDto) {
+    public static Orders toEntity(UserOrderSaveRequestDto userOrderSaveRequestDto) {
         return Orders.builder()
-                .uuid(userOrderSaveDto.getUuid())
-                .region(userOrderSaveDto.getRegion())
-                .name(userOrderSaveDto.getName())
-                .phoneNumber(userOrderSaveDto.getPhoneNumber())
-                .email(userOrderSaveDto.getEmail())
-                .totalPrice(userOrderSaveDto.getTotalPrice())
+                .uuid(userOrderSaveRequestDto.getUuid())
+                .region(userOrderSaveRequestDto.getRegion())
+                .name(userOrderSaveRequestDto.getName())
+                .phoneNumber(userOrderSaveRequestDto.getPhoneNumber())
+                .email(userOrderSaveRequestDto.getEmail())
+                .totalPrice(userOrderSaveRequestDto.getTotalPrice())
                 .status(OrderStatus.ORDERED)
                 .build();
     }

@@ -17,7 +17,7 @@ public class BrandController {
 
     private final BrandService brandService;
 
-    @Operation(summary = "상품별 브랜드 조회", description = "상품별 브랜드 조회", tags = {"Brand List by ProductId"})
+    @Operation(summary = "상품별 브랜드 조회", description = "상품별 브랜드 조회", tags = {"Brand"})
     @GetMapping("/name/{productId}")
     public CommonResponse<BrandResponse> brandList(@PathVariable Long productId){
         BrandResponse brandResponse = brandService.findBrand(productId);
