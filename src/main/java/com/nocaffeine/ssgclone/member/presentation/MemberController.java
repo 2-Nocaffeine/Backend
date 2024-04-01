@@ -28,7 +28,7 @@ public class MemberController {
 
     @Operation(summary = "이메일 중복 검증", description = "이메일 중복 검증")
     @GetMapping("/duplication")
-    public CommonResponse<String> duplicationEmail(@RequestParam String email) {
+    public CommonResponse<String> duplicationEmail(@RequestParam("email") String email) {
         memberService.duplicationEmail(email);
         return CommonResponse.success("이메일 중복 검증 성공");
     }
