@@ -19,4 +19,6 @@ public interface ViewHistoryRepository extends JpaRepository<ViewHistory, Long> 
     List<ViewHistory> findByMemberOrderByCreatedAtDesc(Member member);
 
     void deleteByMemberAndProduct(Member member, Product product);
+
+    Optional<ViewHistory> findByMemberAndProduct(Member member, Product product);
 }
