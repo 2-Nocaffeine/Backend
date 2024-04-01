@@ -6,6 +6,7 @@ import com.nocaffeine.ssgclone.member.infrastructure.MemberRepository;
 import com.nocaffeine.ssgclone.product.domain.Product;
 import com.nocaffeine.ssgclone.product.domain.ViewHistory;
 import com.nocaffeine.ssgclone.product.dto.ViewHistoryDto;
+import com.nocaffeine.ssgclone.product.dto.ViewHistoryListDto;
 import com.nocaffeine.ssgclone.product.infrastructure.ProductRepository;
 import com.nocaffeine.ssgclone.product.infrastructure.ViewHistoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -56,10 +57,10 @@ public class ViewHistoryServiceImpl implements ViewHistoryService {
 
     @Override
     @Transactional
-    public void saveViewHistory(String memberUuid, Long productId) {
+    public void addViewHistory(String memberUuid, ViewHistoryDto viewHistoryDto) {
         Member member = memberRepository.findByUuid(memberUuid)
                 .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
-        Product product = productRepository.findById(productId)
+        Product product = productRepository.findById(viewHistoryDto.getProductId())
                 .orElseThrow(() -> new BaseException(NO_PRODUCT));
 
         // 기존의 view history 에 해당 상품이 있다면 삭제
@@ -74,5 +75,27 @@ public class ViewHistoryServiceImpl implements ViewHistoryService {
         viewHistoryRepository.save(viewHistory);
     }
 
+    @Override
+    @Transactional
+    public void removeViewHistorys(String memberUuid, ViewHistoryListDto viewHistoryListDto) {
+        // 회원이 존재하는지 확인
+        // orElseThrow 를 사용하여 선언 타입을 Optional 을 쓰지않고 바로 Member 객체로 받을 수 있음
+        Member member = memberRepository.findByUuid(memberUuid)
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
+
+        // view history 에서 삭제할 상품이 존재하는지 확인
+        // ViewHistoryListDto 에서 리스트 형식으로 받은 productIds 를 하나씩 조회하여 삭제
+        // for-each 문은 리스트에서 하나씩 꺼내와서 사용할 때 사용
+        for (Long productId : viewHistoryListDto.getProductIds()) {
+
+            Product product = productRepository.findById(productId)
+                    .orElseThrow(() -> new BaseException(NO_PRODUCT));
+
+            ViewHistory viewHistory = viewHistoryRepository.findByMemberAndProduct(member, product)
+                    .orElseThrow(() -> new BaseException(NO_EXIST_VIEW_HISTORY_PRODUCT));
+
+            viewHistoryRepository.delete(viewHistory);
+        }
+    }
 
 }

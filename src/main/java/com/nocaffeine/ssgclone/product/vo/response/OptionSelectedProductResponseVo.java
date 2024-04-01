@@ -3,19 +3,21 @@ package com.nocaffeine.ssgclone.product.vo.response;
 import com.nocaffeine.ssgclone.product.domain.*;
 import com.nocaffeine.ssgclone.product.dto.OptionSelectedProductDto;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class OptionSelectedProductResponseVo {
 
-    private final Long optionSelectedProductId;
-    private final Long productId;
-    private final String productName;
-    private final int productPrice;
-    private final int productDiscount;
-    private final String size;
-    private final String color;
-    private final String addOption;
-    private final int stock;
+    private Long optionSelectedProductId;
+    private Long productId;
+    private String productName;
+    private int productPrice;
+    private int productDiscount;
+    private String size;
+    private String color;
+    private String addOption;
+    private int stock;
 
     public OptionSelectedProductResponseVo(Long id, Product product, SizeOption sizeOption, ColorOption colorOption, AddOption addOption, int stock) {
         this.optionSelectedProductId = id;

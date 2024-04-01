@@ -2,15 +2,17 @@ package com.nocaffeine.ssgclone.product.vo.response;
 
 import com.nocaffeine.ssgclone.product.dto.ColorOptionDto;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@NoArgsConstructor
 public class ColorOptionResponseVo {
     
-    private final Long id;
-    private final String color;
+    private Long id;
+    private String color;
 
     public ColorOptionResponseVo(Long id, String color) {
         this.id = id;

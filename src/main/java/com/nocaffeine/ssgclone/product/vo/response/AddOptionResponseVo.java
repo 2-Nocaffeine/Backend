@@ -2,15 +2,17 @@ package com.nocaffeine.ssgclone.product.vo.response;
 
 import com.nocaffeine.ssgclone.product.dto.AddOptionDto;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@NoArgsConstructor
 public class AddOptionResponseVo {
 
-    private final Long id;
-    private final String optionName;
+    private Long id;
+    private String optionName;
 
     public AddOptionResponseVo(Long id, String optionName) {
         this.id = id;

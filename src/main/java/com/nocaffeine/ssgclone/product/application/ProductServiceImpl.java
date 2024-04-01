@@ -107,4 +107,17 @@ public class ProductServiceImpl implements ProductService{
 
         return responses;
     }
+
+    @Override
+    public List<ProductDto> getSearchProducts(String keyword) {
+        List<Product> products = productRepository.findByNameContaining(keyword);
+
+        List<ProductDto> responses = new ArrayList<>();
+
+        for (Product product : products) {
+            responses.add(ProductDto.fromProduct(product));
+        }
+
+        return responses;
+    }
 }
