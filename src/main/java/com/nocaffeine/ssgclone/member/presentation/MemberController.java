@@ -48,7 +48,7 @@ public class MemberController {
     }
 
     @Operation(summary = "비밀번호 변경", description = "비밀번호 변경", tags = {"Change Password"})
-    @PatchMapping("/member/password")
+    @PutMapping("/member/password")
     public CommonResponse<String> changePassword(@RequestBody MemberPasswordRequestVo memberPasswordRequestVo) {
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
         memberService.updatePassword(memberUuid, MemberPasswordRequestDto.voToDto(memberPasswordRequestVo));

@@ -23,7 +23,7 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping("/sns-member")
+    @PostMapping("/sns-join")
     public CommonResponse<String> snsCreateMember(@RequestBody SnsMemberAddRequestVo snsMemberAddRequestVo) {
         authService.snsAddMember(SnsMemberAddRequestVo.voToDto(snsMemberAddRequestVo));
         return CommonResponse.success("소셜 회원가입 성공");

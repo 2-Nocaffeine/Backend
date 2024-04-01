@@ -122,9 +122,18 @@ public class MemberServiceImp implements MemberService {
             throw new BaseException(FAILED_TO_PASSWORD);
         }
 
-        // 비밀번호 변경
-        member.updateHashPassword(memberPasswordRequestDto.getPassword());
+        Member newMember = Member.builder()
+                .id(member.getId())
+                .email(member.getEmail())
+                .name(member.getName())
+                .phoneNumber(member.getPhoneNumber())
+                .uuid(member.getUuid())
+                .password(memberPasswordRequestDto.getPassword())
+                .build();
 
+        newMember.hashPassword(memberPasswordRequestDto.getPassword());
+
+        memberRepository.save(newMember);
     }
 
     /**
