@@ -1,4 +1,4 @@
-package com.nocaffeine.ssgclone.product.dto;
+package com.nocaffeine.ssgclone.product.dto.response;
 
 import com.nocaffeine.ssgclone.product.domain.Product;
 import lombok.*;
@@ -7,7 +7,7 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TotalDto {
+public class TotalResponseDto {
 
     // Total 엔티티의 필드들을 가져온다.
     private Long id;

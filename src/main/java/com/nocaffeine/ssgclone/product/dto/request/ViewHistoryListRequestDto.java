@@ -1,7 +1,6 @@
-package com.nocaffeine.ssgclone.product.dto;
+package com.nocaffeine.ssgclone.product.dto.request;
 
 import com.nocaffeine.ssgclone.product.vo.request.ViewHistoryDeleteRequestVo;
-import com.nocaffeine.ssgclone.product.vo.request.ViewHistoryRequestVo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,15 +12,13 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ViewHistoryListDto {
+public class ViewHistoryListRequestDto {
 
     private List<Long> productIds;
 
-
-    public static ViewHistoryListDto viewHistoryVoToDto(ViewHistoryDeleteRequestVo viewHistoryDeleteRequestVo) {
-        return ViewHistoryListDto.builder()
+    public static ViewHistoryListRequestDto viewHistoryVoToDto(ViewHistoryDeleteRequestVo viewHistoryDeleteRequestVo) {
+        return ViewHistoryListRequestDto.builder()
                 .productIds(viewHistoryDeleteRequestVo.getProductIds())
                 .build();
-
     }
 }

@@ -1,7 +1,7 @@
 package com.nocaffeine.ssgclone.product.vo.response;
 
 import com.nocaffeine.ssgclone.product.domain.*;
-import com.nocaffeine.ssgclone.product.dto.OptionSelectedProductDto;
+import com.nocaffeine.ssgclone.product.dto.response.OptionSelectedProductResponseDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,14 +31,14 @@ public class OptionSelectedProductResponseVo {
         this.stock = stock;
     }
 
-    public static OptionSelectedProductResponseVo optionSelectedProductDtoToVo(OptionSelectedProductDto optionSelectedProductDto) {
+    public static OptionSelectedProductResponseVo optionSelectedProductDtoToVo(OptionSelectedProductResponseDto optionSelectedProductResponseDto) {
         return new OptionSelectedProductResponseVo(
-                optionSelectedProductDto.getId(),
-                optionSelectedProductDto.getProduct(),
-                optionSelectedProductDto.getSizeOption(),
-                optionSelectedProductDto.getColorOption(),
-                optionSelectedProductDto.getAddOption(),
-                optionSelectedProductDto.getStock()
+                optionSelectedProductResponseDto.getId(),
+                optionSelectedProductResponseDto.getProduct(),
+                optionSelectedProductResponseDto.getSizeOption(),
+                optionSelectedProductResponseDto.getColorOption(),
+                optionSelectedProductResponseDto.getAddOption(),
+                optionSelectedProductResponseDto.getStock()
         );
     }
 }

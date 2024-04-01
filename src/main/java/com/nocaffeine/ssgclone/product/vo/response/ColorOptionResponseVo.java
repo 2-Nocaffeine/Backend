@@ -1,6 +1,6 @@
 package com.nocaffeine.ssgclone.product.vo.response;
 
-import com.nocaffeine.ssgclone.product.dto.ColorOptionDto;
+import com.nocaffeine.ssgclone.product.dto.response.ColorOptionResponseDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -19,14 +19,14 @@ public class ColorOptionResponseVo {
         this.color = color;
     }
     
-    public static List<ColorOptionResponseVo> colorOptionDtoToVo(List<ColorOptionDto> getColorOptions) {
+    public static List<ColorOptionResponseVo> colorOptionDtoToVo(List<ColorOptionResponseDto> getColorOptions) {
         
         List<ColorOptionResponseVo> colorOptionResponseVo = new ArrayList<>();
 
-        for (ColorOptionDto colorOptionDto : getColorOptions) {
+        for (ColorOptionResponseDto colorOptionResponseDto : getColorOptions) {
             colorOptionResponseVo.add(new ColorOptionResponseVo(
-                    colorOptionDto.getId(),
-                    colorOptionDto.getColor()
+                    colorOptionResponseDto.getId(),
+                    colorOptionResponseDto.getColor()
             ));
         }
         

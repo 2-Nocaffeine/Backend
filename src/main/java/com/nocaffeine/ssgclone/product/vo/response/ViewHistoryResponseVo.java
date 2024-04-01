@@ -1,6 +1,6 @@
 package com.nocaffeine.ssgclone.product.vo.response;
 
-import com.nocaffeine.ssgclone.product.dto.ViewHistoryDto;
+import com.nocaffeine.ssgclone.product.dto.response.ViewHistoryResponseDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -17,13 +17,13 @@ public class ViewHistoryResponseVo {
         this.productId = productId;
     }
 
-    public static List<ViewHistoryResponseVo> viewHistoryDtoToVo(List<ViewHistoryDto> getViewHistory) {
+    public static List<ViewHistoryResponseVo> viewHistoryDtoToVo(List<ViewHistoryResponseDto> getViewHistory) {
 
         List<ViewHistoryResponseVo> viewHistoryResponseVo = new ArrayList<>();
 
-        for (ViewHistoryDto viewHistoryDto : getViewHistory) {
+        for (ViewHistoryResponseDto viewHistoryResponseDto : getViewHistory) {
             viewHistoryResponseVo.add(new ViewHistoryResponseVo(
-                    viewHistoryDto.getProductId()
+                    viewHistoryResponseDto.getProductId()
             ));
         }
 
