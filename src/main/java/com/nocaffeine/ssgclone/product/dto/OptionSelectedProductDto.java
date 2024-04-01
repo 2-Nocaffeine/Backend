@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class OptionSelectedProductDto {
 
+    private Long id;
     private Product product;
     private SizeOption sizeOption;
     private ColorOption colorOption;
@@ -20,6 +21,7 @@ public class OptionSelectedProductDto {
 
     public static OptionSelectedProductDto fromOptionSelectedProduct(OptionSelectedProduct optionSelectedProduct) {
         return OptionSelectedProductDto.builder()
+                .id(optionSelectedProduct.getId())
                 .product(optionSelectedProduct.getProduct())
                 .sizeOption(optionSelectedProduct.getSizeOption())
                 .colorOption(optionSelectedProduct.getColorOption())

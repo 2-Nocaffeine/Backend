@@ -49,7 +49,7 @@ public enum BaseResponseStatus {
     DUPLICATE_EMAIL(HttpStatus.CONFLICT, false, 2100, "사용중인 이메일입니다."),
     DUPLICATED_MEMBERS(HttpStatus.CONFLICT, false, 2101, "이미 가입된 멤버입니다."),
     MASSAGE_SEND_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, false, 2102, "인증번호 전송에 실패했습니다."),
-    MASSAGE_VALID_FAILED(HttpStatus.UNAUTHORIZED, false, 2103, "인증번호가 일치하지 않습니다."),
+    MASSAGE_VALID_FAILED(HttpStatus.NOT_FOUND, false, 2103, "인증번호가 일치하지 않습니다."),
     FAILED_TO_LOGIN(HttpStatus.UNAUTHORIZED , false, 2104, "아이디 또는 패스워드를 다시 확인하세요."),
     FAILED_TO_PASSWORD(HttpStatus.UNAUTHORIZED , false, 2104, "비밀번호를 다시 한번 확인 해 주세요."),
     WITHDRAWAL_MEMBERS(HttpStatus.FORBIDDEN, false, 2105, "탈퇴한 회원입니다."),
@@ -58,6 +58,8 @@ public enum BaseResponseStatus {
     PASSWORD_SAME_FAILED(HttpStatus.BAD_REQUEST, false, 2108, "현재 사용중인 비밀번호 입니다."),
     PASSWORD_CONTAIN_NUM_FAILED(HttpStatus.BAD_REQUEST, false, 2109, "휴대폰 번호를 포함한 비밀번호 입니다."),
     PASSWORD_CONTAIN_EMAIL_FAILED(HttpStatus.BAD_REQUEST, false, 2110, "이메일이 포함된 비밀번호 입니다."),
+    NO_EXIST_AUTH(HttpStatus.NOT_FOUND, false, 2106, "인증 정보가 없습니다"),
+
 
     // Address
     NO_EXIST_ADDRESS(HttpStatus.NOT_FOUND, false, 2300, "존재하지 않는 주소입니다."),
@@ -74,6 +76,10 @@ public enum BaseResponseStatus {
     NO_EXIST_WISH_BRAND(HttpStatus.NOT_FOUND, false, 6006, "좋아요에 포함되지 않은 브랜드입니다"),
     NO_EXIST_WISH_PRODUCT(HttpStatus.NOT_FOUND, false, 6007, "좋아요에 포함되지 않은 상품입니다"),
     ALREADY_ADDED_WISH_CATEGORY(HttpStatus.CONFLICT, false, 6008, "이미 좋아요한 카테고리입니다"),
+    ALREADY_ADDED_FOLDER(HttpStatus.CONFLICT, false, 6009, "이미 해당 폴더에 좋아요가 존재합니다"),
+    NO_EXIST_WISH_FOLDER(HttpStatus.NOT_FOUND, false, 6010, "존재하지 않는 폴더 입니다"),
+
+
 
 
 

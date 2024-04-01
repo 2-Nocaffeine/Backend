@@ -62,16 +62,16 @@ public class OrderController {
     }
 
     //주문자 정보 조회
-    @GetMapping("/member")
-    public CommonResponse<List> orderList(){
-        String token = jwtTokenProvider.getHeader();
-        String memberUuid = jwtTokenProvider.validateAndGetUserUuid(token);
-
-
-
-
-
-    }
+//    @GetMapping("/member")
+//    public CommonResponse<List> orderList(){
+//        String token = jwtTokenProvider.getHeader();
+//        String memberUuid = jwtTokenProvider.validateAndGetUserUuid(token);
+//
+//
+//
+//
+//
+//    }
     //회원 주문 조회
 //    @GetMapping
 //    public CommonResponse<List<OrderListResponseVo>> orderList(){

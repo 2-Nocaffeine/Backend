@@ -4,6 +4,7 @@ import com.nocaffeine.ssgclone.common.BaseTimeEntity;
 import com.nocaffeine.ssgclone.member.domain.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,4 +24,9 @@ public class ViewHistory extends BaseTimeEntity {
     @NotNull
     private Member member;
 
+    @Builder
+    public ViewHistory(Product product, Member member) {
+        this.product = product;
+        this.member = member;
+    }
 }

@@ -36,5 +36,6 @@ public class ProductLike {
         this.product = product;
         this.likeFolder = likeFolder;
     }
+
 }
 

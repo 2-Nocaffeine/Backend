@@ -1,23 +1,25 @@
 package com.nocaffeine.ssgclone.member.application;
 
 
-import com.nocaffeine.ssgclone.member.dto.request.MemberLoginRequest;
-import com.nocaffeine.ssgclone.member.dto.request.MemberPasswordRequest;
-import com.nocaffeine.ssgclone.member.dto.request.MemberSaveRequest;
-import com.nocaffeine.ssgclone.member.dto.response.MemberDetailResponse;
-import com.nocaffeine.ssgclone.member.dto.response.TokenResponse;
+import com.nocaffeine.ssgclone.member.dto.request.*;
+import com.nocaffeine.ssgclone.member.dto.response.MemberDetailResponseDto;
+import com.nocaffeine.ssgclone.member.dto.response.TokenResponseDto;
 
 public interface MemberService {
 
     void duplicationEmail(String email);
-    void addMember(MemberSaveRequest memberSaveRequest);
+    void addMember(MemberSaveRequestDto memberSaveRequestDto);
 
-    TokenResponse logIn(MemberLoginRequest memberLoginRequest);
+    TokenResponseDto logIn(MemberLoginRequestDto memberLoginRequestDto);
 
-    void updatePassword(String memberUuid, MemberPasswordRequest memberPasswordRequest);
+    void updatePassword(String memberUuid, MemberPasswordRequestDto memberPasswordRequestDto);
 
-    MemberDetailResponse findMember(String memberUuid);
+    MemberDetailResponseDto findMember(String memberUuid);
 
     void removeMember(String memberUuid);
+
+    void emailAuth(AuthEmailRequestDto authEmailRequestDto);
+
+    void emailAuthCodeCheck(AuthCheckRequestDto authCheckRequestDto);
 
 }
