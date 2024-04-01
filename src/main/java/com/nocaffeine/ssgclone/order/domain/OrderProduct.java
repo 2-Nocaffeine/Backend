@@ -1,5 +1,6 @@
 package com.nocaffeine.ssgclone.order.domain;
 
+import com.nocaffeine.ssgclone.order.dto.OrderedProductDto;
 import com.nocaffeine.ssgclone.product.domain.OptionSelectedProduct;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -31,6 +32,15 @@ public class OrderProduct {
 
     @NotNull
     private int quantity;
+
+    public static OrderProduct toEntity(Orders savedOrders, OptionSelectedProduct optionSelectedProduct, OrderedProductDto orderedProductDto){
+        return OrderProduct.builder()
+                .order(savedOrders)
+                .optionSelectedProduct(optionSelectedProduct)
+                .price(orderedProductDto.getPrice())
+                .quantity(orderedProductDto.getCount())
+                .build();
+    }
 
 
 }

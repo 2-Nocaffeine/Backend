@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-public class ProductImage extends BaseTimeEntity {
+public class ProductImage{
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -18,15 +18,15 @@ public class ProductImage extends BaseTimeEntity {
     private Product product;
 
     @NotNull
-    private Long imageMain;
+    private long imageMain;
 
-    private Long image1;
+    private long image1;
 
-    private Long image2;
+    private long image2;
 
-    private Long image3;
+    private long image3;
 
-    private Long image4;
+    private long image4;
 
 
 }

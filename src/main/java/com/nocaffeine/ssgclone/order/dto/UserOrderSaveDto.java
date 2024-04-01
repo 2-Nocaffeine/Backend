@@ -16,8 +16,9 @@ public class UserOrderSaveDto {
 
         private List<OrderedProductDto> orderProducts;
         private String uuid;
-        private String region;
         private String name;
+        private String region;
+        private String OrderName;
         private String phoneNumber;
         private String email;
         private int totalPrice;
@@ -36,6 +37,7 @@ public class UserOrderSaveDto {
                     .uuid(memberUuid)
                     .region(userOrderProductRequestVo.getRegion())
                     .name(userOrderProductRequestVo.getName())
+                    .OrderName(userOrderProductRequestVo.getOrderName())
                     .phoneNumber(userOrderProductRequestVo.getPhoneNumber())
                     .email(userOrderProductRequestVo.getEmail())
                     .totalPrice(userOrderProductRequestVo.getTotalPrice())

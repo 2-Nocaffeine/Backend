@@ -19,11 +19,11 @@ public class OrderListDto {
     private LocalDateTime orderDate;
     private Long orderId;
     private int totalPrice;
-    private String name;
+    private String Name;
     private List<OrderProductListResponseVo> orderProductListResponseVo;
 
     public static OrderListResponseVo convertToVo(OrderListDto orderListDto){
         return new OrderListResponseVo(orderListDto.orderDate, orderListDto.orderId,
-                orderListDto.totalPrice, orderListDto.name, orderListDto.orderProductListResponseVo);
+                orderListDto.totalPrice, orderListDto.Name, orderListDto.orderProductListResponseVo);
     }
 }

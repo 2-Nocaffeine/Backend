@@ -35,16 +35,7 @@ public class OrderServiceImp implements OrderService{
     public void addMemberOrder(UserOrderSaveDto userOrderSaveDto) {
 
         //주문 저장
-        Orders order = Orders.builder()
-                .uuid(userOrderSaveDto.getUuid())
-                .region(userOrderSaveDto.getRegion())
-                .name(userOrderSaveDto.getName())
-                .phoneNumber(userOrderSaveDto.getPhoneNumber())
-                .email(userOrderSaveDto.getEmail())
-                .totalPrice(userOrderSaveDto.getTotalPrice())
-                .status(Orders.OrderStatus.ORDERED)
-                .build();
-
+        Orders order = Orders.toEntity(userOrderSaveDto);
         Orders savedOrders = orderRepository.save(order);
 
         //재고 확인 후 주문상품 저장
@@ -52,16 +43,21 @@ public class OrderServiceImp implements OrderService{
             OptionSelectedProduct optionSelectedProduct = optionSelectedProductRepository.findById(orderedProductDto.getOptionSelectedProductId())
                     .orElseThrow(() -> new BaseException(NO_PRODUCT));
 
-            optionSelectedProduct.decreaseStock(orderedProductDto.getCount());
-
-            OrderProduct orderProduct = OrderProduct.builder()
-                    .order(savedOrders)
-                    .optionSelectedProduct(optionSelectedProduct)
-                    .price(orderedProductDto.getPrice())
-                    .quantity(orderedProductDto.getCount())
+            OptionSelectedProduct updateOptionSelectedProduct = OptionSelectedProduct.builder()
+                    .id(optionSelectedProduct.getId())
+                    .product(optionSelectedProduct.getProduct())
+                    .sizeOption(optionSelectedProduct.getSizeOption())
+                    .colorOption(optionSelectedProduct.getColorOption())
+                    .addOption(optionSelectedProduct.getAddOption())
+                    .stock(optionSelectedProduct.getStock() - orderedProductDto.getCount())
                     .build();
+            optionSelectedProductRepository.save(updateOptionSelectedProduct);
 
+//            optionSelectedProduct.decreaseStock(orderedProductDto.getCount());
+
+            OrderProduct orderProduct = OrderProduct.toEntity(savedOrders, optionSelectedProduct, orderedProductDto);
             orderProductRepository.save(orderProduct);
+
         }
 
     }
@@ -77,15 +73,40 @@ public class OrderServiceImp implements OrderService{
             throw new BaseException(ALREADY_CANCEL_ORDER);
         }
 
-        order.changeStatus(Orders.OrderStatus.CANCEL);
+        Orders updatedOrder = Orders.builder()
+                .id(order.getId())
+                .uuid(order.getUuid())
+                .region(order.getRegion())
+                .name(order.getName())
+                .phoneNumber(order.getPhoneNumber())
+                .email(order.getEmail())
+                .totalPrice(order.getTotalPrice())
+                .status(Orders.OrderStatus.CANCEL)
+                .build();
+        orderRepository.save(updatedOrder); //save함으로써 update create_at을 null로 보냄 (updatable = false) 이거있으면 괜찮음
+
+//        order.changeStatus(Orders.OrderStatus.CANCEL); //더티체킹..
 
         //재고 복구
         //주문한 상품 id 리스트
         List<OrderProduct> orderProductIdList = orderProductRepository.findByOrder(order);
 
         for (OrderProduct orderProduct : orderProductIdList){
-            OptionSelectedProduct optionSelectedProduct = orderProduct.getOptionSelectedProduct();
-            optionSelectedProduct.increaseStock(orderProduct.getQuantity());
+            OptionSelectedProduct optionSelectedProduct = optionSelectedProductRepository.findById(orderProduct.getOptionSelectedProduct().getId())
+                    .orElseThrow(() -> new BaseException(NO_PRODUCT));
+
+            OptionSelectedProduct updateOptionSelectedProduct = OptionSelectedProduct.builder()
+                    .id(optionSelectedProduct.getId())
+                    .product(optionSelectedProduct.getProduct())
+                    .sizeOption(optionSelectedProduct.getSizeOption())
+                    .colorOption(optionSelectedProduct.getColorOption())
+                    .addOption(optionSelectedProduct.getAddOption())
+                    .stock(optionSelectedProduct.getStock() + orderProduct.getQuantity())
+                    .build();
+
+            optionSelectedProductRepository.save(updateOptionSelectedProduct);
+
+
         }
     }
 

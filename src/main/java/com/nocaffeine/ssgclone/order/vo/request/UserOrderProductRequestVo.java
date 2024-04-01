@@ -10,6 +10,7 @@ public class UserOrderProductRequestVo {
     private List<OrderedProductRequestVo> orderProducts;
     private String region;
     private String name;
+    private String OrderName;
     private String phoneNumber;
     private String email;
     private int totalPrice;
