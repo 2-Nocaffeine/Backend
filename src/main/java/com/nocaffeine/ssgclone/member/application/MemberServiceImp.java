@@ -118,10 +118,11 @@ public class MemberServiceImp implements MemberService {
         Member newMember = Member.builder()
                 .id(member.getId())
                 .email(member.getEmail())
+                .password(memberPasswordRequestDto.getPassword())
+                .uuid(member.getUuid())
                 .name(member.getName())
                 .phoneNumber(member.getPhoneNumber())
-                .uuid(member.getUuid())
-                .password(memberPasswordRequestDto.getPassword())
+                .address(member.getAddress())
                 .build();
 
         newMember.hashPassword(memberPasswordRequestDto.getPassword());
