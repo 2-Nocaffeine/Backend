@@ -1,9 +1,7 @@
 package com.nocaffeine.ssgclone.member.application;
 
 
-import com.nocaffeine.ssgclone.member.dto.request.MemberLoginRequestDto;
-import com.nocaffeine.ssgclone.member.dto.request.MemberPasswordRequestDto;
-import com.nocaffeine.ssgclone.member.dto.request.MemberSaveRequestDto;
+import com.nocaffeine.ssgclone.member.dto.request.*;
 import com.nocaffeine.ssgclone.member.dto.response.MemberDetailResponseDto;
 import com.nocaffeine.ssgclone.member.dto.response.TokenResponseDto;
 
@@ -19,5 +17,9 @@ public interface MemberService {
     MemberDetailResponseDto findMember(String memberUuid);
 
     void removeMember(String memberUuid);
+
+    void emailAuth(AuthEmailRequestDto authEmailRequestDto);
+
+    void emailAuthCodeCheck(AuthCheckRequestDto authCheckRequestDto);
 
 }
