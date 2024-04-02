@@ -26,80 +26,8 @@ public class MemberServiceImp implements MemberService {
 
 
     private final MemberRepository memberRepository;
-    private final AuthenticationManager authenticateManager;
-    private final JwtTokenProvider jwtTokenProvider;
 
 
-    /**
-     * 아이디 중복 확인
-     */
-    @Override
-    public void duplicationEmail(String email) {
-        if (memberRepository.findByEmail(email).isPresent()) {
-            throw new BaseException(DUPLICATE_EMAIL);
-        }
-    }
-
-    /**
-     * 회원가입
-     */
-    @Override
-    @Transactional
-    public void addMember(MemberSaveRequestDto memberSaveRequestDto) {
-        try{
-            duplicationEmail(memberSaveRequestDto.getEmail());
-        } catch (BaseException e){
-            throw new BaseException(DUPLICATE_EMAIL);
-        }
-
-        createMember(memberSaveRequestDto);
-    }
-
-    private void createMember(MemberSaveRequestDto memberSaveRequestDto) {
-        String uuid = UUID.randomUUID().toString();
-
-        Member member = Member.builder()
-                .email(memberSaveRequestDto.getEmail())
-                .password(memberSaveRequestDto.getPassword())
-                .uuid(uuid)
-                .name(memberSaveRequestDto.getName())
-                .phoneNumber(memberSaveRequestDto.getPhoneNumber())
-                .build();
-
-        // 비밀번호 암호화
-        member.hashPassword(memberSaveRequestDto.getPassword());
-
-        memberRepository.save(member);
-    }
-
-    /**
-     * 로그인
-     */
-    @Override
-    public TokenResponseDto logIn(MemberLoginRequestDto memberLoginRequestDto) {
-        Member member = memberRepository.findByEmail(memberLoginRequestDto.getEmail())
-                .orElseThrow(() -> new BaseException(FAILED_TO_LOGIN));
-        try{
-            authenticateManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            member.getUsername(),
-                            memberLoginRequestDto.getPassword()
-                    ));
-        } catch (Exception e){
-            throw new BaseException(FAILED_TO_LOGIN);
-        }
-
-        String token = createToken(member);
-
-        return TokenResponseDto.builder()
-                                .accessToken(token)
-                                .build();
-    }
-
-
-    private String createToken(Member member) {
-        return jwtTokenProvider.generateToken(member);
-    }
 
 
     /**

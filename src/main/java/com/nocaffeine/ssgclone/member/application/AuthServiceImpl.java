@@ -7,16 +7,15 @@ import com.nocaffeine.ssgclone.common.security.JwtTokenProvider;
 import com.nocaffeine.ssgclone.member.domain.EmailAuth;
 import com.nocaffeine.ssgclone.member.domain.Member;
 import com.nocaffeine.ssgclone.member.domain.SnsInfo;
-import com.nocaffeine.ssgclone.member.dto.request.AuthCheckRequestDto;
-import com.nocaffeine.ssgclone.member.dto.request.AuthEmailRequestDto;
-import com.nocaffeine.ssgclone.member.dto.request.SnsMemberAddRequestDto;
-import com.nocaffeine.ssgclone.member.dto.request.SnsMemberLoginRequestDto;
+import com.nocaffeine.ssgclone.member.dto.request.*;
 import com.nocaffeine.ssgclone.member.dto.response.TokenResponseDto;
 import com.nocaffeine.ssgclone.member.infrastructure.EmailAuthRepository;
 import com.nocaffeine.ssgclone.member.infrastructure.MemberRepository;
 import com.nocaffeine.ssgclone.member.infrastructure.SnsInfoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +36,7 @@ public class AuthServiceImpl implements AuthService{
     private final JwtTokenProvider jwtTokenProvider;
     private final EmailProvider emailProvider;
     private final EmailAuthRepository emailAuthRepository;
+    private final AuthenticationManager authenticateManager;
 
 
     /**
@@ -45,10 +45,12 @@ public class AuthServiceImpl implements AuthService{
     @Override
     @Transactional
     public void snsAddMember(SnsMemberAddRequestDto snsMemberAddRequestDto) {
-
-        if(snsInfoRepository.findBySnsId(snsMemberAddRequestDto.getSnsId()).isPresent()){
+        if(snsInfoRepository.findBySnsIdAndSnsType(snsMemberAddRequestDto.getSnsId(),
+                snsMemberAddRequestDto.getSnsType()).isPresent()){
             throw new BaseException(DUPLICATE_SNS_MEMBERS);
         }
+
+        duplicationEmail(snsMemberAddRequestDto.getEmail());
 
         String uuid = UUID.randomUUID().toString();
         Member member = Member.builder()
@@ -77,7 +79,7 @@ public class AuthServiceImpl implements AuthService{
     @Override
     @Transactional
     public TokenResponseDto snsLogin(SnsMemberLoginRequestDto snsMemberLoginRequestDto) {
-        SnsInfo snsInfo = snsInfoRepository.findBySnsId(snsMemberLoginRequestDto.getSnsId())
+        SnsInfo snsInfo = snsInfoRepository.findBySnsIdAndSnsType(snsMemberLoginRequestDto.getSnsId(), snsMemberLoginRequestDto.getSnsType())
                 .orElseThrow(() -> new BaseException(NO_EXIST_SNS_MEMBERS));
 
         Member member = memberRepository.findById(snsInfo.getMember().getId())
@@ -90,10 +92,76 @@ public class AuthServiceImpl implements AuthService{
                 .build();
     }
 
+    /**
+     * 아이디 중복 확인
+     */
+    @Override
+    public void duplicationEmail(String email) {
+        if (memberRepository.findByEmail(email).isPresent()) {
+            throw new BaseException(DUPLICATE_EMAIL);
+        }
+    }
+
+    /**
+     * 일반 회원가입
+     */
+    @Override
+    @Transactional
+    public void addMember(MemberSaveRequestDto memberSaveRequestDto) {
+        try{
+            duplicationEmail(memberSaveRequestDto.getEmail());
+        } catch (BaseException e){
+            throw new BaseException(DUPLICATE_EMAIL);
+        }
+
+        createMember(memberSaveRequestDto);
+    }
+
+    private void createMember(MemberSaveRequestDto memberSaveRequestDto) {
+        String uuid = UUID.randomUUID().toString();
+
+        Member member = Member.builder()
+                .email(memberSaveRequestDto.getEmail())
+                .password(memberSaveRequestDto.getPassword())
+                .uuid(uuid)
+                .name(memberSaveRequestDto.getName())
+                .phoneNumber(memberSaveRequestDto.getPhoneNumber())
+                .build();
+
+        // 비밀번호 암호화
+        member.hashPassword(memberSaveRequestDto.getPassword());
+
+        memberRepository.save(member);
+    }
+
+    /**
+     * 일반 로그인
+     */
+    @Override
+    public TokenResponseDto logIn(MemberLoginRequestDto memberLoginRequestDto) {
+        Member member = memberRepository.findByEmail(memberLoginRequestDto.getEmail())
+                .orElseThrow(() -> new BaseException(FAILED_TO_LOGIN));
+        try{
+            authenticateManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            member.getUsername(),
+                            memberLoginRequestDto.getPassword()
+                    ));
+        } catch (Exception e){
+            throw new BaseException(FAILED_TO_LOGIN);
+        }
+
+        String token = createToken(member);
+
+        return TokenResponseDto.builder()
+                .accessToken(token)
+                .build();
+    }
+
+
     private String createToken(Member member) {
         return jwtTokenProvider.generateToken(member);
     }
-
 
     /**
      * 이메일 인증코드 발송
@@ -141,11 +209,11 @@ public class AuthServiceImpl implements AuthService{
      */
     @Override
     @Transactional
-    public void emailAuthCodeCheck(AuthCheckRequestDto authCheckRequestDto) {
-        EmailAuth emailAuth = emailAuthRepository.findByEmail(authCheckRequestDto.getEmail())
+    public void emailAuthCodeCheck(String email, String code) {
+        EmailAuth emailAuth = emailAuthRepository.findByEmail(email)
                 .orElseThrow(() -> new BaseException(NO_EXIST_AUTH));
 
-        if(!emailAuth.getAuthCode().equals(authCheckRequestDto.getAuthCode())){
+        if(!emailAuth.getAuthCode().equals(code)){
             throw new BaseException(MASSAGE_VALID_FAILED);
         }
 
