@@ -4,6 +4,7 @@ import com.nocaffeine.ssgclone.common.CommonResponse;
 import com.nocaffeine.ssgclone.product.application.ProductImageService;
 import com.nocaffeine.ssgclone.product.dto.response.ProductImageResponseDto;
 import com.nocaffeine.ssgclone.product.vo.response.ProductImageListResponseVo;
+import com.nocaffeine.ssgclone.product.vo.response.ProductThumbnailResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,8 +29,15 @@ public class ProductImageController {
     public CommonResponse<List<ProductImageListResponseVo>> getProductImageList(@PathVariable("productId") Long id) {
         List<ProductImageResponseDto> productImageResponseDto = productImageService.getProductImageList(id);
 
-        return CommonResponse.success("상품 이미지 리스트를 성공적으로 불러왔습니다", ProductImageListResponseVo.productImageDtoToVo(productImageResponseDto));
+        return CommonResponse.success("상품 이미지 리스트를 성공적으로 불러왔습니다.", ProductImageListResponseVo.productImageDtoToVo(productImageResponseDto));
     }
 
     // 특정 상품의 썸네일 이미지 조회
+    @Operation(summary = "상품 썸네일 이미지 조회", description = "상품 썸네일 이미지 조회", tags = {"Product Info"})
+    @GetMapping("/{productId}/thumbnail")
+    public CommonResponse<ProductThumbnailResponseVo> getProductThumbnail(@PathVariable("productId") Long id) {
+        List<ProductImageResponseDto> productImageResponseDto = productImageService.getProductImageList(id);
+
+        return CommonResponse.success("상품 썸네일 이미지를 성공적으로 불러왔습니다.", ProductThumbnailResponseVo.productImageDtoToVo(productImageResponseDto));
+    }
 }
