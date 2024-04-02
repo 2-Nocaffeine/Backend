@@ -14,4 +14,9 @@ public class ExceptionAdvice {
         return CommonResponse.fail(e.getErrorCode(), e.getMessage());
     }
 
+    @ExceptionHandler(Exception.class)
+    public CommonResponse<?> exception(Exception e) {
+        return CommonResponse.fail(BaseResponseStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+    }
+
 }
