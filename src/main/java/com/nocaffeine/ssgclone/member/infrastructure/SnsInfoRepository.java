@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface SnsInfoRepository extends JpaRepository<SnsInfo, Long>{
 
     Optional<SnsInfo> findBySnsId(String snsId);
+
+    Optional<SnsInfo> findBySnsIdAndSnsType(String snsId, String snsType);
 }

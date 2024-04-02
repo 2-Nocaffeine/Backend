@@ -8,6 +8,7 @@ import com.nocaffeine.ssgclone.product.application.ProductService;
 import com.nocaffeine.ssgclone.product.dto.response.SizeOptionResponseDto;
 import com.nocaffeine.ssgclone.product.vo.response.*;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -16,13 +17,14 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Product", description = "상품")
 @RequestMapping("/api/v1/product")
 @Slf4j
 public class ProductController {
 
     private final ProductService productService;
 
-    @Operation(summary = "상품 상세 정보 조회", description = "상품 상세 정보 조회", tags = {"Product Info"})
+    @Operation(summary = "상품 상세 정보 조회", description = "상품 상세 정보 조회")
     @GetMapping("/{productId}")
     public CommonResponse<ProductResponseVo> getProduct(@PathVariable("productId") Long id) {
         ProductResponseDto getProductResponseDto = productService.getProduct(id);
@@ -31,7 +33,7 @@ public class ProductController {
                 ProductResponseVo.productDtoToVo(getProductResponseDto));
     }
 
-    @Operation(summary = "상품 별 사이즈 옵션 조회", description = "상품 별 사이즈 옵션 조회", tags = {"Product Info"})
+    @Operation(summary = "상품 별 사이즈 옵션 조회", description = "상품 별 사이즈 옵션 조회")
     @GetMapping("/{productId}/size")
     public CommonResponse<List<SizeOptionResponseVo>> getSizeOptions(@PathVariable("productId") Long id) {
         List<SizeOptionResponseDto> getSizeOptionResponseDto = productService.getSizeOptions(id);
@@ -40,7 +42,7 @@ public class ProductController {
                 SizeOptionResponseVo.sizeOptionDtoToVo(getSizeOptionResponseDto));
     }
 
-    @Operation(summary = "상품 별 색상 옵션 조회", description = "상품 별 색상 옵션 조회", tags = {"Product Info"})
+    @Operation(summary = "상품 별 색상 옵션 조회", description = "상품 별 색상 옵션 조회")
     @GetMapping("/{productId}/color")
     public CommonResponse<List<ColorOptionResponseVo>> getColorOptions(@PathVariable("productId") Long id) {
         List<ColorOptionResponseDto> getColorOptionResponseDto = productService.getColorOptions(id);
@@ -49,7 +51,7 @@ public class ProductController {
                 ColorOptionResponseVo.colorOptionDtoToVo(getColorOptionResponseDto));
     }
 
-    @Operation(summary = "상품 별 추가 옵션 조회", description = "상품 별 추가 옵션 조회", tags = {"Product Info"})
+    @Operation(summary = "상품 별 추가 옵션 조회", description = "상품 별 추가 옵션 조회")
     @GetMapping("/{productId}/add-option")
     public CommonResponse<List<AddOptionResponseVo>> getAddOptions(@PathVariable("productId") Long id) {
         List<AddOptionResponseDto> getAddOptionResponseDto = productService.getAddOptions(id);
@@ -58,7 +60,7 @@ public class ProductController {
                 AddOptionResponseVo.addOptionDtoToVo(getAddOptionResponseDto));
     }
 
-    @Operation(summary = "상품 검색", description = "상품 검색", tags = {"Product Search"})
+    @Operation(summary = "상품 검색", description = "상품 검색")
     @GetMapping
     public CommonResponse<List<ProductSearchResponseVo>> getProductsBySearchTerm(@RequestParam("search") String searchKeyword) {
         List<ProductResponseDto> getProductResponseDto = productService.getSearchProducts(searchKeyword);

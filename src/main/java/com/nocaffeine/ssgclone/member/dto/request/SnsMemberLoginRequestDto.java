@@ -11,10 +11,14 @@ import lombok.*;
 @Builder
 public class SnsMemberLoginRequestDto {
     private String snsId;
+    private String snsType;
+    private String email;
 
     public static SnsMemberLoginRequestDto voToDto(SnsMemberLoginRequestVo snsMemberLoginRequestVo) {
         return SnsMemberLoginRequestDto.builder()
                 .snsId(snsMemberLoginRequestVo.getSnsId())
+                .snsType(snsMemberLoginRequestVo.getSnsType())
+                .email(snsMemberLoginRequestVo.getEmail())
                 .build();
 
 

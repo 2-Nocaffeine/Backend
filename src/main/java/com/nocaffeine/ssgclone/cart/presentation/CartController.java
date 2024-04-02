@@ -17,6 +17,7 @@ import com.nocaffeine.ssgclone.cart.vo.response.CartPriceResponseVo;
 import com.nocaffeine.ssgclone.common.CommonResponse;
 import com.nocaffeine.ssgclone.common.security.JwtTokenProvider;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +28,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
+@Tag(name = "Cart", description = "장바구니")
 @RequestMapping("/api/v1")
 public class CartController {
 
@@ -34,7 +36,7 @@ public class CartController {
     private final JwtTokenProvider jwtTokenProvider;
 
 
-    @Operation(summary = "장바구니에 상품 추가", description = "장바구니에 상품 추가", tags = {"Cart Add"})
+    @Operation(summary = "장바구니에 상품 추가", description = "장바구니에 상품 추가")
     @PostMapping("/cart")
     public CommonResponse<String> cartAdd(@RequestBody CartAddRequestVo cartAddRequestVo) {
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
@@ -42,7 +44,7 @@ public class CartController {
         return CommonResponse.success("장바구니에 상품이 추가되었습니다.");
     }
 
-    @Operation(summary = "장바구니에 상품 삭제", description = "장바구니에 상품 삭제", tags = {"Cart Remove"})
+    @Operation(summary = "장바구니에 상품 삭제", description = "장바구니에 상품 삭제")
     @DeleteMapping("/cart")
     public CommonResponse<String> cartRemove(@RequestBody CartRemoveRequestVo cartRemoveRequestVo) {
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
@@ -50,7 +52,7 @@ public class CartController {
         return CommonResponse.success("장바구니 상품이 삭제되었습니다.");
     }
 
-    @Operation(summary = "장바구니 조회", description = "장바구니 조회", tags = {"Cart List"})
+    @Operation(summary = "장바구니 조회", description = "장바구니 조회")
     @GetMapping("/cart")
     public CommonResponse<List<CartListResponseVo>> cartList() {
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
@@ -63,21 +65,21 @@ public class CartController {
         return CommonResponse.success("장바구니 조회성공",cartListResponseVo);
     }
 
-    @Operation(summary = "장바구니 상품 수정", description = "장바구니 상품 수정", tags = {"Cart Modify"})
+    @Operation(summary = "장바구니 상품 수정", description = "장바구니 상품 수정")
     @PatchMapping("/cart")
     public CommonResponse<String> cartModify(@RequestBody CartModifyRequestVo cartModifyRequestVo) {
         cartService.modifyCart(CartModifyRequestDto.voToDto(cartModifyRequestVo));
         return CommonResponse.success("장바구니 상품이 수정되었습니다.");
     }
 
-    @Operation(summary = "장바구니 상품 개수 조회", description = "장바구니 상품 개수 조회", tags = {"Cart Count"})
+    @Operation(summary = "장바구니 상품 개수 조회", description = "장바구니 상품 개수 조회")
     @GetMapping("/cart/count")
     public CommonResponse<CartCountResponseVo> cartCount() {
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
         return CommonResponse.success("장바구니 상품 개수 조회 성공", CartCountResponseDto.dtoToVo(cartService.totalCountCart(memberUuid)));
     }
 
-    @Operation(summary = "장바구니 선택한 상품 가격 조회", description = "장바구니 선택한 상품 가격 조회", tags = {"Cart Price"})
+    @Operation(summary = "장바구니 선택한 상품 가격 조회", description = "장바구니 선택한 상품 가격 조회")
     @GetMapping("/cart/price")
     public CommonResponse<CartPriceResponseVo> cartPrice(@RequestParam List<Long> cartId){
         return CommonResponse.success("장바구니 선택한 상품 가격 조회 성공", CartPriceResponseDto.dtoToVo(cartService.findTotalPrice(cartId)));
