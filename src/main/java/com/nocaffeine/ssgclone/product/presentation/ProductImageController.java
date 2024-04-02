@@ -6,6 +6,7 @@ import com.nocaffeine.ssgclone.product.dto.response.ProductImageResponseDto;
 import com.nocaffeine.ssgclone.product.vo.response.ProductImageListResponseVo;
 import com.nocaffeine.ssgclone.product.vo.response.ProductThumbnailResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Product", description = "상품")
 @RequestMapping("/api/v1/product")
 @Slf4j
 public class ProductImageController {
@@ -24,7 +26,7 @@ public class ProductImageController {
     private final ProductImageService productImageService;
 
     // 특정 상품의 이미지 리스트 조회
-    @Operation(summary = "상품 이미지 리스트 조회", description = "상품 이미지 리스트 조회", tags = {"Product Info"})
+    @Operation(summary = "상품 이미지 리스트 조회", description = "상품 이미지 리스트 조회")
     @GetMapping("/{productId}/image")
     public CommonResponse<List<ProductImageListResponseVo>> getProductImageList(@PathVariable("productId") Long id) {
         List<ProductImageResponseDto> productImageResponseDto = productImageService.getProductImageList(id);
@@ -33,7 +35,7 @@ public class ProductImageController {
     }
 
     // 특정 상품의 썸네일 이미지 조회
-    @Operation(summary = "상품 썸네일 이미지 조회", description = "상품 썸네일 이미지 조회", tags = {"Product Info"})
+    @Operation(summary = "상품 썸네일 이미지 조회", description = "상품 썸네일 이미지 조회")
     @GetMapping("/{productId}/thumbnail")
     public CommonResponse<ProductThumbnailResponseVo> getProductThumbnail(@PathVariable("productId") Long id) {
         List<ProductImageResponseDto> productImageResponseDto = productImageService.getProductImageList(id);
