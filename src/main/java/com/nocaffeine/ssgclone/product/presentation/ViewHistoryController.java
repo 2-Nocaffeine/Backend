@@ -39,7 +39,7 @@ public class ViewHistoryController {
     }
 
     // 최근 본 상품을 추가하는 메소드
-    @Operation(summary = "최근 본 상품 추가", description = "최근 본 상품 추가", tags = {"Add View History"})
+    @Operation(summary = "최근 본 상품 추가", description = "최근 본 상품 추가", tags = {"View History"})
     @PostMapping
     public CommonResponse<Void> addViewHistory(@RequestBody ViewHistoryRequestVo viewHistoryRequestVo) {
         String token = jwtTokenProvider.getHeader();
@@ -51,7 +51,7 @@ public class ViewHistoryController {
     }
 
     // 최근 본 상품을 리스트의 형태로 받아 삭제하는 메소드
-    @Operation(summary = "최근 본 상품 삭제", description = "최근 본 상품 삭제", tags = {"Remove View History"})
+    @Operation(summary = "최근 본 상품 삭제", description = "최근 본 상품 삭제", tags = {"View History"})
     @DeleteMapping
     public CommonResponse<List<Void>> deleteViewHistoryProducts(@RequestBody ViewHistoryDeleteRequestVo viewHistoryDeleteRequestVo) {
         String token = jwtTokenProvider.getHeader();

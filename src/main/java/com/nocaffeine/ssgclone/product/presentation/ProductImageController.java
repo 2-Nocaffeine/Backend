@@ -1,12 +1,12 @@
 package com.nocaffeine.ssgclone.product.presentation;
 
+import com.nocaffeine.ssgclone.common.CommonResponse;
 import com.nocaffeine.ssgclone.product.application.ProductImageService;
+import com.nocaffeine.ssgclone.product.dto.response.ProductImageResponseDto;
 import com.nocaffeine.ssgclone.product.vo.response.ProductImageListResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,11 +23,13 @@ public class ProductImageController {
     private final ProductImageService productImageService;
 
     // 특정 상품의 이미지 리스트 조회
-//    @Operation(summary = "상품 이미지 리스트 조회", description = "상품 이미지 리스트 조회", tags = {"Product's Image"})
-//    @GetMapping("/{productId}/image")
-//    public ResponseEntity<List<ProductImageListResponseVo>> getProductImageList(@PathVariable("productId") Long id) {
-//
-//    }
+    @Operation(summary = "상품 이미지 리스트 조회", description = "상품 이미지 리스트 조회", tags = {"Product Info"})
+    @GetMapping("/{productId}/image")
+    public CommonResponse<List<ProductImageListResponseVo>> getProductImageList(@PathVariable("productId") Long id) {
+        List<ProductImageResponseDto> productImageResponseDto = productImageService.getProductImageList(id);
 
-    // 특정 상품의 썸네알 이미지 조회
+        return CommonResponse.success("상품 이미지 리스트를 성공적으로 불러왔습니다", ProductImageListResponseVo.productImageDtoToVo(productImageResponseDto));
+    }
+
+    // 특정 상품의 썸네일 이미지 조회
 }

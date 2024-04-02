@@ -25,7 +25,7 @@ public class OptionSelectedProductController {
                 OptionSelectedProductResponseVo.optionSelectedProductDtoToVo(getOptionSelectedProductResponseDto));
     } // 옵션 선택 완료 최종 상품을 조회하는 메소드
 
-    @Operation(summary = "상품 ID와 옵션 ID를 통해 옵션 선택 완료 최종 상품을 조회", description = "상품 ID와 옵션 ID를 통해 옵션 선택 완료 최종 상품을 조회", tags = {"Option Selected Product"})
+    @Operation(summary = "상품 ID와 옵션 ID를 통해 옵션 선택 완료 최종 상품을 조회", description = "상품 ID와 옵션 ID를 통해 옵션 선택 완료 최종 상품을 조회", tags = {"Product Info"})
     @GetMapping
     public CommonResponse<OptionSelectedProductResponseVo> getOptionSelectedProductByProductIdAndOptions(
             @RequestParam("product") Long productId,
