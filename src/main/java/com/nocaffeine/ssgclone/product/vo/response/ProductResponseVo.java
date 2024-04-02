@@ -1,6 +1,6 @@
 package com.nocaffeine.ssgclone.product.vo.response;
 
-import com.nocaffeine.ssgclone.product.dto.ProductDto;
+import com.nocaffeine.ssgclone.product.dto.response.ProductResponseDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,13 +22,13 @@ public class ProductResponseVo {
         this.discount = discount;
     }
 
-    public static ProductResponseVo productDtoToVo(ProductDto productDto) {
+    public static ProductResponseVo productDtoToVo(ProductResponseDto productResponseDto) {
         return new ProductResponseVo(
-                productDto.getId(),
-                productDto.getName(),
-                productDto.getPrice(),
-                productDto.getContent(),
-                productDto.getDiscount()
+                productResponseDto.getId(),
+                productResponseDto.getName(),
+                productResponseDto.getPrice(),
+                productResponseDto.getContent(),
+                productResponseDto.getDiscount()
         );
     }
 }

@@ -1,4 +1,4 @@
-package com.nocaffeine.ssgclone.product.dto;
+package com.nocaffeine.ssgclone.product.dto.response;
 
 import com.nocaffeine.ssgclone.product.domain.Product;
 import lombok.*;
@@ -8,7 +8,7 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductDto {
+public class ProductResponseDto {
 
     private Long id;
     private String name;
@@ -16,8 +16,8 @@ public class ProductDto {
     private String content;
     private int discount;
 
-    public static ProductDto fromProduct(Product product) {
-        return ProductDto.builder()
+    public static ProductResponseDto fromProduct(Product product) {
+        return ProductResponseDto.builder()
                 .id(product.getId())
                 .name(product.getName())
                 .price(product.getPrice())

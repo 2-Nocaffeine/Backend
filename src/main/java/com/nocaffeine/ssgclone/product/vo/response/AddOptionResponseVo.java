@@ -1,6 +1,6 @@
 package com.nocaffeine.ssgclone.product.vo.response;
 
-import com.nocaffeine.ssgclone.product.dto.AddOptionDto;
+import com.nocaffeine.ssgclone.product.dto.response.AddOptionResponseDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -19,14 +19,14 @@ public class AddOptionResponseVo {
         this.optionName = optionName;
     }
 
-    public static List<AddOptionResponseVo> addOptionDtoToVo(List<AddOptionDto> getAddOptions) {
+    public static List<AddOptionResponseVo> addOptionDtoToVo(List<AddOptionResponseDto> getAddOptions) {
 
         List<AddOptionResponseVo> addOptionResponseVo = new ArrayList<>();
 
-        for (AddOptionDto addOptionDto : getAddOptions) {
+        for (AddOptionResponseDto addOptionResponseDto : getAddOptions) {
             addOptionResponseVo.add(new AddOptionResponseVo(
-                    addOptionDto.getId(),
-                    addOptionDto.getOptionName()
+                    addOptionResponseDto.getId(),
+                    addOptionResponseDto.getOptionName()
             ));
         }
 

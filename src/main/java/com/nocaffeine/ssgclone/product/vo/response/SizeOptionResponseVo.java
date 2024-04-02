@@ -1,6 +1,6 @@
 package com.nocaffeine.ssgclone.product.vo.response;
 
-import com.nocaffeine.ssgclone.product.dto.SizeOptionDto;
+import com.nocaffeine.ssgclone.product.dto.response.SizeOptionResponseDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -19,14 +19,14 @@ public class SizeOptionResponseVo {
         this.size = size;
     }
 
-    public static List<SizeOptionResponseVo> sizeOptionDtoToVo(List<SizeOptionDto> getSizeOptions) {
+    public static List<SizeOptionResponseVo> sizeOptionDtoToVo(List<SizeOptionResponseDto> getSizeOptions) {
 
         List<SizeOptionResponseVo> sizeOptionResponseVo = new ArrayList<>();
 
-        for (SizeOptionDto sizeOptionDto : getSizeOptions) {
+        for (SizeOptionResponseDto sizeOptionResponseDto : getSizeOptions) {
             sizeOptionResponseVo.add(new SizeOptionResponseVo(
-                    sizeOptionDto.getId(),
-                    sizeOptionDto.getSize()
+                    sizeOptionResponseDto.getId(),
+                    sizeOptionResponseDto.getSize()
             ));
         }
 

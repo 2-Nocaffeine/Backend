@@ -1,6 +1,6 @@
 package com.nocaffeine.ssgclone.product.vo.response;
 
-import com.nocaffeine.ssgclone.product.dto.ProductDto;
+import com.nocaffeine.ssgclone.product.dto.response.ProductResponseDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -17,13 +17,13 @@ public class ProductSearchResponseVo {
         this.productId = productId;
     }
 
-    public static List<ProductSearchResponseVo> productDtoToVo(List<ProductDto> getProductDto) {
+    public static List<ProductSearchResponseVo> productDtoToVo(List<ProductResponseDto> getProductResponseDto) {
 
         List<ProductSearchResponseVo> productSearchResponseVo = new ArrayList<>();
 
-        for (ProductDto productDto : getProductDto) {
+        for (ProductResponseDto productResponseDto : getProductResponseDto) {
             productSearchResponseVo.add(new ProductSearchResponseVo(
-                    productDto.getId()
+                    productResponseDto.getId()
             ));
         }
 

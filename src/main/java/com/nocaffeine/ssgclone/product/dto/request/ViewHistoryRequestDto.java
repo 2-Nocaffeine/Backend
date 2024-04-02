@@ -1,4 +1,4 @@
-package com.nocaffeine.ssgclone.product.dto;
+package com.nocaffeine.ssgclone.product.dto.request;
 
 import com.nocaffeine.ssgclone.product.vo.request.ViewHistoryRequestVo;
 import lombok.AllArgsConstructor;
@@ -10,13 +10,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ViewHistoryDto {
+public class ViewHistoryRequestDto {
 
     private Long id;
     private Long productId;
 
-    public static ViewHistoryDto viewHistoryVoToDto(ViewHistoryRequestVo viewHistoryRequestVo) {
-        return ViewHistoryDto.builder()
+    public static ViewHistoryRequestDto viewHistoryVoToDto(ViewHistoryRequestVo viewHistoryRequestVo) {
+        return ViewHistoryRequestDto.builder()
                 .productId(viewHistoryRequestVo.getProductId())
                 .build();
     }
