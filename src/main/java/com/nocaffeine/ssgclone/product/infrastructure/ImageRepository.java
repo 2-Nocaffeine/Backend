@@ -9,6 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface ImageRepository extends JpaRepository<Image, Long> {
+    Optional<Image> findById(Long id);
 
     @Query("SELECT i.url FROM Image i WHERE i.id = :thumbnailId")
     String findByUrl(Long thumbnailId);

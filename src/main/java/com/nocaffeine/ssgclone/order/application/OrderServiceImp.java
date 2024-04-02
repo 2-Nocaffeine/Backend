@@ -60,7 +60,7 @@ public class OrderServiceImp implements OrderService{
 
             OrderProduct orderProduct = OrderProduct.builder()
                     .order(savedOrders)
-                    .productName(thumbnailUrl)
+                    .productName(optionSelectedProduct.getProduct().getName())
                     .price(orderedProductRequestDto.getPrice())
                     .quantity(orderedProductRequestDto.getCount())
                     .thumbnailUrl(thumbnailUrl)
@@ -79,7 +79,7 @@ public class OrderServiceImp implements OrderService{
     @Override
     @Transactional
     public void removeOrder(OrderIdRequestDto orderIdRequestDto) {
-        Orders order = orderRepository.findById(orderIdRequestDto.getOrderNumber())
+        Orders order = orderRepository.findByOrderNumber(orderIdRequestDto.getOrderNumber())
                 .orElseThrow(() -> new BaseException(NO_EXIST_ORDER));
 
         //주문 취소 이력 확인
