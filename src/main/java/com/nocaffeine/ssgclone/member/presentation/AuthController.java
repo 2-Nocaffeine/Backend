@@ -2,14 +2,9 @@ package com.nocaffeine.ssgclone.member.presentation;
 
 import com.nocaffeine.ssgclone.common.CommonResponse;
 import com.nocaffeine.ssgclone.member.application.AuthService;
-import com.nocaffeine.ssgclone.member.dto.request.AuthCheckRequestDto;
-import com.nocaffeine.ssgclone.member.dto.request.AuthEmailRequestDto;
-import com.nocaffeine.ssgclone.member.dto.request.SnsMemberLoginRequestDto;
+import com.nocaffeine.ssgclone.member.dto.request.*;
 import com.nocaffeine.ssgclone.member.dto.response.TokenResponseDto;
-import com.nocaffeine.ssgclone.member.vo.request.AuthCheckRequestVo;
-import com.nocaffeine.ssgclone.member.vo.request.AuthEmailRequestVo;
-import com.nocaffeine.ssgclone.member.vo.request.SnsMemberAddRequestVo;
-import com.nocaffeine.ssgclone.member.vo.request.SnsMemberLoginRequestVo;
+import com.nocaffeine.ssgclone.member.vo.request.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +21,13 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
+
+    @Operation(summary = "이메일 중복 검증", description = "이메일 중복 검증")
+    @GetMapping("/duplication")
+    public CommonResponse<String> duplicationEmail(@RequestParam("email") String email) {
+        authService.duplicationEmail(email);
+        return CommonResponse.success("이메일 중복 검증 성공");
+    }
 
     @Operation(summary = "소셜 회원가입", description = "소셜 회원가입")
     @PostMapping("/sns-join")
@@ -44,6 +46,23 @@ public class AuthController {
     }
 
 
+    @Operation(summary = "일반 회원가입", description = "일반 회원가입")
+    @PostMapping("/join")
+    public CommonResponse<String> memberCreate(@RequestBody MemberSaveRequestVo memberSaveRequestVo) {
+        authService.addMember(MemberSaveRequestDto.voToDto(memberSaveRequestVo));
+        return CommonResponse.success("회원가입 성공");
+    }
+
+    @Operation(summary = "일반 로그인", description = "일반 로그인")
+    @PostMapping("/login")
+    public ResponseEntity<CommonResponse<TokenResponseDto>> logIn(@RequestBody MemberLoginRequestVo memberLoginRequestVo) {
+        TokenResponseDto tokenResponseDto = authService.logIn(MemberLoginRequestDto.voToDto(memberLoginRequestVo));
+        return ResponseEntity.ok()
+                .header(HttpHeaders.AUTHORIZATION, tokenResponseDto.getAccessToken())
+                .body(CommonResponse.success("로그인 성공"));
+    }
+
+
     @Operation(summary = "이메일 인증코드 발송", description = "이메일 인증코드 발송")
     @PostMapping("/email")
     public CommonResponse<String> emailAuth(@RequestBody AuthEmailRequestVo authEmailRequestVo) {
@@ -52,9 +71,11 @@ public class AuthController {
     }
 
     @Operation(summary = "이메일 인증코드 확인", description = "이메일 인증코드 확인")
-    @PostMapping("/email/check")
-    public CommonResponse<String> emailAuthCodeCheck(@RequestBody AuthCheckRequestVo authCheckRequestVo) {
-        authService.emailAuthCodeCheck(AuthCheckRequestDto.voToDto(authCheckRequestVo));
+    @GetMapping("/email")
+    public CommonResponse<String> emailAuthCodeCheck(    @RequestParam("email") String email,
+                                                         @RequestParam("code") String code )
+    {
+        authService.emailAuthCodeCheck(email, code);
         return CommonResponse.success("이메일 인증코드 확인 성공");
     }
 
