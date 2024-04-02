@@ -5,6 +5,6 @@ import lombok.Getter;
 @Getter
 public class OrderIdRequestVo {
 
-    private Long orderId;
+    private Long orderNumber;
 
 }

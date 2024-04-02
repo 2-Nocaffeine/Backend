@@ -12,11 +12,11 @@ import lombok.NoArgsConstructor;
 @Builder
 public class OrderIdRequestDto {
 
-    private Long orderId;
+    private Long orderNumber;
 
     public static OrderIdRequestDto convertToDto(OrderIdRequestVo orderIdRequestVo){
         return OrderIdRequestDto.builder()
-                .orderId(orderIdRequestVo.getOrderId())
+                .orderNumber(orderIdRequestVo.getOrderNumber())
                 .build();
     }
 }

@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.Random;
+
 @Entity
 @Builder
 @NoArgsConstructor
@@ -15,6 +17,9 @@ public class Orders extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column
+    private Long orderNumber;
 
     @Column(length = 255)
     private String uuid;
@@ -49,7 +54,9 @@ public class Orders extends BaseTimeEntity {
     }
 
     public static Orders toEntity(UserOrderSaveRequestDto userOrderSaveRequestDto) {
+        Random random = new Random();
         return Orders.builder()
+                .orderNumber((long) random.nextInt(90000000) + 10000000)
                 .uuid(userOrderSaveRequestDto.getUuid())
                 .region(userOrderSaveRequestDto.getRegion())
                 .name(userOrderSaveRequestDto.getName())

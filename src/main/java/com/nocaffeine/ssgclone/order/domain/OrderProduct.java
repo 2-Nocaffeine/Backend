@@ -22,9 +22,9 @@ public class OrderProduct {
     @NotNull
     private Orders order;
 
-    @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
-    private OptionSelectedProduct optionSelectedProduct;
+    @Column(length = 255)
+    private String productName;
 
     @NotNull
     private int price;
@@ -32,14 +32,25 @@ public class OrderProduct {
     @NotNull
     private int quantity;
 
-    public static OrderProduct toEntity(Orders savedOrders, OptionSelectedProduct optionSelectedProduct, OrderedProductRequestDto orderedProductRequestDto){
-        return OrderProduct.builder()
-                .order(savedOrders)
-                .optionSelectedProduct(optionSelectedProduct)
-                .price(orderedProductRequestDto.getPrice())
-                .quantity(orderedProductRequestDto.getCount())
-                .build();
-    }
+    @NotNull
+    @Column(length = 255)
+    private String thumbnailUrl;
+
+    @NotNull
+    @Column(length = 50)
+    private String color;
+
+    @NotNull
+    @Column(length = 50)
+    private String size;
+
+    @NotNull
+    @Column(length = 50)
+    private String addOption;
+
+    @NotNull
+    @Column(length = 50)
+    private String brand;
 
 
 }

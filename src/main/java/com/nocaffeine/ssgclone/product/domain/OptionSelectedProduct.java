@@ -37,4 +37,26 @@ public class OptionSelectedProduct extends BaseTimeEntity { // BaseTimeEntity를
     @NotNull
     private int stock;
 
+    public static OptionSelectedProduct decreaseStock(OptionSelectedProduct optionSelectedProduct,int stock){
+        return builder()
+                .id(optionSelectedProduct.getId())
+                .product(optionSelectedProduct.getProduct())
+                .sizeOption(optionSelectedProduct.getSizeOption())
+                .colorOption(optionSelectedProduct.getColorOption())
+                .addOption(optionSelectedProduct.getAddOption())
+                .stock(optionSelectedProduct.getStock() - stock)
+                .build();
+    }
+
+    public static OptionSelectedProduct increaseStock(OptionSelectedProduct optionSelectedProduct,int stock){
+        return builder()
+                .id(optionSelectedProduct.getId())
+                .product(optionSelectedProduct.getProduct())
+                .sizeOption(optionSelectedProduct.getSizeOption())
+                .colorOption(optionSelectedProduct.getColorOption())
+                .addOption(optionSelectedProduct.getAddOption())
+                .stock(optionSelectedProduct.getStock() + stock)
+                .build();
+    }
+
 }
