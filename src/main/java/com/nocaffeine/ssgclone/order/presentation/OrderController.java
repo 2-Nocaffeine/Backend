@@ -8,7 +8,6 @@ import com.nocaffeine.ssgclone.order.dto.request.UserOrderSaveRequestDto;
 import com.nocaffeine.ssgclone.order.vo.request.OrderIdRequestVo;
 import com.nocaffeine.ssgclone.order.vo.request.UserOrderProductRequestVo;
 import com.nocaffeine.ssgclone.order.vo.response.OrderIdListResponseVo;
-import com.nocaffeine.ssgclone.order.vo.response.OrderListResponseVo;
 import com.nocaffeine.ssgclone.order.vo.response.MemberOrderInfoResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +45,7 @@ public class OrderController {
     @PostMapping("/guest")
     public CommonResponse<String> nonMemberOrderAdd(@RequestBody UserOrderProductRequestVo userOrderProductRequestVo) {
 
-        String memberUuid = "guest"; //중복체크하면 안들어가가ㅔㅅ네...
+        String memberUuid = "guest";
         UserOrderSaveRequestDto userOrderProduct = UserOrderSaveRequestDto.convertToDto(memberUuid,userOrderProductRequestVo);
 
         orderService.addMemberOrder(userOrderProduct);
@@ -79,7 +78,7 @@ public class OrderController {
     }
 
     //회원 주문 id 호출
-    @Operation(summary = "회원 주문id 호출", description = "회원 주문id 호출", tags = {"Order"})
+    @Operation(summary = "회원 주문 id 호출", description = "회원 주문 id 호출", tags = {"Order"})
     @GetMapping("/member-order-list")
     public CommonResponse<OrderIdListResponseVo> orderIdList(){
 
@@ -88,5 +87,10 @@ public class OrderController {
 
         return CommonResponse.success("주문 목록을 불러왔습니다.", OrderIdListResponseVo.convertToVo(orderService.findOrderIdList(memberUuid)));
     }
+
+    //주문 상품 조회
+//    @Operation(summary = "주문 상품 조회", description = "주문 상품 조회", tags = {"Order"})
+//    @GetMapping("/order-product/list")
+//    public CommonResponse<List<>>
 
 }

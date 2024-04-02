@@ -12,7 +12,6 @@ import com.nocaffeine.ssgclone.order.dto.request.OrderedProductRequestDto;
 import com.nocaffeine.ssgclone.order.dto.response.OrderIdListResponseDto;
 import com.nocaffeine.ssgclone.order.infrastructure.OrderProductRepository;
 import com.nocaffeine.ssgclone.order.infrastructure.OrderRepository;
-import com.nocaffeine.ssgclone.order.vo.response.OrderListResponseVo;
 import com.nocaffeine.ssgclone.product.domain.OptionSelectedProduct;
 import com.nocaffeine.ssgclone.product.infrastructure.OptionSelectedProductRepository;
 import lombok.RequiredArgsConstructor;
