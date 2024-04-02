@@ -47,7 +47,8 @@ public class Member extends BaseTimeEntity implements UserDetails{
 
 
     @Builder
-    public Member(String email, String password, String uuid, String name, String phoneNumber, String address) {
+    public Member(Long id, String email, String password, String uuid, String name, String phoneNumber, String address) {
+        this.id = id;
         this.email = email;
         this.password = password;
         this.uuid = uuid;
@@ -56,9 +57,6 @@ public class Member extends BaseTimeEntity implements UserDetails{
         this.address = address;
     }
 
-    public void updateHashPassword(String password) {
-        this.password = new BCryptPasswordEncoder().encode(password);
-    }
 
     public Member(String uuid) {
         this.uuid = uuid;

@@ -5,18 +5,17 @@ import com.nocaffeine.ssgclone.member.domain.Member;
 import com.nocaffeine.ssgclone.member.infrastructure.MemberRepository;
 import com.nocaffeine.ssgclone.product.domain.Product;
 import com.nocaffeine.ssgclone.product.domain.ViewHistory;
-import com.nocaffeine.ssgclone.product.dto.ViewHistoryDto;
-import com.nocaffeine.ssgclone.product.dto.ViewHistoryListDto;
+import com.nocaffeine.ssgclone.product.dto.request.ViewHistoryRequestDto;
+import com.nocaffeine.ssgclone.product.dto.response.ViewHistoryResponseDto;
+import com.nocaffeine.ssgclone.product.dto.request.ViewHistoryListRequestDto;
 import com.nocaffeine.ssgclone.product.infrastructure.ProductRepository;
 import com.nocaffeine.ssgclone.product.infrastructure.ViewHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.*;
 
@@ -31,7 +30,7 @@ public class ViewHistoryServiceImpl implements ViewHistoryService {
 
     // 최근 본 상품 목록을 조회하는 메소드
     @Override
-    public List<ViewHistoryDto> getViewHistory(String memberUuid) {
+    public List<ViewHistoryResponseDto> getViewHistory(String memberUuid) {
         Member member = memberRepository.findByUuid(memberUuid)
                 .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
 
@@ -41,10 +40,10 @@ public class ViewHistoryServiceImpl implements ViewHistoryService {
             throw new BaseException(NO_VIEW_HISTORY);
         }
 
-        List<ViewHistoryDto> responses = new ArrayList<>();
+        List<ViewHistoryResponseDto> responses = new ArrayList<>();
 
         for (ViewHistory viewHistory : viewHistories) {
-            ViewHistoryDto response = ViewHistoryDto.builder()
+            ViewHistoryResponseDto response = ViewHistoryResponseDto.builder()
                     .id(viewHistory.getId())
                     .productId(viewHistory.getProduct().getId())
                     .build();
@@ -57,10 +56,10 @@ public class ViewHistoryServiceImpl implements ViewHistoryService {
 
     @Override
     @Transactional
-    public void addViewHistory(String memberUuid, ViewHistoryDto viewHistoryDto) {
+    public void addViewHistory(String memberUuid, ViewHistoryRequestDto viewHistoryRequestDto) {
         Member member = memberRepository.findByUuid(memberUuid)
                 .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
-        Product product = productRepository.findById(viewHistoryDto.getProductId())
+        Product product = productRepository.findById(viewHistoryRequestDto.getProductId())
                 .orElseThrow(() -> new BaseException(NO_PRODUCT));
 
         // 기존의 view history 에 해당 상품이 있다면 삭제
@@ -77,7 +76,7 @@ public class ViewHistoryServiceImpl implements ViewHistoryService {
 
     @Override
     @Transactional
-    public void removeViewHistorys(String memberUuid, ViewHistoryListDto viewHistoryListDto) {
+    public void removeViewHistorys(String memberUuid, ViewHistoryListRequestDto viewHistoryListRequestDto) {
         // 회원이 존재하는지 확인
         // orElseThrow 를 사용하여 선언 타입을 Optional 을 쓰지않고 바로 Member 객체로 받을 수 있음
         Member member = memberRepository.findByUuid(memberUuid)
@@ -86,7 +85,7 @@ public class ViewHistoryServiceImpl implements ViewHistoryService {
         // view history 에서 삭제할 상품이 존재하는지 확인
         // ViewHistoryListDto 에서 리스트 형식으로 받은 productIds 를 하나씩 조회하여 삭제
         // for-each 문은 리스트에서 하나씩 꺼내와서 사용할 때 사용
-        for (Long productId : viewHistoryListDto.getProductIds()) {
+        for (Long productId : viewHistoryListRequestDto.getProductIds()) {
 
             Product product = productRepository.findById(productId)
                     .orElseThrow(() -> new BaseException(NO_PRODUCT));

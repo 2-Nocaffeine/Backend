@@ -1,4 +1,4 @@
-package com.nocaffeine.ssgclone.product.dto;
+package com.nocaffeine.ssgclone.product.dto.response;
 
 import com.nocaffeine.ssgclone.product.domain.*;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OptionSelectedProductDto {
+public class OptionSelectedProductResponseDto {
 
     private Long id;
     private Product product;
@@ -19,8 +19,8 @@ public class OptionSelectedProductDto {
     private AddOption addOption;
     private int stock;
 
-    public static OptionSelectedProductDto fromOptionSelectedProduct(OptionSelectedProduct optionSelectedProduct) {
-        return OptionSelectedProductDto.builder()
+    public static OptionSelectedProductResponseDto fromOptionSelectedProduct(OptionSelectedProduct optionSelectedProduct) {
+        return OptionSelectedProductResponseDto.builder()
                 .id(optionSelectedProduct.getId())
                 .product(optionSelectedProduct.getProduct())
                 .sizeOption(optionSelectedProduct.getSizeOption())

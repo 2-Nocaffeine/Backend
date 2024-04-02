@@ -18,8 +18,4 @@ public interface MemberService {
 
     void removeMember(String memberUuid);
 
-    void emailAuth(AuthEmailRequestDto authEmailRequestDto);
-
-    void emailAuthCodeCheck(AuthCheckRequestDto authCheckRequestDto);
-
 }
