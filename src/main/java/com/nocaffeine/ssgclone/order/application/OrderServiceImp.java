@@ -1,17 +1,19 @@
 package com.nocaffeine.ssgclone.order.application;
 
 import com.nocaffeine.ssgclone.brandstore.infrastructure.BrandListRepository;
-import com.nocaffeine.ssgclone.brandstore.infrastructure.BrandRepository;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
 import com.nocaffeine.ssgclone.member.domain.Member;
 import com.nocaffeine.ssgclone.member.infrastructure.MemberRepository;
 import com.nocaffeine.ssgclone.order.domain.OrderProduct;
 import com.nocaffeine.ssgclone.order.domain.Orders;
+import com.nocaffeine.ssgclone.order.dto.request.OrderNumberRequestDto;
 import com.nocaffeine.ssgclone.order.dto.response.MemberOrderInfoResponseDto;
 import com.nocaffeine.ssgclone.order.dto.request.OrderIdRequestDto;
 import com.nocaffeine.ssgclone.order.dto.request.UserOrderSaveRequestDto;
 import com.nocaffeine.ssgclone.order.dto.request.OrderedProductRequestDto;
 import com.nocaffeine.ssgclone.order.dto.response.OrderIdListResponseDto;
+import com.nocaffeine.ssgclone.order.dto.response.OrderInfoAndProductListResponseDto;
+import com.nocaffeine.ssgclone.order.dto.response.OrderProductListResponseDto;
 import com.nocaffeine.ssgclone.order.infrastructure.OrderProductRepository;
 import com.nocaffeine.ssgclone.order.infrastructure.OrderRepository;
 import com.nocaffeine.ssgclone.product.domain.OptionSelectedProduct;
@@ -20,8 +22,9 @@ import com.nocaffeine.ssgclone.product.infrastructure.OptionSelectedProductRepos
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.*;
 
@@ -141,6 +144,45 @@ public class OrderServiceImp implements OrderService{
                 .orderIdList(orderIdList)
                 .build();
 
+    }
+
+    @Override
+    public OrderInfoAndProductListResponseDto findOrderProductList(OrderNumberRequestDto orderNumberRequestDto) {
+
+        Orders order = orderRepository.findById(orderNumberRequestDto.getOrderId())
+                .orElseThrow(() -> new BaseException(NO_EXIST_ORDER));
+
+        List<OrderProduct> orderProductList = orderProductRepository.findByOrder(order);
+
+        List<OrderProductListResponseDto> orderProductinfoList = new ArrayList<>();
+
+        for (OrderProduct orderProduct : orderProductList){
+
+            OrderProductListResponseDto orderProductOne = OrderProductListResponseDto.builder()
+                    .productName(orderProduct.getProductName())
+                    .addOption(orderProduct.getAddOption())
+                    .color(orderProduct.getColor())
+                    .size(orderProduct.getSize())
+                    .count(orderProduct.getQuantity())
+                    .price(orderProduct.getPrice())
+                    .brand(orderProduct.getBrand())
+                    .thumbnail(orderProduct.getThumbnailUrl())
+                    .build();
+
+            orderProductinfoList.add(orderProductOne);
+        }
+
+        OrderInfoAndProductListResponseDto orderInfoAndProductListResponseDto = OrderInfoAndProductListResponseDto.builder()
+                .orderNumber(order.getOrderNumber())
+                .orderId(order.getId())
+                .receiverName(order.getName())
+                .totalPrice(order.getTotalPrice())
+                .orderStatus(order.getStatus())
+                .orderDate(order.getCreatedAt())
+                .orderProductList(orderProductinfoList)
+                .build();
+
+        return orderInfoAndProductListResponseDto;
     }
 
 

@@ -4,16 +4,18 @@ import com.nocaffeine.ssgclone.common.CommonResponse;
 import com.nocaffeine.ssgclone.common.security.JwtTokenProvider;
 import com.nocaffeine.ssgclone.order.application.OrderService;
 import com.nocaffeine.ssgclone.order.dto.request.OrderIdRequestDto;
+import com.nocaffeine.ssgclone.order.dto.request.OrderNumberRequestDto;
 import com.nocaffeine.ssgclone.order.dto.request.UserOrderSaveRequestDto;
+import com.nocaffeine.ssgclone.order.dto.response.OrderInfoAndProductListResponseDto;
 import com.nocaffeine.ssgclone.order.vo.request.OrderIdRequestVo;
 import com.nocaffeine.ssgclone.order.vo.request.UserOrderProductRequestVo;
 import com.nocaffeine.ssgclone.order.vo.response.OrderIdListResponseVo;
 import com.nocaffeine.ssgclone.order.vo.response.MemberOrderInfoResponseVo;
+import com.nocaffeine.ssgclone.order.vo.response.OrderInfoAndProductListResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+;
 
 @RestController
 @RequiredArgsConstructor
@@ -79,7 +81,7 @@ public class OrderController {
 
     //회원 주문 id 호출
     @Operation(summary = "회원 주문 id 호출", description = "회원 주문 id 호출", tags = {"Order"})
-    @GetMapping("/member-order-list")
+    @GetMapping("/member-order-id-list")
     public CommonResponse<OrderIdListResponseVo> orderIdList(){
 
         String token = jwtTokenProvider.getHeader();
@@ -88,9 +90,16 @@ public class OrderController {
         return CommonResponse.success("주문 목록을 불러왔습니다.", OrderIdListResponseVo.convertToVo(orderService.findOrderIdList(memberUuid)));
     }
 
-    //주문 상품 조회
-//    @Operation(summary = "주문 상품 조회", description = "주문 상품 조회", tags = {"Order"})
-//    @GetMapping("/order-product/list")
-//    public CommonResponse<List<>>
+    //회원 주문 상품 조회
+    @Operation(summary = "주문 상품 및 주문 정보 조회", description = "주문 상품 및 주문 정보 조회", tags = {"Order"})
+    @GetMapping("/{orderId}/member-order-product/")
+    public CommonResponse<OrderInfoAndProductListResponseVo> orderProductList(@PathVariable Long orderId){
+
+        OrderNumberRequestDto orderNumberRequestDto = new OrderNumberRequestDto(orderId);
+        OrderInfoAndProductListResponseDto orderInfoAndProductListResponseDto = orderService.findOrderProductList(orderNumberRequestDto);
+
+
+        return CommonResponse.success("주문 상품을 불러왔습니다.", OrderInfoAndProductListResponseVo.convertToVo(orderInfoAndProductListResponseDto));
+    }
 
 }
