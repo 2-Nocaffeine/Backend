@@ -92,4 +92,28 @@ public class ReviewServiceImpl implements ReviewService{
         reviewRepository.delete(review);
     }
 
+    /**
+     * 작성 가능한 리뷰 조회
+     */
+    @Override
+    public void findWritableReviews(String memberUuid) {
+        Member member = memberRepository.findByUuid(memberUuid)
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
+
+        List<Orders> order = orderRepository.findAllByUuid(member.getUuid());
+
+        // 주문리스트 조회
+        for (Orders orders : order) {
+            // 각 주문별 상품 조회
+            List<OrderProduct> orderProduct = orderProductRepository.findAllByOrder(orders);
+
+            for (OrderProduct orderProducts : orderProduct) {
+                reviewRepository.findAllByOrder(orders);
+                if (reviewRepository.findAllByOrder(orders).isEmpty()) {
+                }
+            }
+        }
+    }
+
+
 }
