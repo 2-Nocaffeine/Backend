@@ -68,6 +68,10 @@ public enum BaseResponseStatus {
     // Address
     NO_EXIST_ADDRESS(HttpStatus.NOT_FOUND, false, 2300, "존재하지 않는 주소입니다."),
 
+    /**
+     * Review
+     */
+    NO_EXIST_REVIEW(HttpStatus.NOT_FOUND, false, 5001, "존재하지 않는 리뷰 입니다"),
 
     /**
      * 6000 : Cart & WishProductList Service Error
