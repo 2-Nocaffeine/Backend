@@ -31,9 +31,6 @@ public class ProductCategoryListServiceImpl implements ProductCategoryListServic
                     .build();
             productIdListResponseList.add(productIdListResponse);
         }
-        if (productIdListResponseList.isEmpty()) {
-            throw new BaseException(NO_PRODUCT);
-        }
         return productIdListResponseList;
     }
 
@@ -48,9 +45,6 @@ public class ProductCategoryListServiceImpl implements ProductCategoryListServic
                     .build();
             productIdListResponseList.add(productIdListResponse);
         }
-        if (productIdListResponseList.isEmpty()){
-            throw new BaseException(NO_PRODUCT);
-        }
         return productIdListResponseList;
     }
 
@@ -64,9 +58,6 @@ public class ProductCategoryListServiceImpl implements ProductCategoryListServic
                     .productId(productCategoryList.getProduct().getId())
                     .build();
             productIdListResponseList.add(productIdListResponse);
-        }
-        if (productIdListResponseList.isEmpty()){
-            throw new BaseException(NO_PRODUCT);
         }
         return productIdListResponseList;
     }

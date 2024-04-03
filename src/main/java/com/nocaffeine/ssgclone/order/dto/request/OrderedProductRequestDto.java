@@ -1,4 +1,4 @@
-package com.nocaffeine.ssgclone.order.dto;
+package com.nocaffeine.ssgclone.order.dto.request;
 
 import com.nocaffeine.ssgclone.order.vo.request.OrderedProductRequestVo;
 import lombok.AllArgsConstructor;
@@ -6,24 +6,24 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OrderedProductDto {
+public class OrderedProductRequestDto {
 
     private Long optionSelectedProductId;
     private int count;
     private int price;
+    private Long thumbnailId;
 
-    public static OrderedProductDto convertToDto(OrderedProductRequestVo orderProducts) {
+    public static OrderedProductRequestDto convertToDto(OrderedProductRequestVo orderProducts) {
 
-        return OrderedProductDto.builder()
+        return OrderedProductRequestDto.builder()
                 .optionSelectedProductId(orderProducts.getOptionSelectedProductId())
                 .count(orderProducts.getCount())
                 .price(orderProducts.getPrice())
+                .thumbnailId(orderProducts.getThumbnailId())
                 .build();
     }
 }

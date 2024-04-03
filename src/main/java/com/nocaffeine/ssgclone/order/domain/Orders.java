@@ -1,11 +1,12 @@
 package com.nocaffeine.ssgclone.order.domain;
 
 import com.nocaffeine.ssgclone.common.BaseTimeEntity;
+import com.nocaffeine.ssgclone.order.dto.request.UserOrderSaveRequestDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.sql.Timestamp;
+import java.util.Random;
 
 @Entity
 @Builder
@@ -16,6 +17,9 @@ public class Orders extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column
+    private Long orderNumber;
 
     @Column(length = 255)
     private String uuid;
@@ -44,13 +48,23 @@ public class Orders extends BaseTimeEntity {
     @Column(length = 50)
     private OrderStatus status;
 
-    public void changeStatus(OrderStatus status){
-        this.status = status;
-    }
-
 
     public enum OrderStatus {
         ORDERED, PREPARING, DELIVERING, DETERMINING, CANCEL
+    }
+
+    public static Orders toEntity(UserOrderSaveRequestDto userOrderSaveRequestDto) {
+        Random random = new Random();
+        return Orders.builder()
+                .orderNumber((long) random.nextInt(90000000) + 10000000)
+                .uuid(userOrderSaveRequestDto.getUuid())
+                .region(userOrderSaveRequestDto.getRegion())
+                .name(userOrderSaveRequestDto.getName())
+                .phoneNumber(userOrderSaveRequestDto.getPhoneNumber())
+                .email(userOrderSaveRequestDto.getEmail())
+                .totalPrice(userOrderSaveRequestDto.getTotalPrice())
+                .status(OrderStatus.ORDERED)
+                .build();
     }
 
 }

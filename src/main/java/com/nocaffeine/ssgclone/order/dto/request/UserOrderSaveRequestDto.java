@@ -1,4 +1,4 @@
-package com.nocaffeine.ssgclone.order.dto;
+package com.nocaffeine.ssgclone.order.dto.request;
 
 import com.nocaffeine.ssgclone.order.vo.request.UserOrderProductRequestVo;
 import com.nocaffeine.ssgclone.order.vo.request.OrderedProductRequestVo;
@@ -12,30 +12,32 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 @Builder
-public class UserOrderSaveDto {
+public class UserOrderSaveRequestDto {
 
-        private List<OrderedProductDto> orderProducts;
+        private List<OrderedProductRequestDto> orderProducts;
         private String uuid;
-        private String region;
         private String name;
+        private String region;
+        private String OrderName;
         private String phoneNumber;
         private String email;
         private int totalPrice;
         private String orderDate;
         private String status;
 
-        public static UserOrderSaveDto convertToDto(String memberUuid, UserOrderProductRequestVo userOrderProductRequestVo) {
-            List<OrderedProductDto> OrderedProductDtoList = new ArrayList<>();
+        public static UserOrderSaveRequestDto convertToDto(String memberUuid, UserOrderProductRequestVo userOrderProductRequestVo) {
+            List<OrderedProductRequestDto> orderedProductRequestDtoList = new ArrayList<>();
 
             for (OrderedProductRequestVo orderProducts : userOrderProductRequestVo.getOrderProducts()){
-                OrderedProductDtoList.add(OrderedProductDto.convertToDto(orderProducts));
+                orderedProductRequestDtoList.add(OrderedProductRequestDto.convertToDto(orderProducts));
             }
 
-            return UserOrderSaveDto.builder()
-                    .orderProducts(OrderedProductDtoList)
+            return UserOrderSaveRequestDto.builder()
+                    .orderProducts(orderedProductRequestDtoList)
                     .uuid(memberUuid)
                     .region(userOrderProductRequestVo.getRegion())
                     .name(userOrderProductRequestVo.getName())
+                    .OrderName(userOrderProductRequestVo.getOrderName())
                     .phoneNumber(userOrderProductRequestVo.getPhoneNumber())
                     .email(userOrderProductRequestVo.getEmail())
                     .totalPrice(userOrderProductRequestVo.getTotalPrice())

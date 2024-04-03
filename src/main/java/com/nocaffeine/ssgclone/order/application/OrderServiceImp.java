@@ -1,21 +1,28 @@
 package com.nocaffeine.ssgclone.order.application;
 
+import com.nocaffeine.ssgclone.brandstore.infrastructure.BrandListRepository;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
+import com.nocaffeine.ssgclone.member.domain.Member;
+import com.nocaffeine.ssgclone.member.infrastructure.MemberRepository;
 import com.nocaffeine.ssgclone.order.domain.OrderProduct;
 import com.nocaffeine.ssgclone.order.domain.Orders;
-import com.nocaffeine.ssgclone.order.dto.OrderIdDto;
-import com.nocaffeine.ssgclone.order.dto.UserOrderSaveDto;
-import com.nocaffeine.ssgclone.order.dto.OrderedProductDto;
+import com.nocaffeine.ssgclone.order.dto.request.OrderNumberRequestDto;
+import com.nocaffeine.ssgclone.order.dto.response.MemberOrderInfoResponseDto;
+import com.nocaffeine.ssgclone.order.dto.request.OrderIdRequestDto;
+import com.nocaffeine.ssgclone.order.dto.request.UserOrderSaveRequestDto;
+import com.nocaffeine.ssgclone.order.dto.request.OrderedProductRequestDto;
+import com.nocaffeine.ssgclone.order.dto.response.OrderIdListResponseDto;
+import com.nocaffeine.ssgclone.order.dto.response.OrderInfoAndProductListResponseDto;
+import com.nocaffeine.ssgclone.order.dto.response.OrderProductListResponseDto;
 import com.nocaffeine.ssgclone.order.infrastructure.OrderProductRepository;
 import com.nocaffeine.ssgclone.order.infrastructure.OrderRepository;
 import com.nocaffeine.ssgclone.product.domain.OptionSelectedProduct;
+import com.nocaffeine.ssgclone.product.infrastructure.ImageRepository;
 import com.nocaffeine.ssgclone.product.infrastructure.OptionSelectedProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,47 +36,53 @@ public class OrderServiceImp implements OrderService{
     private final OrderRepository orderRepository;
     private final OrderProductRepository orderProductRepository;
     private final OptionSelectedProductRepository optionSelectedProductRepository;
+    private final MemberRepository memberRepository;
+    private final ImageRepository imageRepository;
+    private final BrandListRepository brandListRepository;
 
     @Override
     @Transactional
-    public void addMemberOrder(UserOrderSaveDto userOrderSaveDto) {
+    public void addMemberOrder(UserOrderSaveRequestDto userOrderSaveRequestDto) {
 
         //주문 저장
-        Orders order = Orders.builder()
-                .uuid(userOrderSaveDto.getUuid())
-                .region(userOrderSaveDto.getRegion())
-                .name(userOrderSaveDto.getName())
-                .phoneNumber(userOrderSaveDto.getPhoneNumber())
-                .email(userOrderSaveDto.getEmail())
-                .totalPrice(userOrderSaveDto.getTotalPrice())
-                .status(Orders.OrderStatus.ORDERED)
-                .build();
-
+        Orders order = Orders.toEntity(userOrderSaveRequestDto);
         Orders savedOrders = orderRepository.save(order);
 
         //재고 확인 후 주문상품 저장
-        for (OrderedProductDto orderedProductDto : userOrderSaveDto.getOrderProducts()) {
-            OptionSelectedProduct optionSelectedProduct = optionSelectedProductRepository.findById(orderedProductDto.getOptionSelectedProductId())
+        for (OrderedProductRequestDto orderedProductRequestDto : userOrderSaveRequestDto.getOrderProducts()) {
+            OptionSelectedProduct optionSelectedProduct = optionSelectedProductRepository.findById(orderedProductRequestDto.getOptionSelectedProductId())
                     .orElseThrow(() -> new BaseException(NO_PRODUCT));
 
-            optionSelectedProduct.decreaseStock(orderedProductDto.getCount());
+            OptionSelectedProduct updateOptionSelectedProduct = OptionSelectedProduct
+                    .decreaseStock(optionSelectedProduct, orderedProductRequestDto.getCount());
+
+            optionSelectedProductRepository.save(updateOptionSelectedProduct);
+
+            String thumbnailUrl = imageRepository.findByUrl(orderedProductRequestDto.getThumbnailId());
+            String brandName = brandListRepository.findBrandNameByProductId(orderedProductRequestDto.getOptionSelectedProductId());
 
             OrderProduct orderProduct = OrderProduct.builder()
                     .order(savedOrders)
-                    .optionSelectedProduct(optionSelectedProduct)
-                    .price(orderedProductDto.getPrice())
-                    .quantity(orderedProductDto.getCount())
+                    .productName(optionSelectedProduct.getProduct().getName())
+                    .price(orderedProductRequestDto.getPrice())
+                    .quantity(orderedProductRequestDto.getCount())
+                    .thumbnailUrl(thumbnailUrl)
+                    .color(optionSelectedProduct.getColorOption().getColor())
+                    .size(optionSelectedProduct.getSizeOption().getSize())
+                    .addOption(optionSelectedProduct.getAddOption().getOptionName())
+                    .brand(brandName)
                     .build();
 
             orderProductRepository.save(orderProduct);
+
         }
 
     }
 
     @Override
     @Transactional
-    public void removeOrder(OrderIdDto orderIdDto) {
-        Orders order = orderRepository.findById(orderIdDto.getOrderId())
+    public void removeOrder(OrderIdRequestDto orderIdRequestDto) {
+        Orders order = orderRepository.findByOrderNumber(orderIdRequestDto.getOrderNumber())
                 .orElseThrow(() -> new BaseException(NO_EXIST_ORDER));
 
         //주문 취소 이력 확인
@@ -77,18 +90,100 @@ public class OrderServiceImp implements OrderService{
             throw new BaseException(ALREADY_CANCEL_ORDER);
         }
 
-        order.changeStatus(Orders.OrderStatus.CANCEL);
+        Orders updatedOrder = Orders.builder()
+                .id(order.getId())
+                .orderNumber(order.getOrderNumber())
+                .uuid(order.getUuid())
+                .region(order.getRegion())
+                .name(order.getName())
+                .phoneNumber(order.getPhoneNumber())
+                .email(order.getEmail())
+                .totalPrice(order.getTotalPrice())
+                .status(Orders.OrderStatus.CANCEL)
+                .build();
+
+        orderRepository.save(updatedOrder);
+
+//        order.changeStatus(Orders.OrderStatus.CANCEL); //더티체킹..
 
         //재고 복구
-        //주문한 상품 id 리스트
+        //주문한 상품 객체 리스트
         List<OrderProduct> orderProductIdList = orderProductRepository.findByOrder(order);
 
         for (OrderProduct orderProduct : orderProductIdList){
-            OptionSelectedProduct optionSelectedProduct = orderProduct.getOptionSelectedProduct();
-            optionSelectedProduct.increaseStock(orderProduct.getQuantity());
+            OptionSelectedProduct optionSelectedProduct = optionSelectedProductRepository.findById(orderProduct.getId())
+                    .orElseThrow(() -> new BaseException(NO_PRODUCT));
+
+            OptionSelectedProduct updateOptionSelectedProduct = OptionSelectedProduct
+                    .increaseStock(optionSelectedProduct, orderProduct.getQuantity());
+
+            optionSelectedProductRepository.save(updateOptionSelectedProduct);
+
+
         }
     }
 
+    @Override
+    public MemberOrderInfoResponseDto findOrderInfo(String memberUuid) {
+        Member member =  memberRepository.findByUuid(memberUuid)
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
+
+        return MemberOrderInfoResponseDto.builder()
+                .orderName(member.getName())
+                .phoneNumber(member.getPhoneNumber())
+                .email(member.getEmail())
+                .build();
+    }
+
+    @Override
+    public OrderIdListResponseDto findOrderIdList(String memberUuid) {
+
+        List<Long> orderIdList = orderRepository.findByUuid(memberUuid);
+
+        return OrderIdListResponseDto.builder()
+                .orderIdList(orderIdList)
+                .build();
+
+    }
+
+    @Override
+    public OrderInfoAndProductListResponseDto findOrderProductList(OrderNumberRequestDto orderNumberRequestDto) {
+
+        Orders order = orderRepository.findById(orderNumberRequestDto.getOrderId())
+                .orElseThrow(() -> new BaseException(NO_EXIST_ORDER));
+
+        List<OrderProduct> orderProductList = orderProductRepository.findByOrder(order);
+
+        List<OrderProductListResponseDto> orderProductinfoList = new ArrayList<>();
+
+        for (OrderProduct orderProduct : orderProductList){
+
+            OrderProductListResponseDto orderProductOne = OrderProductListResponseDto.builder()
+                    .productName(orderProduct.getProductName())
+                    .addOption(orderProduct.getAddOption())
+                    .color(orderProduct.getColor())
+                    .size(orderProduct.getSize())
+                    .count(orderProduct.getQuantity())
+                    .price(orderProduct.getPrice())
+                    .brand(orderProduct.getBrand())
+                    .thumbnail(orderProduct.getThumbnailUrl())
+                    .build();
+
+            orderProductinfoList.add(orderProductOne);
+        }
+
+        OrderInfoAndProductListResponseDto orderInfoAndProductListResponseDto = OrderInfoAndProductListResponseDto.builder()
+                .orderNumber(order.getOrderNumber())
+                .orderId(order.getId())
+                .receiverName(order.getName())
+                .totalPrice(order.getTotalPrice())
+                .orderStatus(order.getStatus())
+                .orderDate(order.getCreatedAt())
+                .orderProductList(orderProductinfoList)
+                .build();
+
+        return orderInfoAndProductListResponseDto;
+    }
 
 
 }
