@@ -81,11 +81,11 @@ public class ReviewController {
     }
 
     @Operation(summary = "리뷰별 이미지 조회", description = "리뷰별 이미지 조회")
-    @GetMapping("/image/{imageId}")
-    public CommonResponse<List<ReviewImageResponseVo>> reviewImageList(@PathVariable("imageId") Long imageId) {
+    @GetMapping("/{reviewId}/image")
+    public CommonResponse<List<ReviewImageResponseVo>> reviewImageList(@PathVariable("reviewId") Long reviewId) {
         List<ReviewImageResponseVo> reviewImageResponseVo = new ArrayList<>();
 
-        for (ReviewImageResponseDto reviewImageResponseDto  : reviewService.findReviewImage(imageId)) {
+        for (ReviewImageResponseDto reviewImageResponseDto  : reviewService.findReviewImage(reviewId)) {
             reviewImageResponseVo.add(ReviewImageResponseDto.dtoToVo(reviewImageResponseDto));
         }
 
