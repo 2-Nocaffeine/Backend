@@ -4,12 +4,14 @@ import com.nocaffeine.ssgclone.order.domain.Orders;
 import com.nocaffeine.ssgclone.order.dto.response.OrderInfoAndProductListResponseDto;
 import com.nocaffeine.ssgclone.order.dto.response.OrderProductListResponseDto;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 public class OrderInfoAndProductListResponseVo {
 
     private Long orderNumber;

@@ -1,5 +1,6 @@
 package com.nocaffeine.ssgclone.order.dto.response;
 
+import com.nocaffeine.ssgclone.order.domain.Orders;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +14,6 @@ import java.util.List;
 @Builder
 public class OrderIdListResponseDto {
 
-    List<Long> orderIdList;
+    private Long orderId;
 
 }

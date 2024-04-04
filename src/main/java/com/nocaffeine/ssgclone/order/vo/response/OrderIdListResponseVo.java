@@ -5,24 +5,26 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderIdListResponseVo {
 
-    private List<Long> orderIdList;
+    private Long orderId;
 
-
-    private OrderIdListResponseVo(List<Long> orderIdList){
-        this.orderIdList = orderIdList;
+    public OrderIdListResponseVo(Long orderId) {
+        this.orderId = orderId;
     }
-    public static OrderIdListResponseVo convertToVo(OrderIdListResponseDto orderIdListResponseDto) {
 
-        return new OrderIdListResponseVo(
-                orderIdListResponseDto.getOrderIdList()
-        );
+    public static List<OrderIdListResponseVo> convertToVo(List<OrderIdListResponseDto> orderIdList) {
 
+        List<OrderIdListResponseVo> orderIdListResponseVos = new ArrayList<>();
 
+        for (OrderIdListResponseDto orderIdListResponseDto : orderIdList) {
+            orderIdListResponseVos.add(new OrderIdListResponseVo(orderIdListResponseDto.getOrderId()));
+        }
+            return orderIdListResponseVos;
     }
 }

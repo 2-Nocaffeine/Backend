@@ -11,6 +11,6 @@ import java.util.Optional;
 public interface BrandListRepository extends JpaRepository<BrandList, Long>{
     Optional<BrandList> findByProductId(Long productId);
 
-    @Query("SELECT b.brand.id FROM BrandList b WHERE b.product.id = :productId")
+    @Query("SELECT b.brand.name FROM BrandList b WHERE b.product.id = :productId")
     String findBrandNameByProductId(Long productId);
 }

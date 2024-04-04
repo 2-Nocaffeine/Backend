@@ -3,8 +3,10 @@ package com.nocaffeine.ssgclone.order.vo.response;
 import com.nocaffeine.ssgclone.order.dto.response.OrderIdListResponseDto;
 import com.nocaffeine.ssgclone.order.dto.response.OrderProductListResponseDto;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 public class OrderProductListResponseVo {
 
     private String productName;

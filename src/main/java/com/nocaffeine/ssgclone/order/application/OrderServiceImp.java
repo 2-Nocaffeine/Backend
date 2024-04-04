@@ -6,11 +6,8 @@ import com.nocaffeine.ssgclone.member.domain.Member;
 import com.nocaffeine.ssgclone.member.infrastructure.MemberRepository;
 import com.nocaffeine.ssgclone.order.domain.OrderProduct;
 import com.nocaffeine.ssgclone.order.domain.Orders;
-import com.nocaffeine.ssgclone.order.dto.request.OrderNumberRequestDto;
+import com.nocaffeine.ssgclone.order.dto.request.*;
 import com.nocaffeine.ssgclone.order.dto.response.MemberOrderInfoResponseDto;
-import com.nocaffeine.ssgclone.order.dto.request.OrderIdRequestDto;
-import com.nocaffeine.ssgclone.order.dto.request.UserOrderSaveRequestDto;
-import com.nocaffeine.ssgclone.order.dto.request.OrderedProductRequestDto;
 import com.nocaffeine.ssgclone.order.dto.response.OrderIdListResponseDto;
 import com.nocaffeine.ssgclone.order.dto.response.OrderInfoAndProductListResponseDto;
 import com.nocaffeine.ssgclone.order.dto.response.OrderProductListResponseDto;
@@ -25,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.*;
 
@@ -58,11 +56,12 @@ public class OrderServiceImp implements OrderService{
 
             optionSelectedProductRepository.save(updateOptionSelectedProduct);
 
-            String thumbnailUrl = imageRepository.findByUrl(orderedProductRequestDto.getThumbnailId());
-            String brandName = brandListRepository.findBrandNameByProductId(orderedProductRequestDto.getOptionSelectedProductId());
+            String thumbnailUrl = imageRepository.findByUrlQuery(orderedProductRequestDto.getThumbnailId());
+            String brandName = brandListRepository.findBrandNameByProductId(optionSelectedProduct.getProduct().getId());
 
             OrderProduct orderProduct = OrderProduct.builder()
                     .order(savedOrders)
+                    .productId(optionSelectedProduct.getProduct().getId())
                     .productName(optionSelectedProduct.getProduct().getName())
                     .price(orderedProductRequestDto.getPrice())
                     .quantity(orderedProductRequestDto.getCount())
@@ -108,7 +107,7 @@ public class OrderServiceImp implements OrderService{
 
         //재고 복구
         //주문한 상품 객체 리스트
-        List<OrderProduct> orderProductIdList = orderProductRepository.findByOrder(order);
+        List<OrderProduct> orderProductIdList = orderProductRepository.findAllByOrder(order);
 
         for (OrderProduct orderProduct : orderProductIdList){
             OptionSelectedProduct optionSelectedProduct = optionSelectedProductRepository.findById(orderProduct.getId())
@@ -136,13 +135,17 @@ public class OrderServiceImp implements OrderService{
     }
 
     @Override
-    public OrderIdListResponseDto findOrderIdList(String memberUuid) {
+    public List<OrderIdListResponseDto> findOrderIdList(String memberUuid) {
 
-        List<Long> orderIdList = orderRepository.findByUuid(memberUuid);
+        List<OrderIdListResponseDto> orderIdDtoList = new ArrayList<>();
 
-        return OrderIdListResponseDto.builder()
-                .orderIdList(orderIdList)
-                .build();
+        for (Orders order : orderRepository.findByUuid(memberUuid)){
+            OrderIdListResponseDto orderIdDto = OrderIdListResponseDto.builder()
+                    .orderId(order.getId())
+                    .build();
+            orderIdDtoList.add(orderIdDto);
+        }
+        return orderIdDtoList;
 
     }
 
@@ -152,7 +155,7 @@ public class OrderServiceImp implements OrderService{
         Orders order = orderRepository.findById(orderNumberRequestDto.getOrderId())
                 .orElseThrow(() -> new BaseException(NO_EXIST_ORDER));
 
-        List<OrderProduct> orderProductList = orderProductRepository.findByOrder(order);
+        List<OrderProduct> orderProductList = orderProductRepository.findAllByOrder(order);
 
         List<OrderProductListResponseDto> orderProductinfoList = new ArrayList<>();
 
@@ -160,6 +163,7 @@ public class OrderServiceImp implements OrderService{
 
             OrderProductListResponseDto orderProductOne = OrderProductListResponseDto.builder()
                     .productName(orderProduct.getProductName())
+                    .productId(orderProduct.getProductId())
                     .addOption(orderProduct.getAddOption())
                     .color(orderProduct.getColor())
                     .size(orderProduct.getSize())
@@ -172,7 +176,7 @@ public class OrderServiceImp implements OrderService{
             orderProductinfoList.add(orderProductOne);
         }
 
-        OrderInfoAndProductListResponseDto orderInfoAndProductListResponseDto = OrderInfoAndProductListResponseDto.builder()
+        return OrderInfoAndProductListResponseDto.builder()
                 .orderNumber(order.getOrderNumber())
                 .orderId(order.getId())
                 .receiverName(order.getName())
@@ -182,7 +186,43 @@ public class OrderServiceImp implements OrderService{
                 .orderProductList(orderProductinfoList)
                 .build();
 
-        return orderInfoAndProductListResponseDto;
+    }
+
+    @Override
+    public OrderInfoAndProductListResponseDto findGuestOrderInfo(GuestOrderInfoRequestDto guestOrderInfoRequestDto) {
+
+        Orders order = orderRepository.findByPhoneNumberAndOrderNumber(guestOrderInfoRequestDto.getOrderPhone(), guestOrderInfoRequestDto.getOrderNumber())
+                .orElseThrow(() -> new BaseException(NO_EXIST_ORDER));
+
+
+
+        List<OrderProductListResponseDto> orderProductinfoList = new ArrayList<>();
+
+        for (OrderProduct orderProduct : orderProductRepository.findAllByOrder(order)){
+            OrderProductListResponseDto orderProductOne = OrderProductListResponseDto.builder()
+                    .productName(orderProduct.getProductName())
+                    .productId(orderProduct.getProductId())
+                    .addOption(orderProduct.getAddOption())
+                    .color(orderProduct.getColor())
+                    .size(orderProduct.getSize())
+                    .count(orderProduct.getQuantity())
+                    .price(orderProduct.getPrice())
+                    .brand(orderProduct.getBrand())
+                    .thumbnail(orderProduct.getThumbnailUrl())
+                    .build();
+
+            orderProductinfoList.add(orderProductOne);
+        }
+
+        return OrderInfoAndProductListResponseDto.builder()
+                .orderNumber(order.getOrderNumber())
+                .orderId(order.getId())
+                .receiverName(order.getName())
+                .totalPrice(order.getTotalPrice())
+                .orderStatus(order.getStatus())
+                .orderDate(order.getCreatedAt())
+                .orderProductList(orderProductinfoList)
+                .build();
     }
 
 
