@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class OptionSelectedProduct extends BaseTimeEntity { // BaseTimeEntity를 상속받음으로써 생성시간, 수정시간을 자동으로 관리한다.
+public class OptionSelectedProduct{ // BaseTimeEntity를 상속받음으로써 생성시간, 수정시간을 자동으로 관리한다.
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
