@@ -240,4 +240,23 @@ public class ReviewServiceImpl implements ReviewService {
         return reviewImageResponseDtoList;
 
     }
+
+    @Override
+    public List<ReviewListResponseDto> findMyReviews(String memberUuid) {
+        Member member = memberRepository.findByUuid(memberUuid)
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
+
+        List<Review> reviews = reviewRepository.findByMemberUuid(member.getUuid());
+
+        List<ReviewListResponseDto> reviewListResponseDto = new ArrayList<>();
+        for (Review review : reviews) {
+            reviewListResponseDto.add(ReviewListResponseDto.builder()
+                    .reviewId(review.getId())
+                    .content(review.getContent())
+                    .rate(review.getRate())
+                    .createdAt(review.getCreatedAt().toString())
+                    .build());
+        }
+        return reviewListResponseDto;
+    }
 }

@@ -24,4 +24,6 @@ public interface ReviewService {
     ReviewDetailResponseDto findReviewDetail(Long reviewId);
 
     List<ReviewImageResponseDto> findReviewImage(Long reviewId);
+
+    List<ReviewListResponseDto> findMyReviews(String memberUuid);
 }

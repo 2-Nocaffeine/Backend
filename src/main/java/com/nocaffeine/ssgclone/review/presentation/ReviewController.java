@@ -80,7 +80,7 @@ public class ReviewController {
         return CommonResponse.success("상품별 리뷰 리스트 조회 성공",reviewListResponseVo);
     }
 
-    @Operation(summary = "리뷰별 이미지 조회", description = "리뷰별 이미지 조회")
+    @Operation(summary = "리뷰 이미지 조회", description = "리뷰 이미지 조회")
     @GetMapping("/{reviewId}/image")
     public CommonResponse<List<ReviewImageResponseVo>> reviewImageList(@PathVariable("reviewId") Long reviewId) {
         List<ReviewImageResponseVo> reviewImageResponseVo = new ArrayList<>();
@@ -89,7 +89,20 @@ public class ReviewController {
             reviewImageResponseVo.add(ReviewImageResponseDto.dtoToVo(reviewImageResponseDto));
         }
 
-        return CommonResponse.success("리뷰별 이미지 조회 성공",reviewImageResponseVo);
+        return CommonResponse.success("리뷰 이미지 조회 성공",reviewImageResponseVo);
+    }
+
+    @Operation(summary = "내가 작성한 리뷰 리스트 조회", description = "내가 작성한 리뷰 리스트 조회")
+    @GetMapping("/member")
+    public CommonResponse<List<ReviewListResponseVo>> reviewFindMember() {
+        String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
+        List<ReviewListResponseVo> reviewListResponseVo = new ArrayList<>();
+
+        for (ReviewListResponseDto reviewListResponseDto : reviewService.findMyReviews(memberUuid)) {
+            reviewListResponseVo.add(ReviewListResponseDto.dtoToVo(reviewListResponseDto));
+        }
+
+        return CommonResponse.success("내가 작성한 리뷰 리스트 조회 성공",reviewListResponseVo);
     }
 
 }
