@@ -186,18 +186,18 @@ public class OrderServiceImp implements OrderService{
 
     }
 
-    @Override
-    public OrderInfoAndProductListResponseDto findGuestOrderInfo(GuestOrderInfoRequestDto guestOrderInfoRequestDto) {
-
-        Orders order = orderRepository.findByOrderPhoneAndOrderNumber(guestOrderInfoRequestDto.getOrderPhone(),guestOrderInfoRequestDto.getOrderNumber())
-                .orElseThrow(() -> new BaseException(NO_EXIST_ORDER));
-
-        List<OrderProduct> orderProductList = orderProductRepository.findAllByOrder(order);
-
-        for (OrderProduct orderProduct : orderProductList){
-
-        }
-    }
+//    @Override
+//    public OrderInfoAndProductListResponseDto findGuestOrderInfo(GuestOrderInfoRequestDto guestOrderInfoRequestDto) {
+//
+//        Orders order = orderRepository.findByOrderPhoneAndOrderNumber(guestOrderInfoRequestDto.getOrderPhone(),guestOrderInfoRequestDto.getOrderNumber())
+//                .orElseThrow(() -> new BaseException(NO_EXIST_ORDER));
+//
+//        List<OrderProduct> orderProductList = orderProductRepository.findAllByOrder(order);
+//
+//        for (OrderProduct orderProduct : orderProductList){
+//
+//        }
+//    }
 
 
 }

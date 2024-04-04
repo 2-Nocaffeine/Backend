@@ -104,17 +104,17 @@ public class OrderController {
         return CommonResponse.success("주문 상품을 불러왔습니다.", OrderInfoAndProductListResponseVo.convertToVo(orderInfoAndProductListResponseDto));
     }
 
-    @Operation(summary = "비주문 주문 조회", description = "비주문 주문 조회", tags = {"Order"})
-    @GetMapping("/guest/order")
-    public CommonResponse<OrderInfoAndProductListResponseVo> guestOrderList(@RequestParam String orderName,
-                                                                     @RequestParam String phoneNumber,
-                                                                     @RequestParam String orderNumber, GuestOrderInfoRequestVo guestOrderInfoRequestVo) {
-
-        GuestOrderInfoRequestDto guestOrderInfoRequestDto = GuestOrderInfoRequestDto.convertToDto(guestOrderInfoRequestVo);
-
-        return CommonResponse.success("비회원 주문 정보를 불러왔습니다.",OrderInfoAndProductListResponseVo
-                .convertToVo(orderService.findGuestOrderInfo(guestOrderInfoRequestDto)) );
-    }
+//    @Operation(summary = "비주문 주문 조회", description = "비주문 주문 조회", tags = {"Order"})
+//    @GetMapping("/guest/order")
+//    public CommonResponse<OrderInfoAndProductListResponseVo> guestOrderList(@RequestParam String orderName,
+//                                                                     @RequestParam String phoneNumber,
+//                                                                     @RequestParam String orderNumber, GuestOrderInfoRequestVo guestOrderInfoRequestVo) {
+//
+//        GuestOrderInfoRequestDto guestOrderInfoRequestDto = GuestOrderInfoRequestDto.convertToDto(guestOrderInfoRequestVo);
+//
+//        return CommonResponse.success("비회원 주문 정보를 불러왔습니다.",OrderInfoAndProductListResponseVo
+//                .convertToVo(orderService.findGuestOrderInfo(guestOrderInfoRequestDto)) );
+//    }
 
 
 }
