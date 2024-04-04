@@ -7,6 +7,6 @@ public class GuestOrderInfoRequestVo {
 
     private String orderName;
     private String orderPhone;
-    private String orderNumber;
+    private Long orderNumber;
 
 }

@@ -14,13 +14,13 @@ public class GuestOrderInfoRequestDto {
 
     private String orderName;
     private String orderPhone;
-    private String orderNumber;
+    private Long orderNumber;
 
-    public static GuestOrderInfoRequestDto convertToDto(GuestOrderInfoRequestVo guestOrderInfoRequestVo) {
-        return GuestOrderInfoRequestDto.builder()
-                .orderName(guestOrderInfoRequestVo.getOrderName())
-                .orderPhone(guestOrderInfoRequestVo.getOrderPhone())
-                .orderNumber(guestOrderInfoRequestVo.getOrderNumber())
-                .build();
-    }
+//    public static GuestOrderInfoRequestDto convertToDto(GuestOrderInfoRequestVo guestOrderInfoRequestVo) {
+//        return GuestOrderInfoRequestDto.builder()
+//                .orderName(guestOrderInfoRequestVo.getOrderName())
+//                .orderPhone(guestOrderInfoRequestVo.getOrderPhone())
+//                .orderNumber(guestOrderInfoRequestVo.getOrderNumber())
+//                .build();
+//    }
 }

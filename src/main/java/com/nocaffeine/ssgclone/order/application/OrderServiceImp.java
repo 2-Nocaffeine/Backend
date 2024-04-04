@@ -57,7 +57,7 @@ public class OrderServiceImp implements OrderService{
             optionSelectedProductRepository.save(updateOptionSelectedProduct);
 
             String thumbnailUrl = imageRepository.findByUrlQuery(orderedProductRequestDto.getThumbnailId());
-            String brandName = brandListRepository.findBrandNameByProductId(orderedProductRequestDto.getOptionSelectedProductId());
+            String brandName = brandListRepository.findBrandNameByProductId(optionSelectedProduct.getProduct().getId());
 
             OrderProduct orderProduct = OrderProduct.builder()
                     .order(savedOrders)
@@ -188,18 +188,42 @@ public class OrderServiceImp implements OrderService{
 
     }
 
-//    @Override
-//    public OrderInfoAndProductListResponseDto findGuestOrderInfo(GuestOrderInfoRequestDto guestOrderInfoRequestDto) {
-//
-//        Orders order = orderRepository.findByOrderPhoneAndOrderNumber(guestOrderInfoRequestDto.getOrderPhone(),guestOrderInfoRequestDto.getOrderNumber())
-//                .orElseThrow(() -> new BaseException(NO_EXIST_ORDER));
-//
-//        List<OrderProduct> orderProductList = orderProductRepository.findAllByOrder(order);
-//
-//        for (OrderProduct orderProduct : orderProductList){
-//
-//        }
-//    }
+    @Override
+    public OrderInfoAndProductListResponseDto findGuestOrderInfo(GuestOrderInfoRequestDto guestOrderInfoRequestDto) {
+
+        Orders order = orderRepository.findByPhoneNumberAndOrderNumber(guestOrderInfoRequestDto.getOrderPhone(), guestOrderInfoRequestDto.getOrderNumber())
+                .orElseThrow(() -> new BaseException(NO_EXIST_ORDER));
+
+
+
+        List<OrderProductListResponseDto> orderProductinfoList = new ArrayList<>();
+
+        for (OrderProduct orderProduct : orderProductRepository.findAllByOrder(order)){
+            OrderProductListResponseDto orderProductOne = OrderProductListResponseDto.builder()
+                    .productName(orderProduct.getProductName())
+                    .productId(orderProduct.getProductId())
+                    .addOption(orderProduct.getAddOption())
+                    .color(orderProduct.getColor())
+                    .size(orderProduct.getSize())
+                    .count(orderProduct.getQuantity())
+                    .price(orderProduct.getPrice())
+                    .brand(orderProduct.getBrand())
+                    .thumbnail(orderProduct.getThumbnailUrl())
+                    .build();
+
+            orderProductinfoList.add(orderProductOne);
+        }
+
+        return OrderInfoAndProductListResponseDto.builder()
+                .orderNumber(order.getOrderNumber())
+                .orderId(order.getId())
+                .receiverName(order.getName())
+                .totalPrice(order.getTotalPrice())
+                .orderStatus(order.getStatus())
+                .orderDate(order.getCreatedAt())
+                .orderProductList(orderProductinfoList)
+                .build();
+    }
 
 
 }

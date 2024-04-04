@@ -7,7 +7,6 @@ import com.nocaffeine.ssgclone.order.dto.request.OrderIdRequestDto;
 import com.nocaffeine.ssgclone.order.dto.request.UserOrderSaveRequestDto;
 import com.nocaffeine.ssgclone.order.dto.response.OrderIdListResponseDto;
 import com.nocaffeine.ssgclone.order.dto.response.OrderInfoAndProductListResponseDto;
-import com.nocaffeine.ssgclone.order.vo.request.GuestOrderInfoRequestVo;
 
 import java.util.List;
 
@@ -23,6 +22,6 @@ public interface OrderService {
 
     OrderInfoAndProductListResponseDto findOrderProductList(OrderNumberRequestDto orderNumberRequestDto);
 
-//    OrderInfoAndProductListResponseDto findGuestOrderInfo(GuestOrderInfoRequestDto guestOrderInfoRequestDto);
 
+    OrderInfoAndProductListResponseDto findGuestOrderInfo(GuestOrderInfoRequestDto guestOrderInfoRequestDto);
 }
