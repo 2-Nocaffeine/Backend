@@ -2,10 +2,7 @@ package com.nocaffeine.ssgclone.product.application;
 
 import com.nocaffeine.ssgclone.common.exception.BaseException;
 import com.nocaffeine.ssgclone.product.domain.*;
-import com.nocaffeine.ssgclone.product.dto.response.AddOptionResponseDto;
-import com.nocaffeine.ssgclone.product.dto.response.ColorOptionResponseDto;
-import com.nocaffeine.ssgclone.product.dto.response.ProductResponseDto;
-import com.nocaffeine.ssgclone.product.dto.response.SizeOptionResponseDto;
+import com.nocaffeine.ssgclone.product.dto.response.*;
 import com.nocaffeine.ssgclone.product.infrastructure.OptionSelectedProductRepository;
 import com.nocaffeine.ssgclone.product.infrastructure.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -119,5 +116,29 @@ public class ProductServiceImpl implements ProductService{
         }
 
         return responses;
+    }
+
+    @Override
+    public ProductOptionTypesResponseDto getOptionTypes(Long id) {
+        List<OptionSelectedProduct> optionSelectedProducts = Optional.ofNullable(optionSelectedProductRepository.findByProductId(id))
+                .filter(list -> !list.isEmpty())
+                .orElseThrow(() -> new BaseException(NO_PRODUCT));
+
+        List<ProductOptionTypesResponseDto> responses = new ArrayList<>();
+
+        for (OptionSelectedProduct optionSelectedProduct : optionSelectedProducts) {
+
+            ProductOptionTypesResponseDto response = ProductOptionTypesResponseDto.builder()
+                    .colorOptionId(optionSelectedProduct.getColorOption().getId())
+                    .sizeOptionId(optionSelectedProduct.getSizeOption().getId())
+                    .addOptionId(optionSelectedProduct.getAddOption().getId())
+                    .build();
+
+            if (!responses.contains(response)) {
+                responses.add(response);
+            } // 중복 제거
+        }
+
+        return responses.get(0);
     }
 }

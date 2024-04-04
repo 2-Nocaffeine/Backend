@@ -1,11 +1,8 @@
 package com.nocaffeine.ssgclone.product.presentation;
 
 import com.nocaffeine.ssgclone.common.CommonResponse;
-import com.nocaffeine.ssgclone.product.dto.response.AddOptionResponseDto;
-import com.nocaffeine.ssgclone.product.dto.response.ColorOptionResponseDto;
-import com.nocaffeine.ssgclone.product.dto.response.ProductResponseDto;
+import com.nocaffeine.ssgclone.product.dto.response.*;
 import com.nocaffeine.ssgclone.product.application.ProductService;
-import com.nocaffeine.ssgclone.product.dto.response.SizeOptionResponseDto;
 import com.nocaffeine.ssgclone.product.vo.response.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -67,5 +64,15 @@ public class ProductController {
 
         return CommonResponse.success("검색어와 일치하는 상품을 성공적으로 찾았습니다.",
                 ProductSearchResponseVo.productDtoToVo(getProductResponseDto));
+    }
+
+    // 해당 상품이 어떤 옵션을 가지고 있는지 조회하는 메소드
+    @Operation(summary = "상품 옵션 종류 조회", description = "상품 옵션 종류 조회")
+    @GetMapping("/{productId}/option-types")
+    public CommonResponse<ProductOptionTypesResponseVo> getOptionTypes(@PathVariable("productId") Long id) {
+        ProductOptionTypesResponseDto productOptionTypesResponseDto = productService.getOptionTypes(id);
+
+        return CommonResponse.success("상품의 옵션 종류를 성공적으로 찾았습니다.",
+                ProductOptionTypesResponseVo.productOptionTypesDtoToVo(productOptionTypesResponseDto));
     }
 }

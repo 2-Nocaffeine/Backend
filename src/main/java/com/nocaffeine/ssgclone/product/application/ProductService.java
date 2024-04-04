@@ -1,9 +1,6 @@
 package com.nocaffeine.ssgclone.product.application;
 
-import com.nocaffeine.ssgclone.product.dto.response.AddOptionResponseDto;
-import com.nocaffeine.ssgclone.product.dto.response.ColorOptionResponseDto;
-import com.nocaffeine.ssgclone.product.dto.response.ProductResponseDto;
-import com.nocaffeine.ssgclone.product.dto.response.SizeOptionResponseDto;
+import com.nocaffeine.ssgclone.product.dto.response.*;
 
 import java.util.List;
 
@@ -19,4 +16,6 @@ public interface ProductService {
      List<AddOptionResponseDto> getAddOptions(Long id);
 
      List<ProductResponseDto> getSearchProducts(String keyword);
+
+     ProductOptionTypesResponseDto getOptionTypes(Long id);
 }

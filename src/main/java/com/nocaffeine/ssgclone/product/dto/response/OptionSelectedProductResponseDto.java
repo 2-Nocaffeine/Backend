@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Builder
 @Data
 @NoArgsConstructor
@@ -28,5 +31,15 @@ public class OptionSelectedProductResponseDto {
                 .addOption(optionSelectedProduct.getAddOption())
                 .stock(optionSelectedProduct.getStock())
                 .build();
+    }
+
+    public static List<OptionSelectedProductResponseDto> fromOptionSelectedProductList(List<OptionSelectedProduct> optionSelectedProducts) {
+        List<OptionSelectedProductResponseDto> optionSelectedProductResponseDtoList = new ArrayList<>();
+
+        for (OptionSelectedProduct optionSelectedProduct : optionSelectedProducts) {
+            optionSelectedProductResponseDtoList.add(fromOptionSelectedProduct(optionSelectedProduct));
+        }
+
+        return optionSelectedProductResponseDtoList;
     }
 }
