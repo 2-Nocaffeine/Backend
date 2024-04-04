@@ -11,8 +11,9 @@ import java.util.Optional;
 @Repository
 public interface OrderRepository extends JpaRepository<Orders, Long> {
 
-    @Query("SELECT o.id FROM Orders o WHERE o.uuid = :memberUuid")
-    List<Long> findByUuid(String memberUuid);
+    List<Orders> findByUuid(String memberUuid);
 
     Optional<Orders> findByOrderNumber(Long orderNumber);
+
+    Optional<Orders> findByOrderPhoneAndOrderNumber(String orderPhone, String orderNumber);
 }

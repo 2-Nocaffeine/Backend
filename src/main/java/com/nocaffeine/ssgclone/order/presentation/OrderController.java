@@ -3,10 +3,12 @@ package com.nocaffeine.ssgclone.order.presentation;
 import com.nocaffeine.ssgclone.common.CommonResponse;
 import com.nocaffeine.ssgclone.common.security.JwtTokenProvider;
 import com.nocaffeine.ssgclone.order.application.OrderService;
+import com.nocaffeine.ssgclone.order.dto.request.GuestOrderInfoRequestDto;
 import com.nocaffeine.ssgclone.order.dto.request.OrderIdRequestDto;
 import com.nocaffeine.ssgclone.order.dto.request.OrderNumberRequestDto;
 import com.nocaffeine.ssgclone.order.dto.request.UserOrderSaveRequestDto;
 import com.nocaffeine.ssgclone.order.dto.response.OrderInfoAndProductListResponseDto;
+import com.nocaffeine.ssgclone.order.vo.request.GuestOrderInfoRequestVo;
 import com.nocaffeine.ssgclone.order.vo.request.OrderIdRequestVo;
 import com.nocaffeine.ssgclone.order.vo.request.UserOrderProductRequestVo;
 import com.nocaffeine.ssgclone.order.vo.response.OrderIdListResponseVo;
@@ -15,7 +17,7 @@ import com.nocaffeine.ssgclone.order.vo.response.OrderInfoAndProductListResponse
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-;
+;import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -82,7 +84,7 @@ public class OrderController {
     //회원 주문 id 호출
     @Operation(summary = "회원 주문 id 호출", description = "회원 주문 id 호출", tags = {"Order"})
     @GetMapping("/member-order-id-list")
-    public CommonResponse<OrderIdListResponseVo> orderIdList(){
+    public CommonResponse<List<OrderIdListResponseVo>> orderIdList(){
 
         String token = jwtTokenProvider.getHeader();
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(token);
@@ -101,5 +103,18 @@ public class OrderController {
 
         return CommonResponse.success("주문 상품을 불러왔습니다.", OrderInfoAndProductListResponseVo.convertToVo(orderInfoAndProductListResponseDto));
     }
+
+    @Operation(summary = "비주문 주문 조회", description = "비주문 주문 조회", tags = {"Order"})
+    @GetMapping("/guest/order")
+    public CommonResponse<OrderInfoAndProductListResponseVo> guestOrderList(@RequestParam String orderName,
+                                                                     @RequestParam String phoneNumber,
+                                                                     @RequestParam String orderNumber, GuestOrderInfoRequestVo guestOrderInfoRequestVo) {
+
+        GuestOrderInfoRequestDto guestOrderInfoRequestDto = GuestOrderInfoRequestDto.convertToDto(guestOrderInfoRequestVo);
+
+        return CommonResponse.success("비회원 주문 정보를 불러왔습니다.",OrderInfoAndProductListResponseVo
+                .convertToVo(orderService.findGuestOrderInfo(guestOrderInfoRequestDto)) );
+    }
+
 
 }

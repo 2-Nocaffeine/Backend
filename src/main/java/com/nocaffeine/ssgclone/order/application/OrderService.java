@@ -1,11 +1,15 @@
 package com.nocaffeine.ssgclone.order.application;
 
+import com.nocaffeine.ssgclone.order.dto.request.GuestOrderInfoRequestDto;
 import com.nocaffeine.ssgclone.order.dto.request.OrderNumberRequestDto;
 import com.nocaffeine.ssgclone.order.dto.response.MemberOrderInfoResponseDto;
 import com.nocaffeine.ssgclone.order.dto.request.OrderIdRequestDto;
 import com.nocaffeine.ssgclone.order.dto.request.UserOrderSaveRequestDto;
 import com.nocaffeine.ssgclone.order.dto.response.OrderIdListResponseDto;
 import com.nocaffeine.ssgclone.order.dto.response.OrderInfoAndProductListResponseDto;
+import com.nocaffeine.ssgclone.order.vo.request.GuestOrderInfoRequestVo;
+
+import java.util.List;
 
 public interface OrderService {
 
@@ -15,7 +19,10 @@ public interface OrderService {
 
     MemberOrderInfoResponseDto findOrderInfo(String memberUuid);
 
-    OrderIdListResponseDto findOrderIdList(String memberUuid);
+    List<OrderIdListResponseDto> findOrderIdList(String memberUuid);
 
     OrderInfoAndProductListResponseDto findOrderProductList(OrderNumberRequestDto orderNumberRequestDto);
+
+    OrderInfoAndProductListResponseDto findGuestOrderInfo(GuestOrderInfoRequestDto guestOrderInfoRequestDto);
+
 }
