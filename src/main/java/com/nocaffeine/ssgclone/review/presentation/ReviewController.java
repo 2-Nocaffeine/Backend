@@ -7,13 +7,19 @@ import com.nocaffeine.ssgclone.review.application.ReviewService;
 import com.nocaffeine.ssgclone.review.dto.request.ReviewAddRequestDto;
 import com.nocaffeine.ssgclone.review.dto.request.ReviewModifyRequestDto;
 import com.nocaffeine.ssgclone.review.dto.request.ReviewRemoveRequestDto;
+import com.nocaffeine.ssgclone.review.dto.response.ReviewListResponseDto;
 import com.nocaffeine.ssgclone.review.vo.request.ReviewAddRequestVo;
 import com.nocaffeine.ssgclone.review.vo.request.ReviewModifyRequestVo;
 import com.nocaffeine.ssgclone.review.vo.request.ReviewRemoveRequestVo;
+import com.nocaffeine.ssgclone.review.vo.response.ReviewListResponseVo;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -44,6 +50,17 @@ public class ReviewController {
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
         reviewService.modifyReview(ReviewModifyRequestDto.voToDto(reviewModifyRequestVo), memberUuid);
         return CommonResponse.success("리뷰 수정 성공");
+    }
+
+    @GetMapping("/{productId}")
+    public CommonResponse<List<ReviewListResponseVo>> reviewList(@PathVariable("productId") Long productId) {
+        List<ReviewListResponseVo> reviewListResponseVo = new ArrayList<>();
+
+        for (ReviewListResponseDto reviewListResponseDto : reviewService.findReviewByProduct(productId)) {
+            reviewListResponseVo.add(ReviewListResponseDto.dtoToVo(reviewListResponseDto));
+        }
+
+        return CommonResponse.success("상품별 리뷰 리스트 조회 성공",reviewListResponseVo);
     }
 
 }

@@ -3,8 +3,6 @@ package com.nocaffeine.ssgclone.review.application;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
 import com.nocaffeine.ssgclone.member.domain.Member;
 import com.nocaffeine.ssgclone.member.infrastructure.MemberRepository;
-import com.nocaffeine.ssgclone.order.domain.OrderProduct;
-import com.nocaffeine.ssgclone.order.domain.Orders;
 import com.nocaffeine.ssgclone.order.infrastructure.OrderProductRepository;
 import com.nocaffeine.ssgclone.order.infrastructure.OrderRepository;
 import com.nocaffeine.ssgclone.product.domain.Image;
@@ -16,6 +14,7 @@ import com.nocaffeine.ssgclone.review.domain.ReviewImage;
 import com.nocaffeine.ssgclone.review.dto.request.ReviewAddRequestDto;
 import com.nocaffeine.ssgclone.review.dto.request.ReviewModifyRequestDto;
 import com.nocaffeine.ssgclone.review.dto.request.ReviewRemoveRequestDto;
+import com.nocaffeine.ssgclone.review.dto.response.ReviewListResponseDto;
 import com.nocaffeine.ssgclone.review.infrastructure.ReviewImageRepository;
 import com.nocaffeine.ssgclone.review.infrastructure.ReviewRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.*;
@@ -31,7 +31,7 @@ import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.*;
 @RequiredArgsConstructor
 @Slf4j
 @Transactional(readOnly = true)
-public class ReviewServiceImpl implements ReviewService{
+public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final ProductRepository productRepository;
@@ -54,19 +54,19 @@ public class ReviewServiceImpl implements ReviewService{
         Product product = productRepository.findById(reviewAddRequestDto.getProductId())
                 .orElseThrow(() -> new BaseException(NO_PRODUCT));
 
-        Orders order = orderRepository.findById(reviewAddRequestDto.getOrderId())
-                .orElseThrow(() -> new BaseException(NO_EXIST_ORDER));
+//        Orders order = orderRepository.findById(reviewAddRequestDto.getOrderId())
+//                .orElseThrow(() -> new BaseException(NO_EXIST_ORDER));
 
         Review review = reviewRepository.save(Review.builder()
                 .product(product)
                 .memberUuid(member.getUuid())
                 .content(reviewAddRequestDto.getContent())
                 .rate(reviewAddRequestDto.getRate())
-                .order(order)
+//                .order(order)
                 .build());
 
         // 이미지 저장
-        for(String imageUrl : reviewAddRequestDto.getImageUrl()) {
+        for (String imageUrl : reviewAddRequestDto.getImageUrl()) {
             Image image = imageRepository.save(Image.builder()
                     .url(imageUrl)
                     .build());
@@ -91,16 +91,15 @@ public class ReviewServiceImpl implements ReviewService{
         List<ReviewImage> reviewImage = reviewImageRepository.findByReview(review);
         reviewImageRepository.deleteAll(reviewImage);
 
-
         reviewRepository.delete(review);
     }
 
 
 
 
-    /**
+    /*    *//**
      * 작성 가능한 리뷰 조회
-     */
+     *//*
     @Override
     public void findWritableReviews(String memberUuid) {
         Member member = memberRepository.findByUuid(memberUuid)
@@ -119,12 +118,13 @@ public class ReviewServiceImpl implements ReviewService{
                 }
             }
         }
-    }
+    }*/
 
     /**
      * 리뷰 수정
      */
     @Override
+    @Transactional
     public void modifyReview(ReviewModifyRequestDto reviewModifyRequestDto, String memberUuid) {
         Review review = reviewRepository.findById(reviewModifyRequestDto.getReviewId())
                 .orElseThrow(() -> new BaseException(NO_EXIST_REVIEW));
@@ -133,8 +133,8 @@ public class ReviewServiceImpl implements ReviewService{
                 .id(review.getId())
                 .product(review.getProduct())
                 .memberUuid(review.getMemberUuid())
-                .content(review.getContent())
-                .rate(review.getRate())
+                .content(reviewModifyRequestDto.getContent())
+                .rate(reviewModifyRequestDto.getRate())
                 .order(review.getOrder())
                 .build()
         );
@@ -144,7 +144,7 @@ public class ReviewServiceImpl implements ReviewService{
         reviewImageRepository.deleteAll(reviewImage);
         reviewRepository.delete(review);
 
-        for(String imageUrl : reviewModifyRequestDto.getImageUrl()) {
+        for (String imageUrl : reviewModifyRequestDto.getImageUrl()) {
             Image image = imageRepository.save(Image.builder()
                     .url(imageUrl)
                     .build());
@@ -154,8 +154,41 @@ public class ReviewServiceImpl implements ReviewService{
                     .image(image)
                     .build());
         }
-
     }
 
+    @Override
+    public List<ReviewListResponseDto> findReviewByProduct(Long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new BaseException(NO_PRODUCT));
 
+        List<Review> review = reviewRepository.findByProduct(product);
+
+        List<ReviewListResponseDto> reviewListResponseDto = new ArrayList<>();
+        for (Review reviews : review) {
+            Member member = memberRepository.findByUuid(reviews.getMemberUuid())
+                    .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
+
+            reviewListResponseDto.add(ReviewListResponseDto.builder()
+                    .reviewId(reviews.getId())
+                    .memberName(maskEmail(member.getEmail()))
+                    .content(reviews.getContent())
+                    .rate(reviews.getRate())
+                    .createdAt(reviews.getCreatedAt().toString())
+                    .build());
+        }
+
+        return reviewListResponseDto;
+    }
+
+    private String maskEmail(String email) {
+        int atIndex = email.indexOf('@');
+        if (atIndex >= 0) {
+            String prefix = email.substring(0, Math.min(3, atIndex));
+            String maskedPrefix = prefix + "*******";
+            return maskedPrefix;
+        } else {
+            return email;
+        }
+
+    }
 }
