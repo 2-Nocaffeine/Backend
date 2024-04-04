@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class CartRemoveListRequestDto {
-    private List<Long> cartId = new ArrayList<>();
+    private List<Long> cartId;
 
     public static CartRemoveListRequestDto voToDto(CartRemoveRequestVo cartRemoveRequestVo) {
         return CartRemoveListRequestDto.builder()
