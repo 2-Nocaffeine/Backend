@@ -23,6 +23,9 @@ public class OrderProduct {
     private Orders order;
 
     @NotNull
+    private Long productId;
+
+    @NotNull
     @Column(length = 255)
     private String productName;
 
