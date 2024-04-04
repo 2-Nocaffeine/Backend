@@ -61,6 +61,7 @@ public class OrderServiceImp implements OrderService{
 
             OrderProduct orderProduct = OrderProduct.builder()
                     .order(savedOrders)
+                    .productId(optionSelectedProduct.getProduct().getId())
                     .productName(optionSelectedProduct.getProduct().getName())
                     .price(orderedProductRequestDto.getPrice())
                     .quantity(orderedProductRequestDto.getCount())
@@ -162,6 +163,7 @@ public class OrderServiceImp implements OrderService{
 
             OrderProductListResponseDto orderProductOne = OrderProductListResponseDto.builder()
                     .productName(orderProduct.getProductName())
+                    .productId(orderProduct.getProductId())
                     .addOption(orderProduct.getAddOption())
                     .color(orderProduct.getColor())
                     .size(orderProduct.getSize())

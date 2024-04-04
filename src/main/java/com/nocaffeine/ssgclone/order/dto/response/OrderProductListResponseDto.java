@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class OrderProductListResponseDto {
 
     private String productName;
+    private Long productId;
     private String addOption;
     private String color;
     private String size;
