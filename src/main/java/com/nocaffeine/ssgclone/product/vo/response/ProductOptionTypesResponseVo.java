@@ -29,6 +29,6 @@ public class ProductOptionTypesResponseVo {
                 productOptionTypesResponseDto.getColorOptionId() != 1,
                 productOptionTypesResponseDto.getSizeOptionId() != 1,
                 productOptionTypesResponseDto.getAddOptionId() != 1
-        );
+        ); // 옵션 타입이 없을 경우 1을 반환하므로 1이 아닐 경우에만 true 로 설정
     }
 }
