@@ -14,6 +14,8 @@ import com.nocaffeine.ssgclone.review.domain.ReviewImage;
 import com.nocaffeine.ssgclone.review.dto.request.ReviewAddRequestDto;
 import com.nocaffeine.ssgclone.review.dto.request.ReviewModifyRequestDto;
 import com.nocaffeine.ssgclone.review.dto.request.ReviewRemoveRequestDto;
+import com.nocaffeine.ssgclone.review.dto.response.ReviewDetailResponseDto;
+import com.nocaffeine.ssgclone.review.dto.response.ReviewImageResponseDto;
 import com.nocaffeine.ssgclone.review.dto.response.ReviewListResponseDto;
 import com.nocaffeine.ssgclone.review.infrastructure.ReviewImageRepository;
 import com.nocaffeine.ssgclone.review.infrastructure.ReviewRepository;
@@ -156,6 +158,9 @@ public class ReviewServiceImpl implements ReviewService {
         }
     }
 
+    /**
+     * 상품별 리뷰 조회
+     */
     @Override
     public List<ReviewListResponseDto> findReviewByProduct(Long productId) {
         Product product = productRepository.findById(productId)
@@ -180,6 +185,7 @@ public class ReviewServiceImpl implements ReviewService {
         return reviewListResponseDto;
     }
 
+
     private String maskEmail(String email) {
         int atIndex = email.indexOf('@');
         if (atIndex >= 0) {
@@ -189,6 +195,49 @@ public class ReviewServiceImpl implements ReviewService {
         } else {
             return email;
         }
+    }
+
+    /**
+     * 리뷰 상세 조회
+     */
+    @Override
+    public ReviewDetailResponseDto findReviewDetail(Long reviewId) {
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new BaseException(NO_EXIST_REVIEW));
+
+        Member member = memberRepository.findByUuid(review.getMemberUuid())
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
+
+        ReviewDetailResponseDto reviewDetailResponseDto = ReviewDetailResponseDto.builder()
+                .reviewId(review.getId())
+                .memberName(maskEmail(member.getEmail()))
+                .content(review.getContent())
+                .rate(review.getRate())
+                .createdAt(review.getCreatedAt().toString())
+                .build();
+
+        return reviewDetailResponseDto;
+    }
+
+    /**
+     * 리뷰 이미지 조회
+     */
+    @Override
+    public List<ReviewImageResponseDto> findReviewImage(Long reviewId) {
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new BaseException(NO_EXIST_REVIEW));
+
+        List<ReviewImage> reviewImages = reviewImageRepository.findByReview(review);
+
+        List<ReviewImageResponseDto> reviewImageResponseDtoList = new ArrayList<>();
+        for (ReviewImage reviewImage : reviewImages) {
+            Image image = reviewImage.getImage();
+            reviewImageResponseDtoList.add(ReviewImageResponseDto.builder()
+                    .imageUrl(image.getUrl())
+                    .build());
+        }
+
+        return reviewImageResponseDtoList;
 
     }
 }

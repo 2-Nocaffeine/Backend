@@ -24,6 +24,8 @@ public enum BaseResponseStatus {
      * 900: 기타 에러
      */
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, false, 900, "Internal server error"),
+    NO_EXIST_IMAGE(HttpStatus.NOT_FOUND, false, 901, "존재하지 않는 이미지 입니다"),
+
 
     /**
      * 1000 : Order Service Error
@@ -72,6 +74,7 @@ public enum BaseResponseStatus {
      * Review
      */
     NO_EXIST_REVIEW(HttpStatus.NOT_FOUND, false, 5001, "존재하지 않는 리뷰 입니다"),
+
 
     /**
      * 6000 : Cart & WishProductList Service Error

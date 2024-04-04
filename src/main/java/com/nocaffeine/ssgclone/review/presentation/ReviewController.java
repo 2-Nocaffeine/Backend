@@ -7,11 +7,16 @@ import com.nocaffeine.ssgclone.review.application.ReviewService;
 import com.nocaffeine.ssgclone.review.dto.request.ReviewAddRequestDto;
 import com.nocaffeine.ssgclone.review.dto.request.ReviewModifyRequestDto;
 import com.nocaffeine.ssgclone.review.dto.request.ReviewRemoveRequestDto;
+import com.nocaffeine.ssgclone.review.dto.response.ReviewDetailResponseDto;
+import com.nocaffeine.ssgclone.review.dto.response.ReviewImageResponseDto;
 import com.nocaffeine.ssgclone.review.dto.response.ReviewListResponseDto;
 import com.nocaffeine.ssgclone.review.vo.request.ReviewAddRequestVo;
 import com.nocaffeine.ssgclone.review.vo.request.ReviewModifyRequestVo;
 import com.nocaffeine.ssgclone.review.vo.request.ReviewRemoveRequestVo;
+import com.nocaffeine.ssgclone.review.vo.response.ReviewDetailResponseVo;
+import com.nocaffeine.ssgclone.review.vo.response.ReviewImageResponseVo;
 import com.nocaffeine.ssgclone.review.vo.response.ReviewListResponseVo;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +36,7 @@ public class ReviewController {
     private final ReviewService reviewService;
     private final JwtTokenProvider jwtTokenProvider;
 
+    @Operation(summary = "리뷰 등록", description = "리뷰 등록")
     @PostMapping
     public CommonResponse<String> reviewAdd(@RequestBody ReviewAddRequestVo reviewAddRequestVo) {
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
@@ -38,6 +44,7 @@ public class ReviewController {
         return CommonResponse.success("리뷰 등록 성공");
     }
 
+    @Operation(summary = "리뷰 삭제", description = "리뷰 삭제")
     @DeleteMapping
     public CommonResponse<String> reviewRemove(@RequestBody ReviewRemoveRequestVo reviewRemoveRequestVo) {
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
@@ -45,6 +52,7 @@ public class ReviewController {
         return CommonResponse.success("리뷰 삭제 성공");
     }
 
+    @Operation(summary = "리뷰 수정", description = "리뷰 수정")
     @PutMapping
     public CommonResponse<String> reviewModify(@RequestBody ReviewModifyRequestVo reviewModifyRequestVo) {
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
@@ -52,7 +60,16 @@ public class ReviewController {
         return CommonResponse.success("리뷰 수정 성공");
     }
 
-    @GetMapping("/{productId}")
+    @Operation(summary = "리뷰 상세 조회", description = "리뷰 상세 조회")
+    @GetMapping("{reviewId}")
+    public CommonResponse<ReviewDetailResponseVo> reviewDetail(@PathVariable("reviewId") Long reviewId) {
+        return CommonResponse.success("리뷰 상세 조회 성공",
+                ReviewDetailResponseDto.dtoToVo(reviewService.findReviewDetail(reviewId)));
+    }
+
+
+    @Operation(summary = "상품별 리뷰 리스트 조회", description = "상품별 리뷰 리스트 조회")
+    @GetMapping("/product/{productId}")
     public CommonResponse<List<ReviewListResponseVo>> reviewList(@PathVariable("productId") Long productId) {
         List<ReviewListResponseVo> reviewListResponseVo = new ArrayList<>();
 
@@ -61,6 +78,18 @@ public class ReviewController {
         }
 
         return CommonResponse.success("상품별 리뷰 리스트 조회 성공",reviewListResponseVo);
+    }
+
+    @Operation(summary = "리뷰별 이미지 조회", description = "리뷰별 이미지 조회")
+    @GetMapping("/image/{imageId}")
+    public CommonResponse<List<ReviewImageResponseVo>> reviewImageList(@PathVariable("imageId") Long imageId) {
+        List<ReviewImageResponseVo> reviewImageResponseVo = new ArrayList<>();
+
+        for (ReviewImageResponseDto reviewImageResponseDto  : reviewService.findReviewImage(imageId)) {
+            reviewImageResponseVo.add(ReviewImageResponseDto.dtoToVo(reviewImageResponseDto));
+        }
+
+        return CommonResponse.success("리뷰별 이미지 조회 성공",reviewImageResponseVo);
     }
 
 }
