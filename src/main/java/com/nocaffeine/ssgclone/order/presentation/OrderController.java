@@ -8,7 +8,6 @@ import com.nocaffeine.ssgclone.order.dto.request.OrderIdRequestDto;
 import com.nocaffeine.ssgclone.order.dto.request.OrderNumberRequestDto;
 import com.nocaffeine.ssgclone.order.dto.request.UserOrderSaveRequestDto;
 import com.nocaffeine.ssgclone.order.dto.response.OrderInfoAndProductListResponseDto;
-import com.nocaffeine.ssgclone.order.vo.request.GuestOrderInfoRequestVo;
 import com.nocaffeine.ssgclone.order.vo.request.OrderIdRequestVo;
 import com.nocaffeine.ssgclone.order.vo.request.UserOrderProductRequestVo;
 import com.nocaffeine.ssgclone.order.vo.response.OrderIdListResponseVo;
