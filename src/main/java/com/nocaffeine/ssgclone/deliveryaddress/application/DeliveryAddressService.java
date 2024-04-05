@@ -5,7 +5,7 @@ import com.nocaffeine.ssgclone.deliveryaddress.dto.request.DeliveryAddressAddReq
 public interface DeliveryAddressService {
 
     void addDeliveryAddress(DeliveryAddressAddRequestDto deliveryAddressAddRequestDto, String memberUuid);
-//    void removeDeliveryAddress(DeliveryAddressRemoveRequest deliveryAddressRemoveRequest, String memberUuid);
+    void removeDeliveryAddress(Long addressId , String memberUuid);
 //    void modifyDeliveryAddress(DeliveryAddressModifyRequest deliveryAddressModifyRequest, String memberUuid);
 //    List<DeliveryAddressListResponse> findDeliveryAddress(String memberUuid);
 //    void setDefaultDeliveryAddress(DeliveryAddressSetDefaultRequest deliveryAddressSetDefaultRequest, String memberUuid);

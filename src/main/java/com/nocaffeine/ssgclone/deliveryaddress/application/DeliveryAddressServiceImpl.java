@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.NO_EXIST_ADDRESS;
 import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.NO_EXIST_MEMBERS;
 
 @Service
@@ -23,6 +24,7 @@ public class DeliveryAddressServiceImpl implements DeliveryAddressService{
 
     private final MemberRepository memberRepository;
     private final DeliveryAddressRepository deliveryAddressRepository;
+
     @Override
     @Transactional
     public void addDeliveryAddress(DeliveryAddressAddRequestDto deliveryAddressAddRequestDto, String memberUuid) {
@@ -39,6 +41,20 @@ public class DeliveryAddressServiceImpl implements DeliveryAddressService{
                 .street(deliveryAddressAddRequestDto.getStreet())
                 .defaultCheck(false)
                 .build());
-
     }
+
+
+    @Override
+    @Transactional
+    public void removeDeliveryAddress(Long addressId, String memberUuid) {
+        Member member = memberRepository.findByUuid(memberUuid).orElseThrow(() ->
+                new BaseException(NO_EXIST_MEMBERS));
+
+        DeliveryAddress deliveryAddress = deliveryAddressRepository.findById(addressId).orElseThrow(() ->
+                new BaseException(NO_EXIST_ADDRESS));
+
+        deliveryAddressRepository.delete(deliveryAddress);
+    }
+
+
 }

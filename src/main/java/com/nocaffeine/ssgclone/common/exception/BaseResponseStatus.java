@@ -95,6 +95,7 @@ public enum BaseResponseStatus {
 
 
 
+
     /**
      * 7000 : Category Service Error
      */
