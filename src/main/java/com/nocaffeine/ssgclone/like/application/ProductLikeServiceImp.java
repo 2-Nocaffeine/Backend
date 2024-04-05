@@ -98,4 +98,15 @@ public class ProductLikeServiceImp implements ProductLikeService {
         return productLikeListResponses;
     }
 
+    @Override
+    public Boolean isProductLike(Long productId, String memberUuid) {
+        Member member = memberRepository.findByUuid(memberUuid).orElseThrow(()
+                -> new BaseException(NO_EXIST_MEMBERS));
+
+        Product product = productRepository.findById(productId).orElseThrow(()
+                -> new BaseException(NO_PRODUCT));
+
+        return productLikeRepository.findByMemberAndProduct(member, product).isPresent();
+    }
+
 }

@@ -25,7 +25,7 @@ public class CategoryLikeController {
     private final CategoryLikeService categoryLikeService;
     private final JwtTokenProvider jwtTokenProvider;
 
-    @Operation(summary = "카테고리 좋아요", description = "카테고리 좋아요")
+    @Operation(summary = "카테고리 좋아요 추가", description = "카테고리 좋아요 추가")
     @PostMapping
     public CommonResponse<String> addCategoryLike(@RequestBody CategoryLikeAddRequest categoryLikeAddRequest){
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
@@ -47,6 +47,7 @@ public class CategoryLikeController {
         categoryLikeService.removeCategoryLike(categoryLikeRemoveRequest, memberUuid);
         return CommonResponse.success("카테고리 좋아요 삭제 성공");
     }
+
 
 
 }

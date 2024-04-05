@@ -25,7 +25,7 @@ public class ProductLikeController {
     private final ProductLikeService productLikeService;
     private final JwtTokenProvider jwtTokenProvider;
 
-    @Operation(summary = "상품 좋아요", description = "상품 좋아요")
+    @Operation(summary = "상품 좋아요 추가", description = "상품 좋아요 추가")
     @PostMapping
     public CommonResponse<String> addProductLike(@RequestBody ProductLikeAddRequest productLikeAddRequest){
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
@@ -46,6 +46,13 @@ public class ProductLikeController {
     public CommonResponse<List<ProductLikeListResponse>> findProductLike(){
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
         return CommonResponse.success("좋아요 조회 성공", productLikeService.findProductLike(memberUuid));
+    }
+
+    @Operation(summary = "상품 좋아요 여부", description = "상품 좋아요 여부")
+    @GetMapping("/{productId}")
+    public CommonResponse<Boolean> isProductLike(@PathVariable("productId") Long productId){
+        String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
+        return CommonResponse.success("좋아요 여부 조회 성공", productLikeService.isProductLike(productId, memberUuid));
     }
 
 

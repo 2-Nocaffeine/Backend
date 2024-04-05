@@ -12,4 +12,6 @@ public interface BrandLikeService {
     void removeBrandLike(BrandLikeRemoveRequest brandLikeRemoveRequest, String memberUuid);
 
     List<BrandLikeListResponse> findBrandLike(String memberUuid);
+
+    boolean isBrandLike(Long brandId, String memberUuid);
 }

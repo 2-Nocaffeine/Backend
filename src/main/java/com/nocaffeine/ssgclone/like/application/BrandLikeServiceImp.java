@@ -103,5 +103,16 @@ public class BrandLikeServiceImp implements BrandLikeService{
         return brandLikeListResponses;
     }
 
+    @Override
+    public boolean isBrandLike(Long brandId, String memberUuid) {
+        Member member = memberRepository.findByUuid(memberUuid)
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
+
+        Brand brand = brandRepository.findById(brandId)
+                .orElseThrow(() -> new BaseException(NO_EXIST_BRAND));
+
+        return brandLikeRepository.findByMemberAndBrand(member, brand).isPresent();
+    }
+
 
 }

@@ -11,4 +11,5 @@ public interface ProductLikeService {
     void addProductLike(ProductLikeAddRequest productLikeAddRequest, String memberUuid);
     void removeProductLike(ProductLikeRemoveRequest productLikeRemoveRequest, String memberUuid);
     List<ProductLikeListResponse> findProductLike(String memberUuid);
+    Boolean isProductLike(Long productId, String memberUuid);
 }

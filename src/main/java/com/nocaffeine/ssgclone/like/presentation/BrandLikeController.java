@@ -25,7 +25,7 @@ public class BrandLikeController {
     private final BrandLikeService brandLikeService;
     private final JwtTokenProvider jwtTokenProvider;
 
-    @Operation(summary = "브랜드 좋아요", description = "브랜드 좋아요")
+    @Operation(summary = "브랜드 좋아요 추가", description = "브랜드 좋아요 추가")
     @PostMapping
     public CommonResponse<String> addBrandLike(@RequestBody BrandLikeAddRequest brandLikeAddRequest){
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
@@ -48,5 +48,11 @@ public class BrandLikeController {
         return CommonResponse.success("브랜드 좋아요 조회 성공", brandLikeService.findBrandLike(memberUuid));
     }
 
+    @Operation(summary = "브랜드 좋아요 여부", description = "브랜드 좋아요 여부")
+    @GetMapping("/{brandId}")
+    public CommonResponse<Boolean> isBrandLike(@PathVariable("brandId") Long brandId){
+        String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
+        return CommonResponse.success("브랜드 좋아요 여부 조회 성공", brandLikeService.isBrandLike(brandId, memberUuid));
+    }
 }
 
