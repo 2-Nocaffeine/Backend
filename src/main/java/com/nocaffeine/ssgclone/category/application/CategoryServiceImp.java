@@ -29,6 +29,7 @@ public class CategoryServiceImp implements CategoryService {
             LargeCategoryResponse largeCategoryDto = LargeCategoryResponse.builder()
                     .largeCategoryId(largeCategory.getId())
                     .largeCategoryName(largeCategory.getName())
+                    .imageUrl(largeCategory.getImageUrl())
                     .build();
             largeCategoryList.add(largeCategoryDto);
         }

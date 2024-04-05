@@ -15,6 +15,8 @@ public class LargeCategory {
     @Column(length = 50)
     private String name;
 
+    private String imageUrl;
+
     @Builder
     public LargeCategory(String name) {
         this.name = name;

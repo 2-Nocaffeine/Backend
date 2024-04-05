@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class LargeCategoryResponse {
     private Long largeCategoryId;
     private String largeCategoryName;
+    private String imageUrl;
 }
