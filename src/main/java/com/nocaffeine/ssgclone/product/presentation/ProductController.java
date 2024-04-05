@@ -75,4 +75,14 @@ public class ProductController {
         return CommonResponse.success("상품의 옵션 종류를 성공적으로 찾았습니다.",
                 ProductOptionTypesResponseVo.productOptionTypesDtoToVo(productOptionTypesResponseDto));
     }
+
+    @Operation(summary = "상품 별 카테고리 조회", description = "상품 별 카테고리 조회")
+    @GetMapping("/{productId}/category")
+    public CommonResponse<ProductCategoryResponseVo> getCategory(@PathVariable("productId") Long id) {
+
+        ProductCategoryResponseDto productCategoryResponseDto = productService.getCategory(id);
+
+        return CommonResponse.success("상품의 카테고리를 성공적으로 찾았습니다.",
+                ProductCategoryResponseVo.productCategoryDtoToVo(productCategoryResponseDto));
+    }
 }

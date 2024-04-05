@@ -37,7 +37,7 @@ public class OptionSelectedProductListResponseVo {
 
         for (OptionSelectedProductResponseDto optionSelectedProductResponseDtos : optionSelectedProductResponseDto) {
             optionSelectedProductListResponseVo.add(new OptionSelectedProductListResponseVo(
-                       optionSelectedProductResponseDtos.getId(),
+                        optionSelectedProductResponseDtos.getId(),
                         optionSelectedProductResponseDtos.getColorOption().getId(),
                         optionSelectedProductResponseDtos.getColorOption().getColor(),
                         optionSelectedProductResponseDtos.getSizeOption().getId(),
