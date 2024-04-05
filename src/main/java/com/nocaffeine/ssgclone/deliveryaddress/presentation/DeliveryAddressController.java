@@ -5,12 +5,17 @@ import com.nocaffeine.ssgclone.common.CommonResponse;
 import com.nocaffeine.ssgclone.common.security.JwtTokenProvider;
 import com.nocaffeine.ssgclone.deliveryaddress.application.DeliveryAddressService;
 import com.nocaffeine.ssgclone.deliveryaddress.dto.request.DeliveryAddressAddRequestDto;
+import com.nocaffeine.ssgclone.deliveryaddress.dto.response.DeliveryAddressListResponseDto;
 import com.nocaffeine.ssgclone.deliveryaddress.vo.request.DeliveryAddressAddRequestVo;
+import com.nocaffeine.ssgclone.deliveryaddress.vo.response.DeliveryAddressListResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -37,4 +42,17 @@ public class DeliveryAddressController {
         deliveryAddressService.removeDeliveryAddress(addressId, memberUuid);
         return CommonResponse.success("배송지 삭제 성공");
     }
+
+    @Operation(summary = "배송지 리스트 조회", description = "배송지 리스트 조회")
+    @GetMapping
+    public CommonResponse<List<DeliveryAddressListResponseVo>> findDeliveryAddress() {
+        String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
+        List<DeliveryAddressListResponseVo> deliveryAddressListResponseVo = new ArrayList<>();
+        for(DeliveryAddressListResponseDto address : deliveryAddressService.findDeliveryAddress(memberUuid)) {
+            deliveryAddressListResponseVo.add(DeliveryAddressListResponseDto.dtoToVo(address));
+        }
+
+        return CommonResponse.success("배송지 조회 성공", deliveryAddressListResponseVo);
+    }
+
 }

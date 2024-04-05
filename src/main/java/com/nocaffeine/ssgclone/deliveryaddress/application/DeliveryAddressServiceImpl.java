@@ -2,9 +2,9 @@ package com.nocaffeine.ssgclone.deliveryaddress.application;
 
 
 import com.nocaffeine.ssgclone.common.exception.BaseException;
-import com.nocaffeine.ssgclone.common.exception.BaseResponseStatus;
 import com.nocaffeine.ssgclone.deliveryaddress.domain.DeliveryAddress;
 import com.nocaffeine.ssgclone.deliveryaddress.dto.request.DeliveryAddressAddRequestDto;
+import com.nocaffeine.ssgclone.deliveryaddress.dto.response.DeliveryAddressListResponseDto;
 import com.nocaffeine.ssgclone.deliveryaddress.infrastructure.DeliveryAddressRepository;
 import com.nocaffeine.ssgclone.member.domain.Member;
 import com.nocaffeine.ssgclone.member.infrastructure.MemberRepository;
@@ -12,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.NO_EXIST_ADDRESS;
 import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.NO_EXIST_MEMBERS;
@@ -57,4 +60,28 @@ public class DeliveryAddressServiceImpl implements DeliveryAddressService{
     }
 
 
+    @Override
+    public List<DeliveryAddressListResponseDto> findDeliveryAddress(String memberUuid) {
+        Member member = memberRepository.findByUuid(memberUuid).orElseThrow(() ->
+                new BaseException(NO_EXIST_MEMBERS));
+
+        List<DeliveryAddress> deliveryAddresses = deliveryAddressRepository.findByMember(member);
+
+        List<DeliveryAddressListResponseDto> deliveryAddressListResponseDto = new ArrayList<>();
+        for (DeliveryAddress deliveryAddress : deliveryAddresses) {
+            deliveryAddressListResponseDto.add(DeliveryAddressListResponseDto.builder()
+                    .deliveryAddressId(deliveryAddress.getId())
+                    .addressName(deliveryAddress.getAddressName())
+                    .recipient(deliveryAddress.getRecipient())
+                    .phoneNumber(deliveryAddress.getPhoneNumber())
+                    .zip(deliveryAddress.getZip())
+                    .post(deliveryAddress.getPost())
+                    .street(deliveryAddress.getStreet())
+                    .defaultCheck(deliveryAddress.isDefaultCheck())
+                    .build());
+
+        }
+
+        return deliveryAddressListResponseDto;
+    }
 }
