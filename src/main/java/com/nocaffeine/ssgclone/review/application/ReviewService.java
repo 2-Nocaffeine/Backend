@@ -6,6 +6,7 @@ import com.nocaffeine.ssgclone.review.dto.request.ReviewRemoveRequestDto;
 import com.nocaffeine.ssgclone.review.dto.response.ReviewDetailResponseDto;
 import com.nocaffeine.ssgclone.review.dto.response.ReviewImageResponseDto;
 import com.nocaffeine.ssgclone.review.dto.response.ReviewListResponseDto;
+import com.nocaffeine.ssgclone.review.dto.response.ReviewPossibleWriteResponseDto;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public interface ReviewService {
 
     void removeReview(ReviewRemoveRequestDto reviewRemoveRequestDto, String memberUuid);
 
-//    void findWritableReviews(String memberUuid);
+    List<ReviewPossibleWriteResponseDto> findWritableReviews(String memberUuid);
 
     void modifyReview(ReviewModifyRequestDto reviewModifyRequestDto, String memberUuid);
 

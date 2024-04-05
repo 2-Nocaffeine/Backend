@@ -23,6 +23,7 @@ public class ReviewAddRequestDto {
         return ReviewAddRequestDto.builder()
                 .imageUrl(reviewAddRequestVo.getImageUrl())
                 .productId(reviewAddRequestVo.getProductId())
+                .orderId(reviewAddRequestVo.getOrderId())
                 .content(reviewAddRequestVo.getContent())
                 .rate(reviewAddRequestVo.getRate())
                 .build();

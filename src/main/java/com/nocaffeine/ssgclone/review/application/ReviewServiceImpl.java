@@ -3,6 +3,8 @@ package com.nocaffeine.ssgclone.review.application;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
 import com.nocaffeine.ssgclone.member.domain.Member;
 import com.nocaffeine.ssgclone.member.infrastructure.MemberRepository;
+import com.nocaffeine.ssgclone.order.domain.OrderProduct;
+import com.nocaffeine.ssgclone.order.domain.Orders;
 import com.nocaffeine.ssgclone.order.infrastructure.OrderProductRepository;
 import com.nocaffeine.ssgclone.order.infrastructure.OrderRepository;
 import com.nocaffeine.ssgclone.product.domain.Image;
@@ -17,6 +19,7 @@ import com.nocaffeine.ssgclone.review.dto.request.ReviewRemoveRequestDto;
 import com.nocaffeine.ssgclone.review.dto.response.ReviewDetailResponseDto;
 import com.nocaffeine.ssgclone.review.dto.response.ReviewImageResponseDto;
 import com.nocaffeine.ssgclone.review.dto.response.ReviewListResponseDto;
+import com.nocaffeine.ssgclone.review.dto.response.ReviewPossibleWriteResponseDto;
 import com.nocaffeine.ssgclone.review.infrastructure.ReviewImageRepository;
 import com.nocaffeine.ssgclone.review.infrastructure.ReviewRepository;
 import lombok.RequiredArgsConstructor;
@@ -56,15 +59,15 @@ public class ReviewServiceImpl implements ReviewService {
         Product product = productRepository.findById(reviewAddRequestDto.getProductId())
                 .orElseThrow(() -> new BaseException(NO_PRODUCT));
 
-//        Orders order = orderRepository.findById(reviewAddRequestDto.getOrderId())
-//                .orElseThrow(() -> new BaseException(NO_EXIST_ORDER));
+        Orders order = orderRepository.findById(reviewAddRequestDto.getOrderId())
+                .orElseThrow(() -> new BaseException(NO_EXIST_ORDER));
 
         Review review = reviewRepository.save(Review.builder()
                 .product(product)
                 .memberUuid(member.getUuid())
                 .content(reviewAddRequestDto.getContent())
                 .rate(reviewAddRequestDto.getRate())
-//                .order(order)
+                .order(order)
                 .build());
 
         // 이미지 저장
@@ -99,28 +102,33 @@ public class ReviewServiceImpl implements ReviewService {
 
 
 
-    /*    *//**
+    /**
      * 작성 가능한 리뷰 조회
-     *//*
+     */
     @Override
-    public void findWritableReviews(String memberUuid) {
-        Member member = memberRepository.findByUuid(memberUuid)
-                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
+    public List<ReviewPossibleWriteResponseDto> findWritableReviews(String memberUuid) {
+        List<Orders> orders = orderRepository.findByUuid(memberUuid);
 
-        List<Orders> order = orderRepository.findAllByUuid(member.getUuid());
+        List<ReviewPossibleWriteResponseDto> writableReviews = new ArrayList<>();
 
-        // 주문리스트 조회
-        for (Orders orders : order) {
-            // 각 주문별 상품 조회
-            List<OrderProduct> orderProduct = orderProductRepository.findAllByOrder(orders);
+        for (Orders order : orders) {
+            List<OrderProduct> orderProducts = orderProductRepository.findAllByOrder(order);
 
-            for (OrderProduct orderProducts : orderProduct) {
-                reviewRepository.findAllByOrder(orders);
-                if (reviewRepository.findAllByOrder(orders).isEmpty()) {
+            for (OrderProduct orderProduct : orderProducts) {
+                List<Review> reviews = reviewRepository.findAllByOrderAndProductId(order, orderProduct.getProductId());
+
+                if (reviews.isEmpty()) {
+                    writableReviews.add(ReviewPossibleWriteResponseDto.builder()
+                            .productId(orderProduct.getProductId())
+                            .productName(orderProduct.getProductName())
+                            .build());
                 }
             }
         }
-    }*/
+
+        return writableReviews;
+    }
+
 
     /**
      * 리뷰 수정
@@ -241,6 +249,9 @@ public class ReviewServiceImpl implements ReviewService {
 
     }
 
+    /**
+     * 내가 작성한 리뷰 조회
+     */
     @Override
     public List<ReviewListResponseDto> findMyReviews(String memberUuid) {
         Member member = memberRepository.findByUuid(memberUuid)

@@ -10,6 +10,7 @@ import com.nocaffeine.ssgclone.review.dto.request.ReviewRemoveRequestDto;
 import com.nocaffeine.ssgclone.review.dto.response.ReviewDetailResponseDto;
 import com.nocaffeine.ssgclone.review.dto.response.ReviewImageResponseDto;
 import com.nocaffeine.ssgclone.review.dto.response.ReviewListResponseDto;
+import com.nocaffeine.ssgclone.review.dto.response.ReviewPossibleWriteResponseDto;
 import com.nocaffeine.ssgclone.review.vo.request.ReviewAddRequestVo;
 import com.nocaffeine.ssgclone.review.vo.request.ReviewModifyRequestVo;
 import com.nocaffeine.ssgclone.review.vo.request.ReviewRemoveRequestVo;
@@ -103,6 +104,14 @@ public class ReviewController {
         }
 
         return CommonResponse.success("내가 작성한 리뷰 리스트 조회 성공",reviewListResponseVo);
+    }
+
+    @Operation(summary = "내가 작성할 수 있는 리뷰 리스트 조회", description = "내가 작성할 수 있는 리뷰 리스트 조회")
+    @GetMapping("/member/possible")
+    public CommonResponse<List<ReviewPossibleWriteResponseDto>> reviewFindMemberPossible() {
+        String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
+
+        return CommonResponse.success("내가 작성할 수 있는 리뷰 리스트 조회 성공",reviewService.findWritableReviews(memberUuid));
     }
 
 }
