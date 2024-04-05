@@ -18,4 +18,6 @@ public interface ProductService {
      List<ProductResponseDto> getSearchProducts(String keyword);
 
      ProductOptionTypesResponseDto getOptionTypes(Long id);
+
+     ProductCategoryResponseDto getCategory(Long id);
 }

@@ -1,9 +1,11 @@
 package com.nocaffeine.ssgclone.product.application;
 
+import com.nocaffeine.ssgclone.category.domain.ProductCategoryList;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
 import com.nocaffeine.ssgclone.product.domain.*;
 import com.nocaffeine.ssgclone.product.dto.response.*;
 import com.nocaffeine.ssgclone.product.infrastructure.OptionSelectedProductRepository;
+import com.nocaffeine.ssgclone.product.infrastructure.ProductCategoryListRepository;
 import com.nocaffeine.ssgclone.product.infrastructure.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ public class ProductServiceImpl implements ProductService{
 
     private final ProductRepository productRepository;
     private final OptionSelectedProductRepository optionSelectedProductRepository;
+    private final ProductCategoryListRepository productCategoryListRepository;
 
     @Override
     public ProductResponseDto getProduct(Long id) {
@@ -140,5 +143,15 @@ public class ProductServiceImpl implements ProductService{
         }
 
         return responses.get(0);
+    }
+
+    @Override
+    public ProductCategoryResponseDto getCategory(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new BaseException(NO_PRODUCT));
+
+        ProductCategoryList productCategoryList = productCategoryListRepository.findByProduct(product);
+
+        return ProductCategoryResponseDto.fromProductCategoryList(productCategoryList);
     }
 }
