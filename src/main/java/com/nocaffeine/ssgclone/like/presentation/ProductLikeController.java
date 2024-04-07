@@ -6,7 +6,9 @@ import com.nocaffeine.ssgclone.common.security.JwtTokenProvider;
 import com.nocaffeine.ssgclone.like.application.ProductLikeService;
 import com.nocaffeine.ssgclone.like.dto.request.ProductLikeAddRequest;
 import com.nocaffeine.ssgclone.like.dto.request.ProductLikeRemoveRequest;
+import com.nocaffeine.ssgclone.like.dto.response.LikeStatusResponseDto;
 import com.nocaffeine.ssgclone.like.dto.response.ProductLikeListResponse;
+import com.nocaffeine.ssgclone.like.vo.response.ProductLikeStatusVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -50,9 +52,9 @@ public class ProductLikeController {
 
     @Operation(summary = "상품 좋아요 여부", description = "상품 좋아요 여부")
     @GetMapping("/{productId}")
-    public CommonResponse<Boolean> isProductLike(@PathVariable("productId") Long productId){
+    public CommonResponse<ProductLikeStatusVo> isProductLike(@PathVariable("productId") Long productId){
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
-        return CommonResponse.success("좋아요 여부 조회 성공", productLikeService.isProductLike(productId, memberUuid));
+        return CommonResponse.success("좋아요 여부 조회 성공", LikeStatusResponseDto.dtoToProductVo(productLikeService.isProductLike(productId, memberUuid)));
     }
 
 

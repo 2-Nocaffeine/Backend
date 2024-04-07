@@ -3,6 +3,7 @@ package com.nocaffeine.ssgclone.like.application;
 import com.nocaffeine.ssgclone.like.dto.request.BrandLikeRemoveRequest;
 import com.nocaffeine.ssgclone.like.dto.request.BrandLikeAddRequest;
 import com.nocaffeine.ssgclone.like.dto.response.BrandLikeListResponse;
+import com.nocaffeine.ssgclone.like.dto.response.LikeStatusResponseDto;
 
 import java.util.List;
 
@@ -13,5 +14,5 @@ public interface BrandLikeService {
 
     List<BrandLikeListResponse> findBrandLike(String memberUuid);
 
-    boolean isBrandLike(Long brandId, String memberUuid);
+    LikeStatusResponseDto isBrandLike(Long brandId, String memberUuid);
 }

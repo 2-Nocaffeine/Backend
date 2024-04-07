@@ -7,6 +7,8 @@ import com.nocaffeine.ssgclone.like.application.BrandLikeService;
 import com.nocaffeine.ssgclone.like.dto.request.BrandLikeRemoveRequest;
 import com.nocaffeine.ssgclone.like.dto.request.BrandLikeAddRequest;
 import com.nocaffeine.ssgclone.like.dto.response.BrandLikeListResponse;
+import com.nocaffeine.ssgclone.like.dto.response.LikeStatusResponseDto;
+import com.nocaffeine.ssgclone.like.vo.response.BrandLikeStatusVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -50,9 +52,9 @@ public class BrandLikeController {
 
     @Operation(summary = "브랜드 좋아요 여부", description = "브랜드 좋아요 여부")
     @GetMapping("/{brandId}")
-    public CommonResponse<Boolean> isBrandLike(@PathVariable("brandId") Long brandId){
+    public CommonResponse<BrandLikeStatusVo> isBrandLike(@PathVariable("brandId") Long brandId){
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
-        return CommonResponse.success("브랜드 좋아요 여부 조회 성공", brandLikeService.isBrandLike(brandId, memberUuid));
+        return CommonResponse.success("브랜드 좋아요 여부 조회 성공", LikeStatusResponseDto.dtoToBrandVo(brandLikeService.isBrandLike(brandId, memberUuid)));
     }
 }
 
