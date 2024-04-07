@@ -7,10 +7,12 @@ import com.nocaffeine.ssgclone.deliveryaddress.application.DeliveryAddressServic
 import com.nocaffeine.ssgclone.deliveryaddress.dto.request.DeliveryAddressAddRequestDto;
 import com.nocaffeine.ssgclone.deliveryaddress.dto.request.DeliveryAddressModifyRequestDto;
 import com.nocaffeine.ssgclone.deliveryaddress.dto.request.DeliveryAddressSetDefaultRequestDto;
+import com.nocaffeine.ssgclone.deliveryaddress.dto.response.DeliveryAddressDetailResponseDto;
 import com.nocaffeine.ssgclone.deliveryaddress.dto.response.DeliveryAddressListResponseDto;
 import com.nocaffeine.ssgclone.deliveryaddress.vo.request.DeliveryAddressAddRequestVo;
 import com.nocaffeine.ssgclone.deliveryaddress.vo.request.DeliveryAddressModifyRequestVo;
 import com.nocaffeine.ssgclone.deliveryaddress.vo.request.DeliveryAddressSetDefaultRequestVo;
+import com.nocaffeine.ssgclone.deliveryaddress.vo.response.DeliveryAddressDetailResponseVo;
 import com.nocaffeine.ssgclone.deliveryaddress.vo.response.DeliveryAddressListResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -41,9 +43,9 @@ public class DeliveryAddressController {
 
     @Operation(summary = "배송지 삭제", description = "배송지 삭제")
     @DeleteMapping("{deliveryAddressId}")
-    public CommonResponse<String> removeDeliveryAddress(@PathVariable("deliveryAddressId") Long addressId) {
+    public CommonResponse<String> removeDeliveryAddress(@PathVariable("deliveryAddressId") Long deliveryAddressId) {
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
-        deliveryAddressService.removeDeliveryAddress(addressId, memberUuid);
+        deliveryAddressService.removeDeliveryAddress(deliveryAddressId, memberUuid);
         return CommonResponse.success("배송지 삭제 성공");
     }
 
@@ -63,8 +65,8 @@ public class DeliveryAddressController {
     @Operation(summary = "배송지 수정", description = "배송지 수정")
     @PutMapping
     public CommonResponse<String> modifyDeliveryAddress(@RequestBody DeliveryAddressModifyRequestVo deliveryAddressAddRequestVo) {
-        jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
-        deliveryAddressService.modifyDeliveryAddress(DeliveryAddressModifyRequestDto.voToDto(deliveryAddressAddRequestVo));
+        String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
+        deliveryAddressService.modifyDeliveryAddress(DeliveryAddressModifyRequestDto.voToDto(deliveryAddressAddRequestVo), memberUuid);
         return CommonResponse.success("배송지 수정 성공");
     }
 
@@ -74,6 +76,14 @@ public class DeliveryAddressController {
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
         deliveryAddressService.setDefaultDeliveryAddress(DeliveryAddressSetDefaultRequestDto.voToDto(deliveryAddressAddRequestVo), memberUuid);
         return CommonResponse.success("기본 배송지 설정 성공");
+    }
+
+    @Operation(summary = "배송지 상세 조회", description = "배송지 상세 조회")
+    @GetMapping("{deliveryAddressId}")
+    public CommonResponse<DeliveryAddressDetailResponseVo> findDeliveryAddressDetail(@PathVariable("deliveryAddressId") Long deliveryAddressId) {
+        String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
+        DeliveryAddressDetailResponseVo deliveryAddressDetailResponseVo = DeliveryAddressDetailResponseDto.dtoToVo(deliveryAddressService.findDeliveryAddressDetail(deliveryAddressId, memberUuid));
+        return CommonResponse.success("배송지 상세 조회 성공",deliveryAddressDetailResponseVo);
     }
 
 }
