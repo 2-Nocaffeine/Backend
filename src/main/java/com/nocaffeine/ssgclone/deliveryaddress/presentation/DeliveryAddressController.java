@@ -5,8 +5,12 @@ import com.nocaffeine.ssgclone.common.CommonResponse;
 import com.nocaffeine.ssgclone.common.security.JwtTokenProvider;
 import com.nocaffeine.ssgclone.deliveryaddress.application.DeliveryAddressService;
 import com.nocaffeine.ssgclone.deliveryaddress.dto.request.DeliveryAddressAddRequestDto;
+import com.nocaffeine.ssgclone.deliveryaddress.dto.request.DeliveryAddressModifyRequestDto;
+import com.nocaffeine.ssgclone.deliveryaddress.dto.request.DeliveryAddressSetDefaultRequestDto;
 import com.nocaffeine.ssgclone.deliveryaddress.dto.response.DeliveryAddressListResponseDto;
 import com.nocaffeine.ssgclone.deliveryaddress.vo.request.DeliveryAddressAddRequestVo;
+import com.nocaffeine.ssgclone.deliveryaddress.vo.request.DeliveryAddressModifyRequestVo;
+import com.nocaffeine.ssgclone.deliveryaddress.vo.request.DeliveryAddressSetDefaultRequestVo;
 import com.nocaffeine.ssgclone.deliveryaddress.vo.response.DeliveryAddressListResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,8 +24,8 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@Tag(name = "Member")
-@RequestMapping("/api/v1/member/delivery-address")
+@Tag(name = "DeliveryAddress", description = "배송지 관리")
+@RequestMapping("/api/v1/delivery-address")
 public class DeliveryAddressController {
 
     private final DeliveryAddressService deliveryAddressService;
@@ -36,8 +40,8 @@ public class DeliveryAddressController {
     }
 
     @Operation(summary = "배송지 삭제", description = "배송지 삭제")
-    @DeleteMapping("{addressId}")
-    public CommonResponse<String> removeDeliveryAddress(@PathVariable("addressId") Long addressId) {
+    @DeleteMapping("{deliveryAddressId}")
+    public CommonResponse<String> removeDeliveryAddress(@PathVariable("deliveryAddressId") Long addressId) {
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
         deliveryAddressService.removeDeliveryAddress(addressId, memberUuid);
         return CommonResponse.success("배송지 삭제 성공");
@@ -53,6 +57,23 @@ public class DeliveryAddressController {
         }
 
         return CommonResponse.success("배송지 조회 성공", deliveryAddressListResponseVo);
+    }
+
+
+    @Operation(summary = "배송지 수정", description = "배송지 수정")
+    @PutMapping
+    public CommonResponse<String> modifyDeliveryAddress(@RequestBody DeliveryAddressModifyRequestVo deliveryAddressAddRequestVo) {
+        jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
+        deliveryAddressService.modifyDeliveryAddress(DeliveryAddressModifyRequestDto.voToDto(deliveryAddressAddRequestVo));
+        return CommonResponse.success("배송지 수정 성공");
+    }
+
+    @Operation(summary = "기본 배송지 설정", description = "기본 배송지 설정")
+    @PutMapping("/default")
+    public CommonResponse<String> setDefaultDeliveryAddress(@RequestBody DeliveryAddressSetDefaultRequestVo deliveryAddressAddRequestVo) {
+        String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
+        deliveryAddressService.setDefaultDeliveryAddress(DeliveryAddressSetDefaultRequestDto.voToDto(deliveryAddressAddRequestVo), memberUuid);
+        return CommonResponse.success("기본 배송지 설정 성공");
     }
 
 }

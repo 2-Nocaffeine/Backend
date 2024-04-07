@@ -6,9 +6,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface DeliveryAddressRepository extends JpaRepository<DeliveryAddress, Long> {
 
     List<DeliveryAddress> findByMember(Member member);
+
+    Optional<DeliveryAddress> findByMemberAndDefaultCheck(Member member, boolean b);
 }
