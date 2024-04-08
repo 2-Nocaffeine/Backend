@@ -25,4 +25,8 @@ public class SpecialPrice {
     @NotNull
     @Column(length = 255)
     private String specialImageUrl;
+
+    @NotNull
+    @Column(length = 255)
+    private String subTitle;
 }
