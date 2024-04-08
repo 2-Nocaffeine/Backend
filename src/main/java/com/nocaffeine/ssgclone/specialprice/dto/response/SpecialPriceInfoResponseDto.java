@@ -13,4 +13,5 @@ public class SpecialPriceInfoResponseDto {
 
     private int lowestPrice;
     private String thumbnailUrl;
+    private String subTitle;
 }

@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Collections;
 import java.util.List;
 @RestController
 @Slf4j
@@ -47,12 +49,17 @@ public class SpecialPriceController {
         return CommonResponse.success("특가별 상품 id를 성공적으로 찾았습니다.", SpecialPriceDetailResponseVo.convertToVo(specialPriceService.findSpecialPriceProductList(specialPriceId)));
     }
 
-//    @Operation(summary = "쓱 특가", description = "특가 id 랜덤 조회")
-//    @GetMapping("/random")
-//    public CommonResponse<List<SpecialPriceIdListResponseVo>> randomSpecialPriceIdList(){
-//
-//        return CommonResponse.success("특가 id를 성공적으로 찾았습니다.", SpecialPriceIdListResponseVo
-//
-//    }
+    @Operation(summary = "쓱 특가", description = "특가 id 랜덤 조회")
+    @GetMapping("/random")
+    public CommonResponse<List<SpecialPriceIdListResponseVo>> randomSpecialPriceIdList(){
+
+        List<SpecialPriceIdListResponseVo> specialPriceIdListResponseVoList = SpecialPriceIdListResponseVo.convertToVo(specialPriceService.findSpecialPriceIds());
+        Collections.shuffle(specialPriceIdListResponseVoList);
+
+        return CommonResponse.success("특가 id를 성공적으로 찾았습니다.", specialPriceIdListResponseVoList);
+
+    }
+
+    //썸네일, 이름, 가격
 
 }

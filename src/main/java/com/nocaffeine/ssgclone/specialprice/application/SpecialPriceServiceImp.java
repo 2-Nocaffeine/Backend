@@ -28,7 +28,7 @@ public class SpecialPriceServiceImp implements SpecialPriceService{
 
         List<SpecialPriceIdListResponseDto> specialPriceIdListResponseDtos = new ArrayList<>();
 
-        //특가id 리스트
+        //특가 id 리스트
         for (SpecialPrice specialPrice : specialPriceRepository.findAll()){
             SpecialPriceIdListResponseDto specialPriceIdListResponseDto = SpecialPriceIdListResponseDto.builder()
                             .specialId(specialPrice.getId())
@@ -41,25 +41,29 @@ public class SpecialPriceServiceImp implements SpecialPriceService{
     @Override
     public SpecialPriceInfoResponseDto findSpecialPriceInfo(Long specialPriceId) {
 
+        SpecialPrice specialPrice = specialPriceRepository.findById(specialPriceId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 특가가 없습니다."));
+
         //최소 가격 찾기
         int minPrice = specialPriceListRepository.findMinPriceBySpecialPriceId(specialPriceId);
-
-        //썸네일 찾기
-        Optional<SpecialPrice> thumbnailUrl = specialPriceRepository.findById(specialPriceId);
 
 
         return SpecialPriceInfoResponseDto.builder()
                 .lowestPrice(minPrice)
-                .thumbnailUrl(thumbnailUrl.get().getSpecialImageUrl())
+                .thumbnailUrl(specialPrice.getSpecialImageUrl())
+                .subTitle(specialPrice.getSubTitle())
                 .build();
         }
 
     @Override
     public SpecialPriceDetailResponseDto findSpecialPriceProductList(Long specialPriceId) {
 
+        SpecialPrice specialPrice = specialPriceRepository.findById(specialPriceId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 특가가 없습니다."));
+
         List<SpecialPriceProductIdResponseDto> specialPriceProductIdResponseDtos = new ArrayList<>();
 
-        //특가별 상품id 리스트
+        //특가별 상품 id 리스트
         for (SpecialPriceList specialPriceList : specialPriceListRepository.findBySpecialPriceId(specialPriceId)){
             SpecialPriceProductIdResponseDto specialPriceProductIdResponseDto = SpecialPriceProductIdResponseDto.builder()
                             .productId(specialPriceList.getProduct().getId())
@@ -71,9 +75,9 @@ public class SpecialPriceServiceImp implements SpecialPriceService{
         int minPrice = specialPriceListRepository.findMinPriceBySpecialPriceId(specialPriceId);
 
         return SpecialPriceDetailResponseDto.builder()
-                .specialPriceName(specialPriceRepository.findById(specialPriceId).get().getName())
+                .specialPriceName(specialPrice.getName())
                 .lowestPrice(minPrice)
-                .thumbnailUrl(specialPriceRepository.findById(specialPriceId).get().getSpecialImageUrl())
+                .thumbnailUrl(specialPrice.getSpecialImageUrl())
                 .specialPriceProductList(specialPriceProductIdResponseDtos)
                 .build();
 
