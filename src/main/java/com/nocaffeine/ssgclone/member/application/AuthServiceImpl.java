@@ -55,6 +55,7 @@ public class AuthServiceImpl implements AuthService{
                 .password(uuid)
                 .name(snsMemberAddRequestDto.getName())
                 .phoneNumber(snsMemberAddRequestDto.getPhoneNumber())
+                .status(false)
                 .uuid(uuid)
                 .build();
 
@@ -81,6 +82,10 @@ public class AuthServiceImpl implements AuthService{
 
         Member member = memberRepository.findById(snsInfo.getMember().getId())
                 .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
+
+        if(member.isStatus()){
+            throw new BaseException(WITHDRAWAL_MEMBERS);
+        }
 
         String token = createToken(member);
 
@@ -123,6 +128,7 @@ public class AuthServiceImpl implements AuthService{
                 .uuid(uuid)
                 .name(memberSaveRequestDto.getName())
                 .phoneNumber(memberSaveRequestDto.getPhoneNumber())
+                .status(false)
                 .build();
 
         // 비밀번호 암호화
@@ -138,6 +144,11 @@ public class AuthServiceImpl implements AuthService{
     public TokenResponseDto logIn(MemberLoginRequestDto memberLoginRequestDto) {
         Member member = memberRepository.findByEmail(memberLoginRequestDto.getEmail())
                 .orElseThrow(() -> new BaseException(FAILED_TO_LOGIN));
+
+        if(member.isStatus()){
+            throw new BaseException(WITHDRAWAL_MEMBERS);
+        }
+
         try{
             authenticateManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
