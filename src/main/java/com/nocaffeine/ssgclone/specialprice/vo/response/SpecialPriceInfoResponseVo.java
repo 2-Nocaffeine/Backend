@@ -8,17 +8,20 @@ public class SpecialPriceInfoResponseVo {
 
     private int lowestPrice;
     private String thumbnailUrl;
+    private String subTitle;
 
 
-    private SpecialPriceInfoResponseVo(int lowestPrice, String thumbnailUrl) {
+    private SpecialPriceInfoResponseVo(int lowestPrice, String thumbnailUrl, String subTitle) {
         this.lowestPrice = lowestPrice;
         this.thumbnailUrl = thumbnailUrl;
+        this.subTitle = subTitle;
     }
 
     public static SpecialPriceInfoResponseVo convertToVo(SpecialPriceInfoResponseDto specialPriceInfoResponseDto) {
         return new SpecialPriceInfoResponseVo(
                 specialPriceInfoResponseDto.getLowestPrice(),
-                specialPriceInfoResponseDto.getThumbnailUrl()
+                specialPriceInfoResponseDto.getThumbnailUrl(),
+                specialPriceInfoResponseDto.getSubTitle()
         );
     }
 }
