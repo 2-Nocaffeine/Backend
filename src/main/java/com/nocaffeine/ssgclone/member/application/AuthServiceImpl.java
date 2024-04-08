@@ -5,12 +5,10 @@ import com.nocaffeine.ssgclone.common.EmailProvider;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
 import com.nocaffeine.ssgclone.common.redis.RedisUtils;
 import com.nocaffeine.ssgclone.common.security.JwtTokenProvider;
-import com.nocaffeine.ssgclone.member.domain.EmailAuth;
 import com.nocaffeine.ssgclone.member.domain.Member;
 import com.nocaffeine.ssgclone.member.domain.SnsInfo;
 import com.nocaffeine.ssgclone.member.dto.request.*;
 import com.nocaffeine.ssgclone.member.dto.response.TokenResponseDto;
-import com.nocaffeine.ssgclone.member.infrastructure.EmailAuthRepository;
 import com.nocaffeine.ssgclone.member.infrastructure.MemberRepository;
 import com.nocaffeine.ssgclone.member.infrastructure.SnsInfoRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +18,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.UUID;
 
 import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.*;
@@ -36,7 +32,6 @@ public class AuthServiceImpl implements AuthService{
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final EmailProvider emailProvider;
-    private final EmailAuthRepository emailAuthRepository;
     private final AuthenticationManager authenticateManager;
     private final RedisUtils redisUtils;
 
@@ -60,6 +55,7 @@ public class AuthServiceImpl implements AuthService{
                 .password(uuid)
                 .name(snsMemberAddRequestDto.getName())
                 .phoneNumber(snsMemberAddRequestDto.getPhoneNumber())
+                .status(false)
                 .uuid(uuid)
                 .build();
 
@@ -86,6 +82,10 @@ public class AuthServiceImpl implements AuthService{
 
         Member member = memberRepository.findById(snsInfo.getMember().getId())
                 .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
+
+        if(member.isStatus()){
+            throw new BaseException(WITHDRAWAL_MEMBERS);
+        }
 
         String token = createToken(member);
 
@@ -128,6 +128,7 @@ public class AuthServiceImpl implements AuthService{
                 .uuid(uuid)
                 .name(memberSaveRequestDto.getName())
                 .phoneNumber(memberSaveRequestDto.getPhoneNumber())
+                .status(false)
                 .build();
 
         // 비밀번호 암호화
@@ -143,6 +144,11 @@ public class AuthServiceImpl implements AuthService{
     public TokenResponseDto logIn(MemberLoginRequestDto memberLoginRequestDto) {
         Member member = memberRepository.findByEmail(memberLoginRequestDto.getEmail())
                 .orElseThrow(() -> new BaseException(FAILED_TO_LOGIN));
+
+        if(member.isStatus()){
+            throw new BaseException(WITHDRAWAL_MEMBERS);
+        }
+
         try{
             authenticateManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -173,9 +179,7 @@ public class AuthServiceImpl implements AuthService{
     public void emailAuth(AuthEmailRequestDto authEmailRequestDto) {
         String authCode = createAuthCode();
 
-        boolean isSuccess = emailProvider.sendAuthMail(authEmailRequestDto.getEmail(), authCode);
-
-        if(!isSuccess){
+        if(!emailProvider.sendAuthMail(authEmailRequestDto.getEmail(), authCode)){
             throw new BaseException(MASSAGE_SEND_FAILED);
         }
 
@@ -215,66 +219,4 @@ public class AuthServiceImpl implements AuthService{
         // 인증 코드 확인 후 Redis 에서 삭제
         redisUtils.deleteData(email);
     }
-
-//    /**
-//     * 이메일 인증코드 발송
-//     */
-//    @Override
-//    @Transactional
-//    public void emailAuth(AuthEmailRequestDto authEmailRequestDto) {
-//        String authCode = createAuthCode();
-//
-//        boolean isSuccess = emailProvider.sendAuthMail(authEmailRequestDto.getEmail(), authCode);
-//
-//        if(!isSuccess){
-//            throw new BaseException(MASSAGE_SEND_FAILED);
-//        }
-//
-//        log.info("이메일 인증코드 : {}", authCode);
-//
-//        Optional<EmailAuth> email = emailAuthRepository.findByEmail(authEmailRequestDto.getEmail());
-//
-//        if(email.isPresent()){
-//            email.get().updateAuthCode(authCode);
-//        } else {
-//            EmailAuth emailAuth = EmailAuth.builder()
-//                    .email(authEmailRequestDto.getEmail())
-//                    .authCode(authCode)
-//                    .expireDate(LocalDateTime.now())
-//                    .build();
-//
-//            emailAuthRepository.save(emailAuth);
-//        }
-//    }
-//
-//    public static String createAuthCode() {
-//        String authCode = "";
-//
-//        for(int count = 0; count < 6; count++){
-//            authCode += (int)(Math.random() * 10);
-//        }
-//
-//        return authCode;
-//    }
-//
-//    /**
-//     * 이메일 인증코드 확인
-//     */
-//    @Override
-//    @Transactional
-//    public void emailAuthCodeCheck(String email, String code) {
-//        EmailAuth emailAuth = emailAuthRepository.findByEmail(email)
-//                .orElseThrow(() -> new BaseException(NO_EXIST_AUTH));
-//
-//        if(!emailAuth.getAuthCode().equals(code)){
-//            throw new BaseException(MASSAGE_VALID_FAILED);
-//        }
-//
-//        if (emailAuth.getExpireDate().isBefore(LocalDateTime.now())) {
-//            // 인증 코드가 만료된 경우
-//            throw new BaseException(EXPIRED_AUTH_CODE);
-//        }
-//
-//        emailAuthRepository.delete(emailAuth);
-//    }
 }

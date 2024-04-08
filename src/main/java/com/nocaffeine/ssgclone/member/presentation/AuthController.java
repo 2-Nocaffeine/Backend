@@ -59,7 +59,7 @@ public class AuthController {
         TokenResponseDto tokenResponseDto = authService.logIn(MemberLoginRequestDto.voToDto(memberLoginRequestVo));
         return ResponseEntity.ok()
                 .header(HttpHeaders.AUTHORIZATION, tokenResponseDto.getAccessToken())
-                .body(CommonResponse.success("로그인 성공"));
+                .body(CommonResponse.success("로그인 성공", tokenResponseDto));
     }
 
 
