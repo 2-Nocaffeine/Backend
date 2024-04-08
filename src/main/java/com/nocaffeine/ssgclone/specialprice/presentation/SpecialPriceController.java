@@ -40,11 +40,19 @@ public class SpecialPriceController {
             SpecialPriceInfoResponseVo.convertToVo(specialPriceService.findSpecialPriceInfo(specialPriceId)));
  }
 
-    @Operation(summary = "특가별 상품 id 나열", description = "특가별 상품 id 나열")
+    @Operation(summary = "특가별 상품 id 및 특가정보", description = "특가별 상품 id 및 특가정보")
     @GetMapping("/{specialPriceId}/product-list")
     public CommonResponse<SpecialPriceDetailResponseVo> specialPriceProductList(@PathVariable("specialPriceId") Long specialPriceId){
 
         return CommonResponse.success("특가별 상품 id를 성공적으로 찾았습니다.", SpecialPriceDetailResponseVo.convertToVo(specialPriceService.findSpecialPriceProductList(specialPriceId)));
     }
+
+//    @Operation(summary = "쓱 특가", description = "특가 id 랜덤 조회")
+//    @GetMapping("/random")
+//    public CommonResponse<List<SpecialPriceIdListResponseVo>> randomSpecialPriceIdList(){
+//
+//        return CommonResponse.success("특가 id를 성공적으로 찾았습니다.", SpecialPriceIdListResponseVo
+//
+//    }
 
 }
