@@ -5,6 +5,7 @@ import com.nocaffeine.ssgclone.common.exception.BaseException;
 import com.nocaffeine.ssgclone.like.domain.ProductLike;
 import com.nocaffeine.ssgclone.like.dto.request.ProductLikeAddRequest;
 import com.nocaffeine.ssgclone.like.dto.request.ProductLikeRemoveRequest;
+import com.nocaffeine.ssgclone.like.dto.response.LikeStatusResponseDto;
 import com.nocaffeine.ssgclone.like.dto.response.ProductLikeListResponse;
 import com.nocaffeine.ssgclone.like.infrastructure.ProductLikeRepository;
 import com.nocaffeine.ssgclone.member.domain.Member;
@@ -96,6 +97,23 @@ public class ProductLikeServiceImp implements ProductLikeService {
         }
 
         return productLikeListResponses;
+    }
+
+    /**
+     * 상품 좋아요 여부 조회
+     */
+    @Override
+    public LikeStatusResponseDto isProductLike(Long productId, String memberUuid) {
+        Member member = memberRepository.findByUuid(memberUuid).orElseThrow(()
+                -> new BaseException(NO_EXIST_MEMBERS));
+
+        Product product = productRepository.findById(productId).orElseThrow(()
+                -> new BaseException(NO_PRODUCT));
+
+        return LikeStatusResponseDto.builder()
+                .productId(productId)
+                .isLike(productLikeRepository.findByMemberAndProduct(member, product).isPresent())
+                .build();
     }
 
 }

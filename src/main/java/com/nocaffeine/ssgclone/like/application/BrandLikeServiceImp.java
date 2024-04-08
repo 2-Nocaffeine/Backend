@@ -8,6 +8,7 @@ import com.nocaffeine.ssgclone.like.domain.ProductLike;
 import com.nocaffeine.ssgclone.like.dto.request.BrandLikeRemoveRequest;
 import com.nocaffeine.ssgclone.like.dto.request.BrandLikeAddRequest;
 import com.nocaffeine.ssgclone.like.dto.response.BrandLikeListResponse;
+import com.nocaffeine.ssgclone.like.dto.response.LikeStatusResponseDto;
 import com.nocaffeine.ssgclone.like.dto.response.ProductLikeListResponse;
 import com.nocaffeine.ssgclone.like.infrastructure.BrandLikeRepository;
 import com.nocaffeine.ssgclone.member.domain.Member;
@@ -101,6 +102,19 @@ public class BrandLikeServiceImp implements BrandLikeService{
         }
 
         return brandLikeListResponses;
+    }
+
+    @Override
+    public LikeStatusResponseDto isBrandLike(Long brandId, String memberUuid) {
+        Member member = memberRepository.findByUuid(memberUuid)
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
+
+        Brand brand = brandRepository.findById(brandId)
+                .orElseThrow(() -> new BaseException(NO_EXIST_BRAND));
+
+        return LikeStatusResponseDto.builder()
+                .isLike(brandLikeRepository.findByMemberAndBrand(member, brand).isPresent())
+                .build();
     }
 
 
