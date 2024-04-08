@@ -46,7 +46,5 @@ public class SpecialPriceController {
 
         return CommonResponse.success("특가별 상품 id를 성공적으로 찾았습니다.", SpecialPriceDetailResponseVo.convertToVo(specialPriceService.findSpecialPriceProductList(specialPriceId)));
     }
-        //특가id에 해당하는product id만 있다면product에서 만든url 쓰면 될듯
-        //옵션 창에 오는거 만들어야할거 같은데
-        //상품 이름, 썸네일, 가격
-    }
+
+}
