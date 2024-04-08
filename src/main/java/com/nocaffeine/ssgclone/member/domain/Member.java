@@ -45,9 +45,12 @@ public class Member extends BaseTimeEntity implements UserDetails{
     @Column(length = 255)
     private String address;
 
+    // 탈퇴여부
+    @NotNull
+    private boolean status;
 
     @Builder
-    public Member(Long id, String email, String password, String uuid, String name, String phoneNumber, String address) {
+    public Member(Long id, String email, String password, String uuid, String name, String phoneNumber, String address, boolean status) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -55,6 +58,7 @@ public class Member extends BaseTimeEntity implements UserDetails{
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.address = address;
+        this.status = status;
     }
 
 

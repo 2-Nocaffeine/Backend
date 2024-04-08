@@ -19,4 +19,8 @@ public class SpecialPrice {
 
     @NotNull
     private Timestamp endAt;
+
+    @NotNull
+    @Column(length = 255)
+    private String specialImageUrl;
 }
