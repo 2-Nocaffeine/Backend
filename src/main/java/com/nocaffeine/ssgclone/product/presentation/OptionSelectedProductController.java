@@ -56,7 +56,7 @@ public class OptionSelectedProductController {
         List<OptionSelectedProductResponseDto> optionSelectedProductResponseDtoList = optionSelectedProductService.getOptionSelectedProductListBySelectedOptionsList(productId, colorOptionId, sizeOptionId, addOptionId);
 
         return CommonResponse.success("옵션 선택 완료 최종 상품을 성공적으로 찾았습니다.",
-                OptionSelectedProductListResponseVo.optionSelectedProductDtoToVo(optionSelectedProductResponseDtoList));
+                OptionSelectedProductListResponseVo.optionSelectedProductDtoListToVoList(optionSelectedProductResponseDtoList));
     }
 }
 
