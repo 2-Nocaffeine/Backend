@@ -3,6 +3,7 @@ package com.nocaffeine.ssgclone.member.application;
 
 import com.nocaffeine.ssgclone.common.EmailProvider;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
+import com.nocaffeine.ssgclone.common.redis.RedisUtils;
 import com.nocaffeine.ssgclone.common.security.JwtTokenProvider;
 import com.nocaffeine.ssgclone.member.domain.EmailAuth;
 import com.nocaffeine.ssgclone.member.domain.Member;
@@ -37,6 +38,7 @@ public class AuthServiceImpl implements AuthService{
     private final EmailProvider emailProvider;
     private final EmailAuthRepository emailAuthRepository;
     private final AuthenticationManager authenticateManager;
+    private final RedisUtils redisUtils;
 
 
     /**
@@ -179,19 +181,8 @@ public class AuthServiceImpl implements AuthService{
 
         log.info("이메일 인증코드 : {}", authCode);
 
-        Optional<EmailAuth> email = emailAuthRepository.findByEmail(authEmailRequestDto.getEmail());
-
-        if(email.isPresent()){
-            email.get().updateAuthCode(authCode);
-        } else {
-            EmailAuth emailAuth = EmailAuth.builder()
-                    .email(authEmailRequestDto.getEmail())
-                    .authCode(authCode)
-                    .expireDate(LocalDateTime.now())
-                    .build();
-
-            emailAuthRepository.save(emailAuth);
-        }
+        // Redis에 이메일 인증 코드 저장
+        redisUtils.setData(authEmailRequestDto.getEmail(), authCode, 300000); // 5분 동안 유효
     }
 
     public static String createAuthCode() {
@@ -210,18 +201,80 @@ public class AuthServiceImpl implements AuthService{
     @Override
     @Transactional
     public void emailAuthCodeCheck(String email, String code) {
-        EmailAuth emailAuth = emailAuthRepository.findByEmail(email)
-                .orElseThrow(() -> new BaseException(NO_EXIST_AUTH));
+        // Redis에서 이메일 인증 코드 가져오기
+        String authCode = redisUtils.getData(email);
 
-        if(!emailAuth.getAuthCode().equals(code)){
+        if(authCode == null){
+            throw new BaseException(NO_EXIST_AUTH);
+        }
+
+        if(!authCode.equals(code)){
             throw new BaseException(MASSAGE_VALID_FAILED);
         }
 
-        if (emailAuth.getExpireDate().isBefore(LocalDateTime.now())) {
-            // 인증 코드가 만료된 경우
-            throw new BaseException(EXPIRED_AUTH_CODE);
-        }
-
-        emailAuthRepository.delete(emailAuth);
+        // 인증 코드 확인 후 Redis 에서 삭제
+        redisUtils.deleteData(email);
     }
+
+//    /**
+//     * 이메일 인증코드 발송
+//     */
+//    @Override
+//    @Transactional
+//    public void emailAuth(AuthEmailRequestDto authEmailRequestDto) {
+//        String authCode = createAuthCode();
+//
+//        boolean isSuccess = emailProvider.sendAuthMail(authEmailRequestDto.getEmail(), authCode);
+//
+//        if(!isSuccess){
+//            throw new BaseException(MASSAGE_SEND_FAILED);
+//        }
+//
+//        log.info("이메일 인증코드 : {}", authCode);
+//
+//        Optional<EmailAuth> email = emailAuthRepository.findByEmail(authEmailRequestDto.getEmail());
+//
+//        if(email.isPresent()){
+//            email.get().updateAuthCode(authCode);
+//        } else {
+//            EmailAuth emailAuth = EmailAuth.builder()
+//                    .email(authEmailRequestDto.getEmail())
+//                    .authCode(authCode)
+//                    .expireDate(LocalDateTime.now())
+//                    .build();
+//
+//            emailAuthRepository.save(emailAuth);
+//        }
+//    }
+//
+//    public static String createAuthCode() {
+//        String authCode = "";
+//
+//        for(int count = 0; count < 6; count++){
+//            authCode += (int)(Math.random() * 10);
+//        }
+//
+//        return authCode;
+//    }
+//
+//    /**
+//     * 이메일 인증코드 확인
+//     */
+//    @Override
+//    @Transactional
+//    public void emailAuthCodeCheck(String email, String code) {
+//        EmailAuth emailAuth = emailAuthRepository.findByEmail(email)
+//                .orElseThrow(() -> new BaseException(NO_EXIST_AUTH));
+//
+//        if(!emailAuth.getAuthCode().equals(code)){
+//            throw new BaseException(MASSAGE_VALID_FAILED);
+//        }
+//
+//        if (emailAuth.getExpireDate().isBefore(LocalDateTime.now())) {
+//            // 인증 코드가 만료된 경우
+//            throw new BaseException(EXPIRED_AUTH_CODE);
+//        }
+//
+//        emailAuthRepository.delete(emailAuth);
+//    }
 }
