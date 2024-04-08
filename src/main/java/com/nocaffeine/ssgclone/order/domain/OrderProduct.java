@@ -4,16 +4,11 @@ import com.nocaffeine.ssgclone.order.dto.request.OrderedProductRequestDto;
 import com.nocaffeine.ssgclone.product.domain.OptionSelectedProduct;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderProduct {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -56,4 +51,18 @@ public class OrderProduct {
     private String brand;
 
 
+    @Builder
+    public OrderProduct(Long id,Orders order, Long productId, String productName, int price, int quantity, String thumbnailUrl, String color, String size, String addOption, String brand) {
+        this.id = id;
+        this.order = order;
+        this.productId = productId;
+        this.productName = productName;
+        this.price = price;
+        this.quantity = quantity;
+        this.thumbnailUrl = thumbnailUrl;
+        this.color = color;
+        this.size = size;
+        this.addOption = addOption;
+        this.brand = brand;
+    }
 }
