@@ -16,7 +16,7 @@ import com.nocaffeine.ssgclone.order.vo.response.OrderInfoAndProductListResponse
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-;import java.util.List;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -94,7 +94,7 @@ public class OrderController {
     //회원 주문 상품 조회
     @Operation(summary = "주문 상품 및 주문 정보 조회", description = "주문 상품 및 주문 정보 조회", tags = {"Order"})
     @GetMapping("/{orderId}/member-order-product/")
-    public CommonResponse<OrderInfoAndProductListResponseVo> orderProductList(@PathVariable Long orderId){
+    public CommonResponse<OrderInfoAndProductListResponseVo> orderProductList(@PathVariable("orderId") Long orderId){
 
         OrderNumberRequestDto orderNumberRequestDto = new OrderNumberRequestDto(orderId);
         OrderInfoAndProductListResponseDto orderInfoAndProductListResponseDto = orderService.findOrderProductList(orderNumberRequestDto);

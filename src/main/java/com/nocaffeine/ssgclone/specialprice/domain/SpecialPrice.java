@@ -2,10 +2,12 @@ package com.nocaffeine.ssgclone.specialprice.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
 
 import java.sql.Timestamp;
 
 @Entity
+@Getter
 public class SpecialPrice {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

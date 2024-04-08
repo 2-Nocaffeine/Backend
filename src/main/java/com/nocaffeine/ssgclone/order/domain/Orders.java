@@ -9,9 +9,7 @@ import lombok.*;
 import java.util.Random;
 
 @Entity
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Orders extends BaseTimeEntity {
 
@@ -51,6 +49,19 @@ public class Orders extends BaseTimeEntity {
 
     public enum OrderStatus {
         ORDERED, PREPARING, DELIVERING, DETERMINING, CANCEL
+    }
+
+    @Builder
+    public Orders(Long id, Long orderNumber, String uuid, String region, String name, String phoneNumber, String email, int totalPrice, OrderStatus status) {
+        this.id = id;
+        this.orderNumber = orderNumber;
+        this.uuid = uuid;
+        this.region = region;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.totalPrice = totalPrice;
+        this.status = status;
     }
 
     public static Orders toEntity(UserOrderSaveRequestDto userOrderSaveRequestDto) {
