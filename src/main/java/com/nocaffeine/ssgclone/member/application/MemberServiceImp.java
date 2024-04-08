@@ -75,7 +75,7 @@ public class MemberServiceImp implements MemberService {
 
 
     /**
-     * 회원 삭제
+     * 회원 탈퇴
      */
     @Override
     @Transactional
@@ -83,7 +83,17 @@ public class MemberServiceImp implements MemberService {
         Member member = memberRepository.findByUuid(memberUuid)
                 .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
 
-        memberRepository.delete(member);
+        memberRepository.save(Member.builder()
+                .id(member.getId())
+                .email(member.getEmail())
+                .password(member.getPassword())
+                .uuid(member.getUuid())
+                .name(member.getName())
+                .phoneNumber(member.getPhoneNumber())
+                .address(member.getAddress())
+                .status(true)
+                .build()
+        );
     }
 
 }
