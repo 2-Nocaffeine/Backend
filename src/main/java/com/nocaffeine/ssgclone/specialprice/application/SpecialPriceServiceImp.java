@@ -49,6 +49,7 @@ public class SpecialPriceServiceImp implements SpecialPriceService{
 
 
         return SpecialPriceInfoResponseDto.builder()
+                .title(specialPrice.getName())
                 .lowestPrice(minPrice)
                 .thumbnailUrl(specialPrice.getSpecialImageUrl())
                 .subTitle(specialPrice.getSubTitle())
