@@ -29,7 +29,7 @@ public class SpecialPriceController {
     @GetMapping
     public CommonResponse<List<SpecialPriceIdListResponseVo>> specialPriceList(){
 
-        return CommonResponse.success("특가 목록을 성공적으로 찾았습니다.", SpecialPriceIdListResponseVo.convertToVo(specialPriceService.findSpecialPriceIds()));
+        return CommonResponse.success("특가 목록을 순서대로 찾았습니다.", SpecialPriceIdListResponseVo.convertToVo(specialPriceService.findSpecialPriceIds()));
 
     }
 
@@ -56,10 +56,20 @@ public class SpecialPriceController {
         List<SpecialPriceIdListResponseVo> specialPriceIdListResponseVoList = SpecialPriceIdListResponseVo.convertToVo(specialPriceService.findSpecialPriceIds());
         Collections.shuffle(specialPriceIdListResponseVoList);
 
-        return CommonResponse.success("특가 id를 성공적으로 찾았습니다.", specialPriceIdListResponseVoList);
+        return CommonResponse.success("특가 id를 랜덤으로 모두 찾았습니다.", specialPriceIdListResponseVoList);
 
     }
 
     //썸네일, 이름, 가격
+    @Operation(summary = "오늘의 장보기", description = "특가별 상품 id 랜덤 조회")
+    @GetMapping("/ramdom/special-price-product")
+    public CommonResponse<List<SpecialPriceProductIdResponseVo>> randomSpecialPriceProductList(){
+
+        List<SpecialPriceProductIdResponseVo> specialPriceProductIdResponseVoList = SpecialPriceProductIdResponseVo.convertToVo(specialPriceService.findSpecialPriceRandomId());
+        Collections.shuffle(specialPriceProductIdResponseVoList);
+
+        return CommonResponse.success("특가별 상품을 랜덤으로 모두 찾았습니다.", specialPriceProductIdResponseVoList);
+    }
+
 
 }

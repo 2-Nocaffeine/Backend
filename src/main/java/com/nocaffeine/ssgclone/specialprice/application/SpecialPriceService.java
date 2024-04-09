@@ -2,6 +2,8 @@ package com.nocaffeine.ssgclone.specialprice.application;
 import com.nocaffeine.ssgclone.specialprice.dto.response.SpecialPriceDetailResponseDto;
 import com.nocaffeine.ssgclone.specialprice.dto.response.SpecialPriceIdListResponseDto;
 import com.nocaffeine.ssgclone.specialprice.dto.response.SpecialPriceInfoResponseDto;
+import com.nocaffeine.ssgclone.specialprice.dto.response.SpecialPriceProductIdResponseDto;
+
 import java.util.List;
 public interface SpecialPriceService {
     List<SpecialPriceIdListResponseDto> findSpecialPriceIds();
@@ -9,4 +11,6 @@ public interface SpecialPriceService {
     SpecialPriceInfoResponseDto findSpecialPriceInfo(Long specialPriceId);
 
     SpecialPriceDetailResponseDto findSpecialPriceProductList(Long specialPriceId);
+
+    List<SpecialPriceProductIdResponseDto> findSpecialPriceRandomId();
 }

@@ -49,6 +49,7 @@ public class SpecialPriceServiceImp implements SpecialPriceService{
 
 
         return SpecialPriceInfoResponseDto.builder()
+                .title(specialPrice.getName())
                 .lowestPrice(minPrice)
                 .thumbnailUrl(specialPrice.getSpecialImageUrl())
                 .subTitle(specialPrice.getSubTitle())
@@ -81,5 +82,20 @@ public class SpecialPriceServiceImp implements SpecialPriceService{
                 .specialPriceProductList(specialPriceProductIdResponseDtos)
                 .build();
 
+    }
+
+    @Override
+    public List<SpecialPriceProductIdResponseDto> findSpecialPriceRandomId() {
+
+        List<SpecialPriceList> specialPriceLists = specialPriceListRepository.findAll();
+        List<SpecialPriceProductIdResponseDto> specialPriceProductIdResponseDtos = new ArrayList<>();
+
+        for (SpecialPriceList specialPriceList : specialPriceLists){
+            SpecialPriceProductIdResponseDto specialPriceProductIdResponseDto = SpecialPriceProductIdResponseDto.builder()
+                    .productId(specialPriceList.getProduct().getId())
+                    .build();
+            specialPriceProductIdResponseDtos.add(specialPriceProductIdResponseDto);
+        }
+        return specialPriceProductIdResponseDtos;
     }
 }
