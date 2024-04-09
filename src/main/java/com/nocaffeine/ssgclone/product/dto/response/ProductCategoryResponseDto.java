@@ -4,8 +4,6 @@ import com.nocaffeine.ssgclone.category.domain.LargeCategory;
 import com.nocaffeine.ssgclone.category.domain.MediumCategory;
 import com.nocaffeine.ssgclone.category.domain.ProductCategoryList;
 import com.nocaffeine.ssgclone.category.domain.SmallCategory;
-import com.nocaffeine.ssgclone.category.dto.response.MediumCategoryResponse;
-import com.nocaffeine.ssgclone.product.domain.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

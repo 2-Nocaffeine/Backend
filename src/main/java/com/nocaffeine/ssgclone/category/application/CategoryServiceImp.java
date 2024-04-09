@@ -3,7 +3,6 @@ package com.nocaffeine.ssgclone.category.application;
 import com.nocaffeine.ssgclone.category.domain.*;
 import com.nocaffeine.ssgclone.category.dto.response.*;
 import com.nocaffeine.ssgclone.category.infrastructure.*;
-import com.nocaffeine.ssgclone.common.exception.BaseException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,11 +21,11 @@ public class CategoryServiceImp implements CategoryService {
 
 
     @Override
-    public List<LargeCategoryResponse> findLargeCategories() {
-        List<LargeCategoryResponse> largeCategoryList = new ArrayList<>();
+    public List<LargeCategoryResponseDto> findLargeCategories() {
+        List<LargeCategoryResponseDto> largeCategoryList = new ArrayList<>();
 
         for (LargeCategory largeCategory : largeCategoryRepository.findAll()){
-            LargeCategoryResponse largeCategoryDto = LargeCategoryResponse.builder()
+            LargeCategoryResponseDto largeCategoryDto = LargeCategoryResponseDto.builder()
                     .largeCategoryId(largeCategory.getId())
                     .largeCategoryName(largeCategory.getName())
                     .imageUrl(largeCategory.getImageUrl())
@@ -37,12 +36,12 @@ public class CategoryServiceImp implements CategoryService {
     }
 
     @Override
-    public List<MediumCategoryResponse> findMediumCategories(Long largeId) {
+    public List<MediumCategoryResponseDto> findMediumCategories(Long largeId) {
 
-        List<MediumCategoryResponse> mediumCategoryDtoList = new ArrayList<>();
+        List<MediumCategoryResponseDto> mediumCategoryDtoList = new ArrayList<>();
 
         for (MediumCategory mediumCategory : mediumCategoryRepository.findByLargeCategoryId(largeId)) {
-            MediumCategoryResponse mediumCategoryDto = MediumCategoryResponse.builder()
+            MediumCategoryResponseDto mediumCategoryDto = MediumCategoryResponseDto.builder()
                     .mediumCategoryId(mediumCategory.getId())
                     .mediumCategoryName(mediumCategory.getName())
                     .build();
@@ -52,11 +51,11 @@ public class CategoryServiceImp implements CategoryService {
     }
 
     @Override
-    public List<SmallCategoryResponse> findSmallCategories(Long mediumId) {
-        List<SmallCategoryResponse> smallCategoryDtoList = new ArrayList<>();
+    public List<SmallCategoryResponseDto> findSmallCategories(Long mediumId) {
+        List<SmallCategoryResponseDto> smallCategoryDtoList = new ArrayList<>();
 
         for (SmallCategory smallCategory : smallCategoryRepository.findByMediumCategoryId(mediumId)) {
-            SmallCategoryResponse smallCategoryDto = SmallCategoryResponse.builder()
+            SmallCategoryResponseDto smallCategoryDto = SmallCategoryResponseDto.builder()
                     .smallCategoryId(smallCategory.getId())
                     .smallCategoryName(smallCategory.getName())
                     .build();
@@ -68,11 +67,11 @@ public class CategoryServiceImp implements CategoryService {
     }
 
     @Override
-    public List<TinyCategoryResponse> findTinyCategories(Long smallId) {
-        List<TinyCategoryResponse> tinyCategoryDtoList = new ArrayList<>();
+    public List<TinyCategoryResponseDto> findTinyCategories(Long smallId) {
+        List<TinyCategoryResponseDto> tinyCategoryDtoList = new ArrayList<>();
 
         for (TinyCategory tinyCategory : tinyCategoryRepository.findBySmallCategoryId(smallId)) {
-            TinyCategoryResponse tinyCategoryDto = TinyCategoryResponse.builder()
+            TinyCategoryResponseDto tinyCategoryDto = TinyCategoryResponseDto.builder()
                     .tinyCategoryId(tinyCategory.getId())
                     .tinyCategoryName(tinyCategory.getName())
                     .build();

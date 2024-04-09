@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MediumCategoryResponse {
-    private Long mediumCategoryId;
-    private String mediumCategoryName;
+public class SmallCategoryResponseDto {
+
+    private Long smallCategoryId;
+    private String smallCategoryName;
 }

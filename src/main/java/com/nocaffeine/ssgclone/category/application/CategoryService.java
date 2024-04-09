@@ -6,12 +6,12 @@ import java.util.List;
 
 public interface CategoryService {
 
-    List<LargeCategoryResponse> findLargeCategories();
-    List<MediumCategoryResponse> findMediumCategories(Long largeId);
+    List<LargeCategoryResponseDto> findLargeCategories();
+    List<MediumCategoryResponseDto> findMediumCategories(Long largeId);
 
-    List<SmallCategoryResponse> findSmallCategories(Long mediumId);
+    List<SmallCategoryResponseDto> findSmallCategories(Long mediumId);
 
-    List<TinyCategoryResponse> findTinyCategories(Long smallId);
+    List<TinyCategoryResponseDto> findTinyCategories(Long smallId);
 
 
 }
