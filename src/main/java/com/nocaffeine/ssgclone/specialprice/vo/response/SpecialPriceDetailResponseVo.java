@@ -18,7 +18,6 @@ public class SpecialPriceDetailResponseVo {
     private List<SpecialPriceProductIdResponseVo> specialPriceProductList;
 
 
-    @Builder
     public SpecialPriceDetailResponseVo(String specialPriceName, int lowestPrice, String thumbnailUrl, List<SpecialPriceProductIdResponseVo> specialPriceProductList) {
         this.specialPriceName = specialPriceName;
         this.lowestPrice = lowestPrice;
@@ -28,11 +27,11 @@ public class SpecialPriceDetailResponseVo {
 
     public static SpecialPriceDetailResponseVo convertToVo(SpecialPriceDetailResponseDto specialPriceProductList) {
 
-        return SpecialPriceDetailResponseVo.builder()
-                .specialPriceName(specialPriceProductList.getSpecialPriceName())
-                .lowestPrice(specialPriceProductList.getLowestPrice())
-                .thumbnailUrl(specialPriceProductList.getThumbnailUrl())
-                .specialPriceProductList(SpecialPriceProductIdResponseVo.convertToVo(specialPriceProductList.getSpecialPriceProductList()))
-                .build();
+        return new SpecialPriceDetailResponseVo(
+                specialPriceProductList.getSpecialPriceName(),
+                specialPriceProductList.getLowestPrice(),
+                specialPriceProductList.getThumbnailUrl(),
+                SpecialPriceProductIdResponseVo.convertToVo(specialPriceProductList.getSpecialPriceProductList())
+                );
     }
 }

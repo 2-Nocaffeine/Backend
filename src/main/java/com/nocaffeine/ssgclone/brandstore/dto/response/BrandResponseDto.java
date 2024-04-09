@@ -1,4 +1,4 @@
-package com.nocaffeine.ssgclone.brandstore.dto;
+package com.nocaffeine.ssgclone.brandstore.dto.response;
 
 import lombok.*;
 
@@ -6,7 +6,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BrandResponse {
+public class BrandResponseDto {
 
     private Long brandId;
     private String brandName;

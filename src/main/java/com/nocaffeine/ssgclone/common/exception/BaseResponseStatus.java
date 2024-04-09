@@ -119,6 +119,7 @@ public enum BaseResponseStatus {
      * 9000 : Brand Service Error
      */
     NO_EXIST_BRAND(HttpStatus.NOT_FOUND, false,9001, "브랜드가 존재하지 않습니다"),
+    NO_EXIST_BRAND_PRODUCT(HttpStatus.NOT_FOUND, false, 9002, "브랜드에 해당하는 상품이 존재하지 않습니다"),
 
 
     /**
