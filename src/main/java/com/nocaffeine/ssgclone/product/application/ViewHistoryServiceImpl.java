@@ -39,10 +39,6 @@ public class ViewHistoryServiceImpl implements ViewHistoryService {
 
         List<ViewHistory> viewHistories = viewHistoryRepository.findByMemberOrderByCreatedAtDesc(member);
 
-        if (viewHistories.isEmpty()) {
-            throw new BaseException(NO_VIEW_HISTORY);
-        }
-
         List<ViewHistoryResponseDto> responses = new ArrayList<>();
 
         for (ViewHistory viewHistory : viewHistories) {
@@ -64,10 +60,6 @@ public class ViewHistoryServiceImpl implements ViewHistoryService {
                 .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
 
         Page<ViewHistory> viewHistories = viewHistoryRepository.findByMemberOrderByCreatedAtDesc(member, page);
-
-        if (viewHistories.isEmpty()) {
-            throw new BaseException(NO_VIEW_HISTORY);
-        }
 
         List<ViewHistoryResponseDto> responses = new ArrayList<>();
 
