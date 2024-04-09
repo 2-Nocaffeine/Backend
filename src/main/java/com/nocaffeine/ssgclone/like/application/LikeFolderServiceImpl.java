@@ -7,7 +7,6 @@ import com.nocaffeine.ssgclone.like.domain.ProductLike;
 import com.nocaffeine.ssgclone.like.dto.ProductLikeAddDto;
 import com.nocaffeine.ssgclone.like.dto.LikeFolderDto;
 import com.nocaffeine.ssgclone.like.dto.ProductLikeListDto;
-import com.nocaffeine.ssgclone.like.dto.ProductLikeRemoveDto;
 import com.nocaffeine.ssgclone.like.infrastructure.LikeFolderRepository;
 import com.nocaffeine.ssgclone.like.infrastructure.ProductLikeRepository;
 import com.nocaffeine.ssgclone.member.domain.Member;
@@ -54,11 +53,11 @@ public class LikeFolderServiceImpl implements LikeFolderService{
      */
     @Override
     @Transactional
-    public void removeLikeFolder(LikeFolderDto likeFolderDto, String memberUuid) {
+    public void removeLikeFolder(Long likeFolderId, String memberUuid) {
         Member member = memberRepository.findByUuid(memberUuid)
                 .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
 
-        LikeFolder likeFolder = likeFolderRepository.findByIdAndMember(likeFolderDto.getLikeFolderId(), member)
+        LikeFolder likeFolder = likeFolderRepository.findByIdAndMember(likeFolderId, member)
                 .orElseThrow(() -> new BaseException(NO_DATA));
 
         likeFolderRepository.delete(likeFolder);
@@ -93,14 +92,18 @@ public class LikeFolderServiceImpl implements LikeFolderService{
      */
     @Override
     @Transactional
-    public void modifyLikeFolder(LikeFolderDto likeFolderDto, String memberUuid) {
+    public void modifyLikeFolder(LikeFolderDto likeFolderDto, Long likeFolderId, String memberUuid) {
         Member member = memberRepository.findByUuid(memberUuid)
                 .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
 
-        LikeFolder likeFolder = likeFolderRepository.findByIdAndMember(likeFolderDto.getLikeFolderId(), member)
+        LikeFolder likeFolder = likeFolderRepository.findByIdAndMember(likeFolderId, member)
                 .orElseThrow(() -> new BaseException(NO_DATA));
 
-        likeFolder.changeName(likeFolderDto.getName());
+        likeFolderRepository.save(LikeFolder.builder()
+                .id(likeFolder.getId())
+                .name(likeFolderDto.getName())
+                .member(likeFolder.getMember())
+                .build());
     }
 
 
@@ -167,13 +170,11 @@ public class LikeFolderServiceImpl implements LikeFolderService{
      */
     @Override
     @Transactional
-    public void removeProductLike(ProductLikeRemoveDto productLikeRemoveDto, String memberUuid) {
-        memberRepository.findByUuid(memberUuid)
-                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
-
-        for (Long productLikeId : productLikeRemoveDto.getProductLikeId()) {
-            ProductLike productLike = productLikeRepository.findByIdAndLikeFolder(productLikeId, productLikeRemoveDto.getLikeFolderId())
+    public void removeProductLike(List<Long> productLikeIds, Long likeFolderId) {
+        for (Long productLikeId : productLikeIds) {
+            ProductLike productLike = productLikeRepository.findByIdAndLikeFolder(productLikeId, likeFolderId)
                     .orElseThrow(() -> new BaseException(NO_DATA));
+
             productLikeRepository.delete(productLike);
         }
     }

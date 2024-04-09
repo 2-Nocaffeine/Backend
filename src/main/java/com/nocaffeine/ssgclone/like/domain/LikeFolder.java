@@ -23,13 +23,11 @@ public class LikeFolder {
     @Column(length = 50)
     private String name;
 
-    @Builder
-    public LikeFolder(Member member, String name) {
-        this.member = member;
-        this.name = name;
-    }
 
-    public void changeName(String name) {
+    @Builder
+    public LikeFolder(Long id, Member member, String name) {
+        this.id = id;
+        this.member = member;
         this.name = name;
     }
 }
