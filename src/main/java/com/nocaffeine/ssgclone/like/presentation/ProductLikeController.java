@@ -5,9 +5,11 @@ import com.nocaffeine.ssgclone.common.CommonResponse;
 import com.nocaffeine.ssgclone.common.security.JwtTokenProvider;
 import com.nocaffeine.ssgclone.like.application.ProductLikeService;
 import com.nocaffeine.ssgclone.like.dto.request.ProductLikeAddRequest;
+import com.nocaffeine.ssgclone.like.dto.request.ProductLikeListRequestDto;
 import com.nocaffeine.ssgclone.like.dto.request.ProductLikeRemoveRequest;
 import com.nocaffeine.ssgclone.like.dto.response.LikeStatusResponseDto;
 import com.nocaffeine.ssgclone.like.dto.response.ProductLikeListResponse;
+import com.nocaffeine.ssgclone.like.vo.request.ProductLikeListRequestVo;
 import com.nocaffeine.ssgclone.like.vo.response.ProductLikeStatusVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -41,6 +43,14 @@ public class ProductLikeController {
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
         productLikeService.removeProductLike(productLikeRemoveRequest, memberUuid);
         return CommonResponse.success("좋아요 취소 성공");
+    }
+
+    @Operation(summary = "상품 좋아요 여러개 취소", description = "상품 좋아요 여러개 취소")
+    @DeleteMapping("/list")
+    public CommonResponse<String> removeListProductLike(@RequestBody ProductLikeListRequestVo productLikeListRequestVo){
+        String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
+        productLikeService.removeListProductLike(ProductLikeListRequestDto.voToDto(productLikeListRequestVo), memberUuid);
+        return CommonResponse.success("좋아요 여러개 취소 성공");
     }
 
     @Operation(summary = "상품 좋아요 조회", description = "상품 좋아요 조회")
