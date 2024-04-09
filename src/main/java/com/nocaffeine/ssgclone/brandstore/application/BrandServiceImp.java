@@ -37,10 +37,6 @@ public class BrandServiceImp implements BrandService{
     public List<BrandProductIdResponseDto> findBrandProductList(Long brandId) {
         List<BrandList> brandList = brandListRepository.findByBrandId(brandId);
 
-        if (brandList.isEmpty()) {
-            throw new BaseException(NO_EXIST_BRAND_PRODUCT);
-        }
-
         List<BrandProductIdResponseDto> brandProductIdList = new ArrayList<>();
 
         for (BrandList brand : brandList) {
