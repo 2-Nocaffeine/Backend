@@ -1,6 +1,8 @@
 package com.nocaffeine.ssgclone.product.infrastructure;
 
 import com.nocaffeine.ssgclone.product.domain.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,4 +19,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findByNameContaining(String searchKeyword);
 
+    // 제품 리스트를 10개씩 페이징을 해서 가져오는 메소드
+    Page<Product> findAll(Pageable page);
 }

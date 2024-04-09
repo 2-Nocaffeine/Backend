@@ -6,11 +6,14 @@ import com.nocaffeine.ssgclone.member.infrastructure.MemberRepository;
 import com.nocaffeine.ssgclone.product.domain.Product;
 import com.nocaffeine.ssgclone.product.domain.ViewHistory;
 import com.nocaffeine.ssgclone.product.dto.request.ViewHistoryRequestDto;
+import com.nocaffeine.ssgclone.product.dto.response.ViewHistoryPageListResponseDto;
 import com.nocaffeine.ssgclone.product.dto.response.ViewHistoryResponseDto;
 import com.nocaffeine.ssgclone.product.dto.request.ViewHistoryListRequestDto;
 import com.nocaffeine.ssgclone.product.infrastructure.ProductRepository;
 import com.nocaffeine.ssgclone.product.infrastructure.ViewHistoryRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,10 +39,6 @@ public class ViewHistoryServiceImpl implements ViewHistoryService {
 
         List<ViewHistory> viewHistories = viewHistoryRepository.findByMemberOrderByCreatedAtDesc(member);
 
-        if (viewHistories.isEmpty()) {
-            throw new BaseException(NO_VIEW_HISTORY);
-        }
-
         List<ViewHistoryResponseDto> responses = new ArrayList<>();
 
         for (ViewHistory viewHistory : viewHistories) {
@@ -53,6 +52,30 @@ public class ViewHistoryServiceImpl implements ViewHistoryService {
 
         return responses;
     }
+
+    // 최근 본 상품을 조회하는 메소드
+    @Override
+    public ViewHistoryPageListResponseDto getViewHistoryPageList(String memberUuid, Pageable page) {
+        Member member = memberRepository.findByUuid(memberUuid)
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
+
+        Page<ViewHistory> viewHistories = viewHistoryRepository.findByMemberOrderByCreatedAtDesc(member, page);
+
+        List<ViewHistoryResponseDto> responses = new ArrayList<>();
+
+        for (ViewHistory viewHistory : viewHistories) {
+            ViewHistoryResponseDto response = ViewHistoryResponseDto.builder()
+                    .id(viewHistory.getId())
+                    .productId(viewHistory.getProduct().getId())
+                    .build();
+
+            responses.add(response);
+        }
+
+        return ViewHistoryPageListResponseDto.fromViewHistoryPageListResponseDto(viewHistories.hasNext(), viewHistories.isLast(), responses);
+    }
+
+
 
     @Override
     @Transactional
