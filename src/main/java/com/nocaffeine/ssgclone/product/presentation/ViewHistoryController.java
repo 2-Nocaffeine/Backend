@@ -4,15 +4,20 @@ import com.nocaffeine.ssgclone.common.CommonResponse;
 import com.nocaffeine.ssgclone.common.security.JwtTokenProvider;
 import com.nocaffeine.ssgclone.product.application.ViewHistoryService;
 import com.nocaffeine.ssgclone.product.dto.request.ViewHistoryRequestDto;
+import com.nocaffeine.ssgclone.product.dto.response.ViewHistoryPageListResponseDto;
 import com.nocaffeine.ssgclone.product.dto.response.ViewHistoryResponseDto;
 import com.nocaffeine.ssgclone.product.dto.request.ViewHistoryListRequestDto;
 import com.nocaffeine.ssgclone.product.vo.request.ViewHistoryDeleteRequestVo;
 import com.nocaffeine.ssgclone.product.vo.request.ViewHistoryRequestVo;
+import com.nocaffeine.ssgclone.product.vo.response.ViewHistoryPageListResponseVo;
 import com.nocaffeine.ssgclone.product.vo.response.ViewHistoryResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,7 +34,7 @@ public class ViewHistoryController {
 
     // 최근 본 상품 목록을 조회하는 메소드
     @Operation(summary = "최근 본 상품 목록 조회", description = "최근 본 상품 목록 조회", tags = {"View History"})
-    @GetMapping
+    @GetMapping("/list")
     public CommonResponse<List<ViewHistoryResponseVo>> getViewHistory() {
         String token = jwtTokenProvider.getHeader();
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(token);
@@ -38,6 +43,21 @@ public class ViewHistoryController {
 
         return CommonResponse.success("최근 본 상품 목록을 성공적으로 가져왔습니다.",
                 ViewHistoryResponseVo.viewHistoryDtoToVo(viewHistory));
+    }
+
+    // 최근 본 상품 조회
+    @Operation(summary = "최근 본 상품 목록 조회", description = "최근 본 상품 목록 조회", tags = {"View History"})
+    @GetMapping
+    public CommonResponse<ViewHistoryPageListResponseVo> getViewHistoryPageList(
+            @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable page
+    ) {
+        String token = jwtTokenProvider.getHeader();
+        String memberUuid = jwtTokenProvider.validateAndGetUserUuid(token);
+
+        ViewHistoryPageListResponseDto viewHistoryPageListResponseDto = viewHistoryService.getViewHistoryPageList(memberUuid, page);
+
+        return CommonResponse.success("최근 본 상품 목록을 성공적으로 가져왔습니다.",
+                ViewHistoryPageListResponseVo.fromViewHistoryPageListResponseDto(viewHistoryPageListResponseDto));
     }
 
     // 최근 본 상품을 추가하는 메소드

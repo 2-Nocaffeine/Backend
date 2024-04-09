@@ -8,6 +8,8 @@ import com.nocaffeine.ssgclone.product.infrastructure.OptionSelectedProductRepos
 import com.nocaffeine.ssgclone.product.infrastructure.ProductCategoryListRepository;
 import com.nocaffeine.ssgclone.product.infrastructure.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,22 @@ public class ProductServiceImpl implements ProductService{
     private final ProductRepository productRepository;
     private final OptionSelectedProductRepository optionSelectedProductRepository;
     private final ProductCategoryListRepository productCategoryListRepository;
+
+    // 제품 리스트를 10개씩 페이징을 해서 가져오는 메소드
+    @Override
+    public ProductPageListResponseDto getAllProducts(Pageable page) {
+
+        Page<Product> products = productRepository.findAll(page);
+
+        List<ProductResponseDto> responses = new ArrayList<>();
+
+        for (Product product : products) {
+            responses.add(ProductResponseDto.fromProduct(product));
+        }
+
+        return ProductPageListResponseDto.fromProductPageListResponseDto(products.hasNext(), products.isLast(), responses);
+    }
+
 
     @Override
     public ProductResponseDto getProduct(Long id) {

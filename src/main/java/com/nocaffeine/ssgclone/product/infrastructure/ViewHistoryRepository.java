@@ -3,6 +3,8 @@ package com.nocaffeine.ssgclone.product.infrastructure;
 import com.nocaffeine.ssgclone.member.domain.Member;
 import com.nocaffeine.ssgclone.product.domain.Product;
 import com.nocaffeine.ssgclone.product.domain.ViewHistory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -21,4 +23,6 @@ public interface ViewHistoryRepository extends JpaRepository<ViewHistory, Long> 
     void deleteByMemberAndProduct(Member member, Product product);
 
     Optional<ViewHistory> findByMemberAndProduct(Member member, Product product);
+
+    Page<ViewHistory> findByMemberOrderByCreatedAtDesc(Member member, Pageable pageable);
 }

@@ -8,6 +8,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +23,17 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+
+    // 전체 상품 리스트 페이징 조회
+    @Operation(summary = "전체 상품 리스트 조회", description = "전체 상품 리스트 조회")
+    @GetMapping("/product-list")
+    public CommonResponse<ProductPageListResponseVo> getAllProducts(
+            @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable page) {
+        ProductPageListResponseDto productPageListResponseDto = productService.getAllProducts(page);
+
+        return CommonResponse.success("상품 리스트를 성공적으로 찾았습니다.",
+                ProductPageListResponseVo.fromProductPageListResponseDto(productPageListResponseDto));
+    }
 
     @Operation(summary = "상품 상세 정보 조회", description = "상품 상세 정보 조회")
     @GetMapping("/{productId}")
