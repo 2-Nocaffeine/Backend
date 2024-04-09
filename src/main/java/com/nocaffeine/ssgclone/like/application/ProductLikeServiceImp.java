@@ -4,6 +4,7 @@ package com.nocaffeine.ssgclone.like.application;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
 import com.nocaffeine.ssgclone.like.domain.ProductLike;
 import com.nocaffeine.ssgclone.like.dto.request.ProductLikeAddRequest;
+import com.nocaffeine.ssgclone.like.dto.request.ProductLikeListRequestDto;
 import com.nocaffeine.ssgclone.like.dto.request.ProductLikeRemoveRequest;
 import com.nocaffeine.ssgclone.like.dto.response.LikeStatusResponseDto;
 import com.nocaffeine.ssgclone.like.dto.response.ProductLikeListResponse;
@@ -74,6 +75,23 @@ public class ProductLikeServiceImp implements ProductLikeService {
 
         productLikeRepository.delete(productLike);
 
+    }
+
+    @Override
+    @Transactional
+    public void removeListProductLike(ProductLikeListRequestDto productLikeListRequestDto, String memberUuid) {
+        Member member = memberRepository.findByUuid(memberUuid)
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
+
+        for (Long productId : productLikeListRequestDto.getProductId()) {
+            Product product = productRepository.findById(productId)
+                    .orElseThrow(() -> new BaseException(NO_PRODUCT));
+
+            ProductLike productLike = productLikeRepository.findByMemberAndProduct(member, product)
+                    .orElseThrow(() -> new BaseException(NO_EXIST_WISH_PRODUCT));
+
+            productLikeRepository.delete(productLike);
+        }
     }
 
     /**
