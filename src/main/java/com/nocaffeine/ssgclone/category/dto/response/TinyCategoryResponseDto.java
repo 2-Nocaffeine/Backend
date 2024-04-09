@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TinyCategoryResponse {
+public class TinyCategoryResponseDto {
 
     private Long tinyCategoryId;
     private String tinyCategoryName;

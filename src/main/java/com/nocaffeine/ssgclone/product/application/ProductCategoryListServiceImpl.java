@@ -2,7 +2,7 @@ package com.nocaffeine.ssgclone.product.application;
 
 import com.nocaffeine.ssgclone.category.domain.ProductCategoryList;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
-import com.nocaffeine.ssgclone.product.dto.response.ProductIdListResponse;
+import com.nocaffeine.ssgclone.product.dto.response.ProductIdListResponseDto;
 import com.nocaffeine.ssgclone.product.infrastructure.ProductCategoryListRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,63 +21,63 @@ public class ProductCategoryListServiceImpl implements ProductCategoryListServic
     private final ProductCategoryListRepository productCategoryListRepository;
 
     @Override
-    public List<ProductIdListResponse> getProductIdListWithLargeCategory(Long largeId) {
-        List<ProductIdListResponse> productIdListResponseList = new ArrayList<>();
+    public List<ProductIdListResponseDto> getProductIdListWithLargeCategory(Long largeId) {
+        List<ProductIdListResponseDto> productIdListResponseListDto = new ArrayList<>();
 
         for (ProductCategoryList productCategoryList : productCategoryListRepository.findByLargeCategoryId(largeId)){
-            ProductIdListResponse productIdListResponse = ProductIdListResponse.builder()
+            ProductIdListResponseDto productIdListResponseDto = ProductIdListResponseDto.builder()
                     .id(productCategoryList.getId())
                     .productId(productCategoryList.getProduct().getId())
                     .build();
-            productIdListResponseList.add(productIdListResponse);
+            productIdListResponseListDto.add(productIdListResponseDto);
         }
-        return productIdListResponseList;
+        return productIdListResponseListDto;
     }
 
     @Override
-    public List<ProductIdListResponse> getProductIdListWithMediumCategory(Long mediumId) {
-        List<ProductIdListResponse> productIdListResponseList = new ArrayList<>();
+    public List<ProductIdListResponseDto> getProductIdListWithMediumCategory(Long mediumId) {
+        List<ProductIdListResponseDto> productIdListResponseListDto = new ArrayList<>();
 
         for (ProductCategoryList productCategoryList : productCategoryListRepository.findByMediumCategoryId(mediumId)){
-            ProductIdListResponse productIdListResponse = ProductIdListResponse.builder()
+            ProductIdListResponseDto productIdListResponseDto = ProductIdListResponseDto.builder()
                     .id(productCategoryList.getId())
                     .productId(productCategoryList.getProduct().getId())
                     .build();
-            productIdListResponseList.add(productIdListResponse);
+            productIdListResponseListDto.add(productIdListResponseDto);
         }
-        return productIdListResponseList;
+        return productIdListResponseListDto;
     }
 
     @Override
-    public List<ProductIdListResponse> getProductIdListWithSmallCategory(Long smallId) {
-        List<ProductIdListResponse> productIdListResponseList = new ArrayList<>();
+    public List<ProductIdListResponseDto> getProductIdListWithSmallCategory(Long smallId) {
+        List<ProductIdListResponseDto> productIdListResponseListDto = new ArrayList<>();
 
         for (ProductCategoryList productCategoryList : productCategoryListRepository.findBySmallCategoryId(smallId)){
-            ProductIdListResponse productIdListResponse = ProductIdListResponse.builder()
+            ProductIdListResponseDto productIdListResponseDto = ProductIdListResponseDto.builder()
                     .id(productCategoryList.getId())
                     .productId(productCategoryList.getProduct().getId())
                     .build();
-            productIdListResponseList.add(productIdListResponse);
+            productIdListResponseListDto.add(productIdListResponseDto);
         }
-        return productIdListResponseList;
+        return productIdListResponseListDto;
     }
 
     @Override
-    public List<ProductIdListResponse> getProductIdListWithTinyCategory(Long tinyId) {
+    public List<ProductIdListResponseDto> getProductIdListWithTinyCategory(Long tinyId) {
 
         List<ProductCategoryList> productCategoryLists = productCategoryListRepository.findByTinyCategory(tinyId);
         if (productCategoryLists.isEmpty()){
                 throw new BaseException(NO_PRODUCT);
         }
 
-        List<ProductIdListResponse> productIdList = new ArrayList<>();
+        List<ProductIdListResponseDto> productIdList = new ArrayList<>();
 
         for (ProductCategoryList productCategoryList : productCategoryLists){
-            ProductIdListResponse productIdListResponse = ProductIdListResponse.builder()
+            ProductIdListResponseDto productIdListResponseDto = ProductIdListResponseDto.builder()
                     .id(productCategoryList.getId())
                     .productId(productCategoryList.getProduct().getId())
                     .build();
-            productIdList.add(productIdListResponse);
+            productIdList.add(productIdListResponseDto);
         }
         return productIdList;
     }

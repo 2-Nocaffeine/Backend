@@ -1,15 +1,15 @@
 package com.nocaffeine.ssgclone.product.application;
 
-import com.nocaffeine.ssgclone.product.dto.response.ProductIdListResponse;
+import com.nocaffeine.ssgclone.product.dto.response.ProductIdListResponseDto;
 
 import java.util.List;
 
 public interface ProductCategoryListService {
-    List<ProductIdListResponse> getProductIdListWithLargeCategory(Long largeId);
+    List<ProductIdListResponseDto> getProductIdListWithLargeCategory(Long largeId);
 
-    List<ProductIdListResponse> getProductIdListWithMediumCategory(Long mediumId);
+    List<ProductIdListResponseDto> getProductIdListWithMediumCategory(Long mediumId);
 
-    List<ProductIdListResponse> getProductIdListWithSmallCategory(Long smallId);
+    List<ProductIdListResponseDto> getProductIdListWithSmallCategory(Long smallId);
 
-    List<ProductIdListResponse> getProductIdListWithTinyCategory(Long tinyId);
+    List<ProductIdListResponseDto> getProductIdListWithTinyCategory(Long tinyId);
 }
