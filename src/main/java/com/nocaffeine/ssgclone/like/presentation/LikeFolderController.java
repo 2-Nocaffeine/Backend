@@ -55,22 +55,21 @@ public class LikeFolderController {
         return CommonResponse.success("폴더 조회 성공",likeFolderListResponseVo);
     }
 
-    @Operation(summary = "폴더 삭제", description = "폴더 삭제")
-    @DeleteMapping
-    public CommonResponse<String> folderRemove(@RequestBody LikeFolderRemoveRequestVo likeFolderRemoveRequestVo){
-        String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
-        LikeFolderDto likeFolderDto = LikeFolderDto.voToDto(likeFolderRemoveRequestVo);
-        likeFolderService.removeLikeFolder(likeFolderDto, memberUuid);
-        return CommonResponse.success("폴더 삭제 성공");
-    }
-
     @Operation(summary = "폴더 이름 수정", description = "폴더 이름 수정")
-    @PatchMapping
+    @PutMapping
     public CommonResponse<String> folderModify(@RequestBody LikeFolderModifyRequestVo likeFolderModifyRequestVo){
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
         LikeFolderDto likeFolderDto = LikeFolderDto.voToDto(likeFolderModifyRequestVo);
         likeFolderService.modifyLikeFolder(likeFolderDto, memberUuid);
         return CommonResponse.success("폴더 이름 수정 성공");
+    }
+
+    @Operation(summary = "폴더 삭제", description = "폴더 삭제")
+    @DeleteMapping("/{likeFolderId}")
+    public CommonResponse<String> folderRemove(@PathVariable("likeFolderId") Long likeFolderId){
+        String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
+        likeFolderService.removeLikeFolder(likeFolderId, memberUuid);
+        return CommonResponse.success("폴더 삭제 성공");
     }
 
     @Operation(summary = "선택한 폴더에 좋아요 상품 추가", description = "선택한 폴더에 좋아요 상품 추가")
@@ -84,7 +83,7 @@ public class LikeFolderController {
 
     @Operation(summary = "폴더에 담긴 상품 좋아요 조회", description = "폴더 담긴 상품 좋아요 조회")
     @GetMapping("/{likeFolderId}/product")
-    public CommonResponse<List<LikeProductListResponseVo>> productLikeList(@PathVariable Long likeFolderId){
+    public CommonResponse<List<LikeProductListResponseVo>> productLikeList(@PathVariable("likeFolderId") Long likeFolderId){
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
 
         List<ProductLikeListDto> likeFolderProductList = likeFolderService.findProductLike(likeFolderId, memberUuid);
@@ -98,11 +97,11 @@ public class LikeFolderController {
     }
 
     @Operation(summary = "폴더에 담긴 상품 좋아요 삭제", description = "폴더 담긴 상품 좋아요 삭제")
-    @DeleteMapping("/product")
-    public CommonResponse<String> productLikeRemove(@RequestBody ProductLikeRemoveRequestVo productLikeRemoveRequestVo){
+    @DeleteMapping("{likeFolderId}/product")
+    public CommonResponse<String> productLikeRemove(@PathVariable("likeFolderId") Long likeFolderId,
+                                                    @RequestParam("productLikeId") List<Long> productLikeId){
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
-        ProductLikeRemoveDto productLikeRemoveDto = ProductLikeRemoveDto.voToDto(productLikeRemoveRequestVo);
-        likeFolderService.removeProductLike(productLikeRemoveDto, memberUuid);
+        likeFolderService.removeProductLike(likeFolderId,productLikeId, memberUuid);
         return CommonResponse.success("폴더 삭제 성공");
     }
 
