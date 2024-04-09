@@ -1,9 +1,9 @@
 package com.nocaffeine.ssgclone.product.application;
 
-import com.nocaffeine.ssgclone.product.dto.request.ViewHistoryRequestDto;
-import com.nocaffeine.ssgclone.product.dto.response.ViewHistoryPageListResponseDto;
-import com.nocaffeine.ssgclone.product.dto.response.ViewHistoryResponseDto;
-import com.nocaffeine.ssgclone.product.dto.request.ViewHistoryListRequestDto;
+import com.nocaffeine.ssgclone.product.dto.request.viewhistory.ViewHistoryRequestDto;
+import com.nocaffeine.ssgclone.product.dto.response.viewhistory.ViewHistoryPageListResponseDto;
+import com.nocaffeine.ssgclone.product.dto.response.viewhistory.ViewHistoryResponseDto;
+import com.nocaffeine.ssgclone.product.dto.request.viewhistory.ViewHistoryListRequestDto;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;

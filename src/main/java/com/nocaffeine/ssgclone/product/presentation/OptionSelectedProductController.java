@@ -2,9 +2,9 @@ package com.nocaffeine.ssgclone.product.presentation;
 
 import com.nocaffeine.ssgclone.common.CommonResponse;
 import com.nocaffeine.ssgclone.product.application.OptionSelectedProductService;
-import com.nocaffeine.ssgclone.product.dto.response.OptionSelectedProductResponseDto;
-import com.nocaffeine.ssgclone.product.vo.response.OptionSelectedProductListResponseVo;
-import com.nocaffeine.ssgclone.product.vo.response.OptionSelectedProductResponseVo;
+import com.nocaffeine.ssgclone.product.dto.response.productoption.OptionSelectedProductResponseDto;
+import com.nocaffeine.ssgclone.product.vo.response.productoption.OptionSelectedProductListResponseVo;
+import com.nocaffeine.ssgclone.product.vo.response.productoption.OptionSelectedProductResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,9 @@ public class OptionSelectedProductController {
 
     @Operation(summary = "옵션 선택 완료 최종 상품 조회", description = "옵션 선택 완료 최종 상품 조회")
     @GetMapping("/{optionSelectedProductId}")
-    public CommonResponse<OptionSelectedProductResponseVo> getOptionSelectedProduct(@PathVariable("optionSelectedProductId") Long id) {
+    public CommonResponse<OptionSelectedProductResponseVo> getOptionSelectedProduct(
+            @PathVariable("optionSelectedProductId") Long id) {
+
         OptionSelectedProductResponseDto getOptionSelectedProductResponseDto = optionSelectedProductService.getOptionSelectedProduct(id);
 
         return CommonResponse.success("옵션 선택 완료 최종 상품을 성공적으로 찾았습니다.",
