@@ -2,7 +2,7 @@ package com.nocaffeine.ssgclone.product.application;
 
 import com.nocaffeine.ssgclone.category.domain.ProductCategoryList;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
-import com.nocaffeine.ssgclone.product.dto.response.ProductIdListResponseDto;
+import com.nocaffeine.ssgclone.product.dto.response.product.ProductIdListResponseDto;
 import com.nocaffeine.ssgclone.product.infrastructure.ProductCategoryListRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

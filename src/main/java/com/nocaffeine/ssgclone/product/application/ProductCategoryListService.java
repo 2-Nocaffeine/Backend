@@ -1,6 +1,6 @@
 package com.nocaffeine.ssgclone.product.application;
 
-import com.nocaffeine.ssgclone.product.dto.response.ProductIdListResponseDto;
+import com.nocaffeine.ssgclone.product.dto.response.product.ProductIdListResponseDto;
 
 import java.util.List;
 

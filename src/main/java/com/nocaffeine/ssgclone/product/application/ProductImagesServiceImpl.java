@@ -1,7 +1,7 @@
 package com.nocaffeine.ssgclone.product.application;
 
 import com.nocaffeine.ssgclone.product.domain.ProductImage;
-import com.nocaffeine.ssgclone.product.dto.response.ProductImageResponseDto;
+import com.nocaffeine.ssgclone.product.dto.response.productimage.ProductImageResponseDto;
 import com.nocaffeine.ssgclone.product.infrastructure.ProductImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

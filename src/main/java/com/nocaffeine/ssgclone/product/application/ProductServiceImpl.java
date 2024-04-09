@@ -3,7 +3,13 @@ package com.nocaffeine.ssgclone.product.application;
 import com.nocaffeine.ssgclone.category.domain.ProductCategoryList;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
 import com.nocaffeine.ssgclone.product.domain.*;
-import com.nocaffeine.ssgclone.product.dto.response.*;
+import com.nocaffeine.ssgclone.product.dto.response.category.ProductCategoryResponseDto;
+import com.nocaffeine.ssgclone.product.dto.response.product.ProductPageListResponseDto;
+import com.nocaffeine.ssgclone.product.dto.response.product.ProductResponseDto;
+import com.nocaffeine.ssgclone.product.dto.response.productoption.AddOptionResponseDto;
+import com.nocaffeine.ssgclone.product.dto.response.productoption.ColorOptionResponseDto;
+import com.nocaffeine.ssgclone.product.dto.response.productoption.ProductOptionTypesResponseDto;
+import com.nocaffeine.ssgclone.product.dto.response.productoption.SizeOptionResponseDto;
 import com.nocaffeine.ssgclone.product.infrastructure.OptionSelectedProductRepository;
 import com.nocaffeine.ssgclone.product.infrastructure.ProductCategoryListRepository;
 import com.nocaffeine.ssgclone.product.infrastructure.ProductRepository;
@@ -28,7 +34,23 @@ public class ProductServiceImpl implements ProductService{
     private final OptionSelectedProductRepository optionSelectedProductRepository;
     private final ProductCategoryListRepository productCategoryListRepository;
 
-    // 제품 리스트를 10개씩 페이징을 해서 가져오는 메소드
+    // 전체 상품 리스트를 가져오는 메소드
+    @Override
+    public List<ProductResponseDto> getAllProductId() {
+
+        List<Product> products = productRepository.findAll();
+
+        List<ProductResponseDto> responses = new ArrayList<>();
+
+        for (Product product : products) {
+            responses.add(ProductResponseDto.fromProduct(product));
+        }
+
+        return responses;
+    }
+
+
+    // 전체 상품 리스트를 10개씩 페이징을 해서 가져오는 메소드
     @Override
     public ProductPageListResponseDto getAllProducts(Pageable page) {
 

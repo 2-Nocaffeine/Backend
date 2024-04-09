@@ -2,8 +2,7 @@ package com.nocaffeine.ssgclone.product.presentation;
 
 import com.nocaffeine.ssgclone.common.CommonResponse;
 import com.nocaffeine.ssgclone.product.application.ProductCategoryListService;
-import com.nocaffeine.ssgclone.product.dto.response.ProductIdListResponseDto;
-import com.nocaffeine.ssgclone.product.vo.response.ProductIdListResponseVo;
+import com.nocaffeine.ssgclone.product.vo.response.product.ProductIdListResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

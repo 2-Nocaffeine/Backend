@@ -17,8 +17,16 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     // Optional.empty()를 리턴하게 되면 클라이언트는 null 체크를 하지 않아도 된다.
     // 즉, 클라이언트는 Optional 객체가 비어있는지 확인하는 메소드를 사용하여 null 체크를 할 수 있다.
 
+    // 제품을 찾는 메소드
     List<Product> findByNameContaining(String searchKeyword);
+
+    // 키워드 검색을 통해 상품 이름과 겹치는 상품과 브랜드명과 겹치는 상품과 카테고리명과 겹치 는 상품을 리스트로 가져오는 메소드
+    //List<Product> findByNameContainingOrBrandNameContainingOrCategoryNameContaining(String searchKeyword, String searchKeyword2, String searchKeyword3);
 
     // 제품 리스트를 10개씩 페이징을 해서 가져오는 메소드
     Page<Product> findAll(Pageable page);
+
+    // 전체 상품 리스트 조회
+    List<Product> findAll();
+
 }
