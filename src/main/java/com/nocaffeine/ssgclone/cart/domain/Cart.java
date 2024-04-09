@@ -30,7 +30,8 @@ public class Cart {
     private boolean checkProduct;
 
     @Builder
-    public Cart(Member member, OptionSelectedProduct optionSelectedProduct, int quantity, boolean pin, boolean checkProduct) {
+    public Cart(Long id, Member member, OptionSelectedProduct optionSelectedProduct, int quantity, boolean pin, boolean checkProduct) {
+        this.id = id;
         this.member = member;
         this.optionSelectedProduct = optionSelectedProduct;
         this.quantity = quantity;
@@ -38,19 +39,22 @@ public class Cart {
         this.checkProduct = checkProduct;
     }
 
-    public void addQuantity(int quantity) {
-        this.quantity += quantity;
-    }
 
-    public void plusQuantity() {
-        this.quantity++;
-
-    }
-    public void minusQuantity() {
+    public int minusQuantity() {
         if(quantity > 1){
             this.quantity--;
         } else{
             throw new BaseException(INVALID_CART_QUANTITY);
         }
+        return quantity;
     }
+
+
+    public int plusQuantity() {
+        this.quantity++;
+        return quantity;
+    }
+
+
+
 }
