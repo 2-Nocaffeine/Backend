@@ -55,7 +55,7 @@ public class CartController {
     }
 
 
-    @Operation(summary = "장바구니 리스트 조회", description = "장바구니 리스트 조회")
+    @Operation(summary = "장바구니 상품 리스트 조회", description = "장바구니 상품 리스트 조회")
     @GetMapping
     public CommonResponse<List<CartListResponseVo>> cartList() {
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
