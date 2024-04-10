@@ -3,8 +3,6 @@ package com.nocaffeine.ssgclone.cart.application;
 
 import com.nocaffeine.ssgclone.cart.domain.Cart;
 import com.nocaffeine.ssgclone.cart.dto.request.CartAddRequestDto;
-import com.nocaffeine.ssgclone.cart.dto.request.CartModifyRequestDto;
-import com.nocaffeine.ssgclone.cart.dto.request.CartRemoveListRequestDto;
 import com.nocaffeine.ssgclone.cart.dto.response.CartCountResponseDto;
 import com.nocaffeine.ssgclone.cart.dto.response.CartListResponseDto;
 import com.nocaffeine.ssgclone.cart.dto.response.CartPriceResponseDto;
@@ -51,39 +49,31 @@ public class CartServiceImp implements CartService {
 
         if (memberCart.isPresent()) {
             // 이미 장바구니에 해당 상품이 존재하는 경우 -> 수량만큼 추가
-            memberCart.get().addQuantity(cartAddRequestDto.getQuantity());
+            Cart cart = memberCart.get();
+            cartRepository.save(Cart.builder()
+                    .id(cart.getId())
+                    .member(member)
+                    .optionSelectedProduct(optionSelectedProduct)
+                    .quantity(cart.getQuantity() + cartAddRequestDto.getQuantity())
+                    .pin(cart.isPin())
+                    .checkProduct(cart.isCheckProduct())
+                    .build()
+            );
         } else {
             // 장바구니에 해당 상품이 없는경우
-            Cart cart = Cart.builder()
+            cartRepository.save(Cart.builder()
                     .member(member)
                     .optionSelectedProduct(optionSelectedProduct)
                     .quantity(cartAddRequestDto.getQuantity())
                     .pin(false)
                     .checkProduct(false)
-                    .build();
-
-            cartRepository.save(cart);
-        }
-    }
-
-
-    /**
-     * 장바구니 선택 상품 삭제.
-     */
-    @Override
-    @Transactional
-    public void removeCart(CartRemoveListRequestDto cartRemoveRequestDto, String memberUuid) {
-        List<Long> cartIds = cartRemoveRequestDto.getCartId();
-        for (Long cartId : cartIds) {
-            cartRepository.findById(cartId).orElseThrow(()
-                    -> new BaseException(NO_DATA));
-
-            cartRepository.deleteById(cartId);
+                    .build()
+            );
         }
     }
 
     /**
-     * 장바구니 목록 조회.
+     * 장바구니 리스트 조회.
      */
     @Override
     public List<CartListResponseDto> findCart(String memberUuid) {
@@ -100,6 +90,8 @@ public class CartServiceImp implements CartService {
                     .productId(cart.getOptionSelectedProduct().getProduct().getId())
                     .optionSelectedProduct(cart.getOptionSelectedProduct().getId())
                     .quantity(cart.getQuantity())
+                    .pin(cart.isPin())
+                    .checkProduct(cart.isCheckProduct())
                     .build();
             responseCartList.add(response);
         }
@@ -107,23 +99,39 @@ public class CartServiceImp implements CartService {
     }
 
     /**
-     * 장바구니 상품 수량 수정.
+     * 장바구니 선택한 상품 조회.
+     */
+    @Override
+    public List<CartListResponseDto> findCheckedCart(String memberUuid) {
+        Member member = memberRepository.findByUuid(memberUuid)
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
+
+        List<Cart> cartList = cartRepository.findByCheckProductAndMember(true, member);
+
+        List<CartListResponseDto> responseCartList = new ArrayList<>();
+
+        for (Cart cart : cartList) {
+            CartListResponseDto response = CartListResponseDto.builder()
+                    .cartId(cart.getId())
+                    .productId(cart.getOptionSelectedProduct().getProduct().getId())
+                    .optionSelectedProduct(cart.getOptionSelectedProduct().getId())
+                    .quantity(cart.getQuantity())
+                    .pin(cart.isPin())
+                    .checkProduct(cart.isCheckProduct())
+                    .build();
+            responseCartList.add(response);
+        }
+
+        return responseCartList;
+    }
+
+    /**
+     * 장바구니 상품 선택 삭제.
      */
     @Override
     @Transactional
-    public void modifyCart(CartModifyRequestDto cartModifyRequestDto){
-        Cart cart = cartRepository.findById(cartModifyRequestDto.getCartId())
-                .orElseThrow(() -> new BaseException(NO_DATA));
-
-        if(cartModifyRequestDto.getPm().equals("plus")){
-            cart.plusQuantity();
-        }else if(cartModifyRequestDto.getPm().equals("minus")){
-            cart.minusQuantity();
-        } else{
-            throw new BaseException(NO_DATA);
-
-
-        }
+    public void removeCartList(List<Long> cartId) {
+        cartRepository.deleteAllById(cartId);
     }
 
     /**
@@ -143,6 +151,94 @@ public class CartServiceImp implements CartService {
                 .build();
 
     }
+
+    /**
+     * 장바구니 상품 단건 삭제.
+     */
+    @Override
+    @Transactional
+    public void removeCart(Long cartId) {
+        cartRepository.deleteById(cartId);
+    }
+
+
+
+    /**
+     * 장바구니 상품 수량 증가.
+     */
+    @Override
+    @Transactional
+    public void increaseCount(Long cartId){
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new BaseException(NO_DATA));
+
+        cartRepository.save(Cart.builder()
+                .id(cart.getId())
+                .member(cart.getMember())
+                .optionSelectedProduct(cart.getOptionSelectedProduct())
+                .quantity(cart.plusQuantity())
+                .pin(cart.isPin())
+                .checkProduct(cart.isCheckProduct())
+                .build());
+    }
+
+    /**
+     * 장바구니 상품 수량 감소.
+     */
+    @Override
+    @Transactional
+    public void decreaseCount(Long cartId) {
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new BaseException(NO_DATA));
+
+        cartRepository.save(Cart.builder()
+                .id(cart.getId())
+                .member(cart.getMember())
+                .optionSelectedProduct(cart.getOptionSelectedProduct())
+                .quantity(cart.minusQuantity())
+                .pin(cart.isPin())
+                .checkProduct(cart.isCheckProduct())
+                .build());
+    }
+
+    /**
+     * 장바구니 상품 선택.
+     */
+    @Override
+    @Transactional
+    public void checkCart(Long cartId) {
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new BaseException(NO_DATA));
+
+        cartRepository.save(Cart.builder()
+                .id(cart.getId())
+                .member(cart.getMember())
+                .optionSelectedProduct(cart.getOptionSelectedProduct())
+                .quantity(cart.getQuantity())
+                .pin(cart.isPin())
+                .checkProduct(true)
+                .build());
+    }
+
+    /**
+     * 장바구니 상품 선택 해제.
+     */
+    @Override
+    @Transactional
+    public void unCheckCart(Long cartId) {
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new BaseException(NO_DATA));
+
+        cartRepository.save(Cart.builder()
+                .id(cart.getId())
+                .member(cart.getMember())
+                .optionSelectedProduct(cart.getOptionSelectedProduct())
+                .quantity(cart.getQuantity())
+                .pin(cart.isPin())
+                .checkProduct(false)
+                .build());
+    }
+
 
     /**
      * 장바구니 선택한 상품 가격 조회.
