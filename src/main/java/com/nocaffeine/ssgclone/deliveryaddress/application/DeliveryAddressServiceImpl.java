@@ -5,7 +5,6 @@ import com.nocaffeine.ssgclone.common.exception.BaseException;
 import com.nocaffeine.ssgclone.deliveryaddress.domain.DeliveryAddress;
 import com.nocaffeine.ssgclone.deliveryaddress.dto.request.DeliveryAddressAddRequestDto;
 import com.nocaffeine.ssgclone.deliveryaddress.dto.request.DeliveryAddressModifyRequestDto;
-import com.nocaffeine.ssgclone.deliveryaddress.dto.request.DeliveryAddressSetDefaultRequestDto;
 import com.nocaffeine.ssgclone.deliveryaddress.dto.response.DeliveryAddressDetailResponseDto;
 import com.nocaffeine.ssgclone.deliveryaddress.dto.response.DeliveryAddressListResponseDto;
 import com.nocaffeine.ssgclone.deliveryaddress.infrastructure.DeliveryAddressRepository;
@@ -132,7 +131,7 @@ public class DeliveryAddressServiceImpl implements DeliveryAddressService{
      */
     @Override
     @Transactional
-    public void setDefaultDeliveryAddress(DeliveryAddressSetDefaultRequestDto deliveryAddressSetDefaultRequestDto, String memberUuid) {
+    public void setDefaultDeliveryAddress(Long deliveryAddressId, String memberUuid) {
         Member member = memberRepository.findByUuid(memberUuid).orElseThrow(() ->
                 new BaseException(NO_EXIST_MEMBERS));
 
@@ -153,7 +152,7 @@ public class DeliveryAddressServiceImpl implements DeliveryAddressService{
             );
         });
 
-        DeliveryAddress deliveryAddress = deliveryAddressRepository.findById(deliveryAddressSetDefaultRequestDto.getDeliveryAddressId()).orElseThrow(() ->
+        DeliveryAddress deliveryAddress = deliveryAddressRepository.findById(deliveryAddressId).orElseThrow(() ->
                 new BaseException(NO_EXIST_ADDRESS));
 
         deliveryAddressRepository.save(

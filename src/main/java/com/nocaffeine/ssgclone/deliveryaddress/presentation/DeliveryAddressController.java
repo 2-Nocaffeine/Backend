@@ -6,12 +6,10 @@ import com.nocaffeine.ssgclone.common.security.JwtTokenProvider;
 import com.nocaffeine.ssgclone.deliveryaddress.application.DeliveryAddressService;
 import com.nocaffeine.ssgclone.deliveryaddress.dto.request.DeliveryAddressAddRequestDto;
 import com.nocaffeine.ssgclone.deliveryaddress.dto.request.DeliveryAddressModifyRequestDto;
-import com.nocaffeine.ssgclone.deliveryaddress.dto.request.DeliveryAddressSetDefaultRequestDto;
 import com.nocaffeine.ssgclone.deliveryaddress.dto.response.DeliveryAddressDetailResponseDto;
 import com.nocaffeine.ssgclone.deliveryaddress.dto.response.DeliveryAddressListResponseDto;
 import com.nocaffeine.ssgclone.deliveryaddress.vo.request.DeliveryAddressAddRequestVo;
 import com.nocaffeine.ssgclone.deliveryaddress.vo.request.DeliveryAddressModifyRequestVo;
-import com.nocaffeine.ssgclone.deliveryaddress.vo.request.DeliveryAddressSetDefaultRequestVo;
 import com.nocaffeine.ssgclone.deliveryaddress.vo.response.DeliveryAddressDetailResponseVo;
 import com.nocaffeine.ssgclone.deliveryaddress.vo.response.DeliveryAddressListResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
@@ -71,15 +69,15 @@ public class DeliveryAddressController {
     }
 
     @Operation(summary = "기본 배송지 설정", description = "기본 배송지 설정")
-    @PutMapping("/default")
-    public CommonResponse<String> setDefaultDeliveryAddress(@RequestBody DeliveryAddressSetDefaultRequestVo deliveryAddressAddRequestVo) {
+    @PutMapping("/{deliveryAddressId}/default")
+    public CommonResponse<String> setDefaultDeliveryAddress(@PathVariable("deliveryAddressId") Long deliveryAddressId) {
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
-        deliveryAddressService.setDefaultDeliveryAddress(DeliveryAddressSetDefaultRequestDto.voToDto(deliveryAddressAddRequestVo), memberUuid);
+        deliveryAddressService.setDefaultDeliveryAddress(deliveryAddressId, memberUuid);
         return CommonResponse.success("기본 배송지 설정 성공");
     }
 
     @Operation(summary = "배송지 상세 조회", description = "배송지 상세 조회")
-    @GetMapping("{deliveryAddressId}")
+    @GetMapping("/{deliveryAddressId}")
     public CommonResponse<DeliveryAddressDetailResponseVo> findDeliveryAddressDetail(@PathVariable("deliveryAddressId") Long deliveryAddressId) {
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
         DeliveryAddressDetailResponseVo deliveryAddressDetailResponseVo = DeliveryAddressDetailResponseDto.dtoToVo(deliveryAddressService.findDeliveryAddressDetail(deliveryAddressId, memberUuid));
