@@ -12,6 +12,8 @@ import com.nocaffeine.ssgclone.like.infrastructure.LikeFolderRepository;
 import com.nocaffeine.ssgclone.like.infrastructure.ProductLikeRepository;
 import com.nocaffeine.ssgclone.member.domain.Member;
 import com.nocaffeine.ssgclone.member.infrastructure.MemberRepository;
+import com.nocaffeine.ssgclone.product.domain.Product;
+import com.nocaffeine.ssgclone.product.infrastructure.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,7 +33,7 @@ public class LikeFolderServiceImpl implements LikeFolderService{
     private final LikeFolderRepository likeFolderRepository;
     private final MemberRepository memberRepository;
     private final ProductLikeRepository productLikeRepository;
-
+    private final ProductRepository productRepository;
     /**
      * 폴더 추가
      */
@@ -117,13 +119,13 @@ public class LikeFolderServiceImpl implements LikeFolderService{
             LikeFolder likeFolder = likeFolderRepository.findById(likeFolderId)
                     .orElseThrow(() -> new BaseException(NO_EXIST_WISH_FOLDER));
 
-            for (Long productLikeId : productLikeAddDto.getProductLikeId()) {
-                ProductLike productLike = productLikeRepository.findById(productLikeId)
+            for (Long productId : productLikeAddDto.getProductId()) {
+                Product product = productRepository.findById(productId)
                         .orElseThrow(() -> new BaseException(NO_DATA));
 
                 // 폴더에 이미 있을경우 예외처리
                 try {
-                    productLikeRepository.findByProductAndLikeFolder(productLike.getProduct(), likeFolder.getId())
+                    productLikeRepository.findByProductAndLikeFolder(product, likeFolder.getId())
                             .ifPresent(like -> {
                                 throw new BaseException(ALREADY_ADDED_FOLDER);
                             });
@@ -131,13 +133,12 @@ public class LikeFolderServiceImpl implements LikeFolderService{
                     continue;
                 }
 
-                ProductLike like = ProductLike.builder()
+                productLikeRepository.save(ProductLike.builder()
                         .member(member)
                         .likeFolder(likeFolder.getId())
-                        .product(productLike.getProduct())
-                        .build();
+                        .product(product)
+                        .build());
 
-                productLikeRepository.save(like);
             }
         }
     }

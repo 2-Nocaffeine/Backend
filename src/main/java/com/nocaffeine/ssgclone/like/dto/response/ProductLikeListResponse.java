@@ -9,6 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class ProductLikeListResponse {
+    private Long productLikeId;
     private Long productId;
 
 }

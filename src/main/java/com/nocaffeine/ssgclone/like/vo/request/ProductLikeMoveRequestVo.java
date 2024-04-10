@@ -7,5 +7,5 @@ import java.util.List;
 @Getter
 public class ProductLikeMoveRequestVo {
     private List<Long> likeFolderId;
-    private List<Long> productLikeId;
+    private List<Long> productId;
 }
