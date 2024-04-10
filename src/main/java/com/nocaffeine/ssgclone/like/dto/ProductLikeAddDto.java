@@ -14,13 +14,13 @@ import java.util.List;
 public class ProductLikeAddDto {
 
     private List<Long> likeFolderId;
-    private List<Long> productLikeId;
+    private List<Long> productId;
 
 
     public static ProductLikeAddDto voToDto(ProductLikeMoveRequestVo productLikeMoveRequestVo){
         return ProductLikeAddDto.builder()
                 .likeFolderId(productLikeMoveRequestVo.getLikeFolderId())
-                .productLikeId(productLikeMoveRequestVo.getProductLikeId())
+                .productId(productLikeMoveRequestVo.getProductId())
                 .build();
     }
 

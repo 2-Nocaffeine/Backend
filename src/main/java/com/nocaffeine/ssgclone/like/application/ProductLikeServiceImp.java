@@ -108,6 +108,7 @@ public class ProductLikeServiceImp implements ProductLikeService {
 
         for (ProductLike like : productLike) {
             ProductLikeListResponse response = ProductLikeListResponse.builder()
+                    .productLikeId(like.getId())
                     .productId(like.getProduct().getId())
                     .build();
 

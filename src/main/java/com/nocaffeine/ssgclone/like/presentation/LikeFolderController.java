@@ -84,7 +84,7 @@ public class LikeFolderController {
 
     @Operation(summary = "폴더에 담긴 상품 좋아요 조회", description = "폴더 담긴 상품 좋아요 조회")
     @GetMapping("/{likeFolderId}/product")
-    public CommonResponse<List<LikeProductListResponseVo>> productLikeList(@PathVariable Long likeFolderId){
+    public CommonResponse<List<LikeProductListResponseVo>> productLikeList(@PathVariable("likeFolderId") Long likeFolderId){
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
 
         List<ProductLikeListDto> likeFolderProductList = likeFolderService.findProductLike(likeFolderId, memberUuid);
