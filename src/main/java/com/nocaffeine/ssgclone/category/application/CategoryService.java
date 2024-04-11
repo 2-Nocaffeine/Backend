@@ -7,11 +7,11 @@ import java.util.List;
 public interface CategoryService {
 
     List<LargeCategoryResponseDto> findLargeCategories();
-    List<MediumCategoryResponseDto> findMediumCategories(Long largeId);
+    List<CategoryResponseDto> findMediumCategories(Long largeId);
 
-    List<SmallCategoryResponseDto> findSmallCategories(Long mediumId);
+    List<CategoryResponseDto> findSmallCategories(Long mediumId);
 
-    List<TinyCategoryResponseDto> findTinyCategories(Long smallId);
+    List<CategoryResponseDto> findTinyCategories(Long smallId);
 
 
 }

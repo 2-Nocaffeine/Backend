@@ -36,14 +36,14 @@ public class CategoryServiceImp implements CategoryService {
     }
 
     @Override
-    public List<MediumCategoryResponseDto> findMediumCategories(Long largeId) {
+    public List<CategoryResponseDto> findMediumCategories(Long largeId) {
 
-        List<MediumCategoryResponseDto> mediumCategoryDtoList = new ArrayList<>();
+        List<CategoryResponseDto> mediumCategoryDtoList = new ArrayList<>();
 
         for (MediumCategory mediumCategory : mediumCategoryRepository.findByLargeCategoryId(largeId)) {
-            MediumCategoryResponseDto mediumCategoryDto = MediumCategoryResponseDto.builder()
-                    .mediumCategoryId(mediumCategory.getId())
-                    .mediumCategoryName(mediumCategory.getName())
+            CategoryResponseDto mediumCategoryDto = CategoryResponseDto.builder()
+                    .id(mediumCategory.getId())
+                    .name(mediumCategory.getName())
                     .build();
             mediumCategoryDtoList.add(mediumCategoryDto);
         }
@@ -51,13 +51,13 @@ public class CategoryServiceImp implements CategoryService {
     }
 
     @Override
-    public List<SmallCategoryResponseDto> findSmallCategories(Long mediumId) {
-        List<SmallCategoryResponseDto> smallCategoryDtoList = new ArrayList<>();
+    public List<CategoryResponseDto> findSmallCategories(Long mediumId) {
+        List<CategoryResponseDto> smallCategoryDtoList = new ArrayList<>();
 
         for (SmallCategory smallCategory : smallCategoryRepository.findByMediumCategoryId(mediumId)) {
-            SmallCategoryResponseDto smallCategoryDto = SmallCategoryResponseDto.builder()
-                    .smallCategoryId(smallCategory.getId())
-                    .smallCategoryName(smallCategory.getName())
+            CategoryResponseDto smallCategoryDto = CategoryResponseDto.builder()
+                    .id(smallCategory.getId())
+                    .name(smallCategory.getName())
                     .build();
             smallCategoryDtoList.add(smallCategoryDto);
 
@@ -67,13 +67,13 @@ public class CategoryServiceImp implements CategoryService {
     }
 
     @Override
-    public List<TinyCategoryResponseDto> findTinyCategories(Long smallId) {
-        List<TinyCategoryResponseDto> tinyCategoryDtoList = new ArrayList<>();
+    public List<CategoryResponseDto> findTinyCategories(Long smallId) {
+        List<CategoryResponseDto> tinyCategoryDtoList = new ArrayList<>();
 
         for (TinyCategory tinyCategory : tinyCategoryRepository.findBySmallCategoryId(smallId)) {
-            TinyCategoryResponseDto tinyCategoryDto = TinyCategoryResponseDto.builder()
-                    .tinyCategoryId(tinyCategory.getId())
-                    .tinyCategoryName(tinyCategory.getName())
+            CategoryResponseDto tinyCategoryDto = CategoryResponseDto.builder()
+                    .id(tinyCategory.getId())
+                    .name(tinyCategory.getName())
                     .build();
             tinyCategoryDtoList.add(tinyCategoryDto);
         }
