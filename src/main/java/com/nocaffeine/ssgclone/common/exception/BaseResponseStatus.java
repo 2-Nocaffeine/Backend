@@ -115,6 +115,8 @@ public enum BaseResponseStatus {
     NO_EXIST_VIEW_HISTORY_PRODUCT(HttpStatus.NOT_FOUND, false, 8007, "해당 유저의 최근 본 상품에는 없는 상품입니다"),
     NO_SEARCH_PRODUCT(HttpStatus.NOT_FOUND, false, 8008, "검색 결과가 없습니다"),
 
+    NO_EXIST_TOTAL(HttpStatus.NOT_FOUND, false, 8009, "존재하지 않는 집계 정보입니다"),
+
     /**
      * 9000 : Brand Service Error
      */
