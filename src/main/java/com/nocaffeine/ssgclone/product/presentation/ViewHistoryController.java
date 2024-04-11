@@ -50,7 +50,7 @@ public class ViewHistoryController {
     @Operation(summary = "최근 본 상품 목록 페이징 조회", description = "최근 본 상품 목록 페이징 조회", tags = {"View History"})
     @GetMapping
     public CommonResponse<ViewHistoryPageListResponseVo> getViewHistoryPageList(
-            @PageableDefault(size = 10, sort = "id") Pageable page) {
+            @PageableDefault(size = 20, sort = "id") Pageable page) {
 
         String token = jwtTokenProvider.getHeader();
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(token);
