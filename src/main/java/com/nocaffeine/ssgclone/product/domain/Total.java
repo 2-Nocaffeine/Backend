@@ -31,11 +31,11 @@ public class Total {
     private int reviewCount;
 
     @Builder
-    public Total(Product product, int sales, Double rateAverage, int reviewCount) {
+    public Total(Long id, Product product, int sales, Double rateAverage, int reviewCount) {
+        this.id = id;
         this.product = product;
         this.sales = sales;
         this.rateAverage = rateAverage;
         this.reviewCount = reviewCount;
     }
-
 }

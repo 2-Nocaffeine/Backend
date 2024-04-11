@@ -9,8 +9,10 @@ import com.nocaffeine.ssgclone.order.infrastructure.OrderProductRepository;
 import com.nocaffeine.ssgclone.order.infrastructure.OrderRepository;
 import com.nocaffeine.ssgclone.product.domain.Image;
 import com.nocaffeine.ssgclone.product.domain.Product;
+import com.nocaffeine.ssgclone.product.domain.Total;
 import com.nocaffeine.ssgclone.product.infrastructure.ImageRepository;
 import com.nocaffeine.ssgclone.product.infrastructure.ProductRepository;
+import com.nocaffeine.ssgclone.product.infrastructure.TotalRepository;
 import com.nocaffeine.ssgclone.review.domain.Review;
 import com.nocaffeine.ssgclone.review.domain.ReviewImage;
 import com.nocaffeine.ssgclone.review.dto.request.ReviewAddRequestDto;
@@ -45,6 +47,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final OrderProductRepository orderProductRepository;
     private final ReviewImageRepository reviewImageRepository;
     private final ImageRepository imageRepository;
+    private final TotalRepository totalRepository;
 
 
     /**
@@ -70,19 +73,47 @@ public class ReviewServiceImpl implements ReviewService {
                 .order(order)
                 .build());
 
-        // 이미지 저장
-        for (String imageUrl : reviewAddRequestDto.getImageUrl()) {
+        addReviewImage(reviewAddRequestDto.getImageUrl(), review);
+
+        updateTotal(reviewAddRequestDto, product);
+
+    }
+
+    // 리뷰 이미지 저장
+    private void addReviewImage(List<String> imageUrls, Review review) {
+        for (String imageUrl : imageUrls) {
             Image image = imageRepository.save(Image.builder()
                     .url(imageUrl)
                     .build());
 
-            // 리뷰 이미지
             reviewImageRepository.save(ReviewImage.builder()
                     .review(review)
                     .image(image)
                     .build());
         }
     }
+
+    // 리뷰 등록 후 상품 평점 업데이트
+    private void updateTotal(ReviewAddRequestDto reviewAddRequestDto, Product product) {
+        Total total = totalRepository.findByProduct(product)
+                .orElseGet(() -> Total.builder()
+                        .product(product)
+                        .sales(0)
+                        .rateAverage((double) reviewAddRequestDto.getRate())
+                        .reviewCount(0)
+                        .build());
+
+        double rateAverage = (total.getRateAverage() * total.getReviewCount() + reviewAddRequestDto.getRate()) / (total.getReviewCount() + 1);
+
+        totalRepository.save(Total.builder()
+                .id(total.getId())
+                .product(total.getProduct())
+                .sales(total.getSales())
+                .rateAverage(rateAverage)
+                .reviewCount(total.getReviewCount() + 1)
+                .build());
+    }
+
 
     /**
      * 리뷰 삭제
@@ -93,13 +124,84 @@ public class ReviewServiceImpl implements ReviewService {
         Review review = reviewRepository.findById(reviewRemoveRequestDto.getReviewId())
                 .orElseThrow(() -> new BaseException(NO_EXIST_REVIEW));
 
+        recoverTotal(review);
+
         List<ReviewImage> reviewImage = reviewImageRepository.findByReview(review);
         reviewImageRepository.deleteAll(reviewImage);
 
         reviewRepository.delete(review);
+
+
     }
 
+    // 평점 되돌리기
+    private void recoverTotal(Review review) {
+        Product product = review.getProduct();
 
+        Total total = totalRepository.findByProduct(product)
+                .orElseThrow(() -> new BaseException(NO_EXIST_TOTAL));
+
+        double rateAverage = (total.getRateAverage() * total.getReviewCount() - review.getRate()) / (total.getReviewCount() - 1);
+
+        totalRepository.save(Total.builder()
+                .id(total.getId())
+                .product(total.getProduct())
+                .sales(total.getSales())
+                .rateAverage(rateAverage)
+                .reviewCount(total.getReviewCount() - 1)
+                .build());
+    }
+
+    /**
+     * 리뷰 수정
+     */
+    @Override
+    @Transactional
+    public void modifyReview(ReviewModifyRequestDto reviewModifyRequestDto, String memberUuid) {
+        Review review = reviewRepository.findById(reviewModifyRequestDto.getReviewId())
+                .orElseThrow(() -> new BaseException(NO_EXIST_REVIEW));
+
+        int previousRate = review.getRate();
+
+        Review newReview = reviewRepository.save(Review.builder()
+                .id(review.getId())
+                .product(review.getProduct())
+                .memberUuid(review.getMemberUuid())
+                .content(reviewModifyRequestDto.getContent())
+                .rate(reviewModifyRequestDto.getRate())
+                .order(review.getOrder())
+                .build()
+        );
+
+        // 기존 사진 삭제후 새로운 사진 추가
+        List<ReviewImage> reviewImage = reviewImageRepository.findByReview(review);
+        reviewImageRepository.deleteAll(reviewImage);
+        reviewRepository.delete(review);
+
+        addReviewImage(reviewModifyRequestDto.getImageUrl(), newReview);
+
+        updateTotal(reviewModifyRequestDto, review, previousRate);
+
+    }
+
+    // 리뷰 수정 후 평점 업데이트
+    private void updateTotal(ReviewModifyRequestDto reviewModifyRequestDto, Review review, int previousRate) {
+        // 평점 업데이트
+        Product product = review.getProduct();
+
+        Total total = totalRepository.findByProduct(product)
+                .orElseThrow(() -> new BaseException(NO_EXIST_TOTAL));
+
+        double rateAverage = (total.getRateAverage() * total.getReviewCount() - previousRate + reviewModifyRequestDto.getRate()) / total.getReviewCount();
+
+        totalRepository.save(Total.builder()
+                .id(total.getId())
+                .product(total.getProduct())
+                .sales(total.getSales())
+                .rateAverage(rateAverage)
+                .reviewCount(total.getReviewCount())
+                .build());
+    }
 
 
     /**
@@ -131,42 +233,6 @@ public class ReviewServiceImpl implements ReviewService {
 
 
     /**
-     * 리뷰 수정
-     */
-    @Override
-    @Transactional
-    public void modifyReview(ReviewModifyRequestDto reviewModifyRequestDto, String memberUuid) {
-        Review review = reviewRepository.findById(reviewModifyRequestDto.getReviewId())
-                .orElseThrow(() -> new BaseException(NO_EXIST_REVIEW));
-
-        Review newReview = reviewRepository.save(Review.builder()
-                .id(review.getId())
-                .product(review.getProduct())
-                .memberUuid(review.getMemberUuid())
-                .content(reviewModifyRequestDto.getContent())
-                .rate(reviewModifyRequestDto.getRate())
-                .order(review.getOrder())
-                .build()
-        );
-
-        // 기존 사진 삭제후 새로운 사진 추가
-        List<ReviewImage> reviewImage = reviewImageRepository.findByReview(review);
-        reviewImageRepository.deleteAll(reviewImage);
-        reviewRepository.delete(review);
-
-        for (String imageUrl : reviewModifyRequestDto.getImageUrl()) {
-            Image image = imageRepository.save(Image.builder()
-                    .url(imageUrl)
-                    .build());
-
-            reviewImageRepository.save(ReviewImage.builder()
-                    .review(newReview)
-                    .image(image)
-                    .build());
-        }
-    }
-
-    /**
      * 상품별 리뷰 조회
      */
     @Override
@@ -193,7 +259,7 @@ public class ReviewServiceImpl implements ReviewService {
         return reviewListResponseDto;
     }
 
-
+    // 이메일 마스킹
     private String maskEmail(String email) {
         int atIndex = email.indexOf('@');
         if (atIndex >= 0) {
@@ -204,6 +270,7 @@ public class ReviewServiceImpl implements ReviewService {
             return email;
         }
     }
+
 
     /**
      * 리뷰 상세 조회
@@ -216,15 +283,13 @@ public class ReviewServiceImpl implements ReviewService {
         Member member = memberRepository.findByUuid(review.getMemberUuid())
                 .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
 
-        ReviewDetailResponseDto reviewDetailResponseDto = ReviewDetailResponseDto.builder()
+        return ReviewDetailResponseDto.builder()
                 .reviewId(review.getId())
                 .memberName(maskEmail(member.getEmail()))
                 .content(review.getContent())
                 .rate(review.getRate())
                 .createdAt(review.getCreatedAt().toString())
                 .build();
-
-        return reviewDetailResponseDto;
     }
 
     /**
@@ -238,6 +303,7 @@ public class ReviewServiceImpl implements ReviewService {
         List<ReviewImage> reviewImages = reviewImageRepository.findByReview(review);
 
         List<ReviewImageResponseDto> reviewImageResponseDtoList = new ArrayList<>();
+
         for (ReviewImage reviewImage : reviewImages) {
             Image image = reviewImage.getImage();
             reviewImageResponseDtoList.add(ReviewImageResponseDto.builder()
@@ -260,6 +326,7 @@ public class ReviewServiceImpl implements ReviewService {
         List<Review> reviews = reviewRepository.findByMemberUuid(member.getUuid());
 
         List<ReviewListResponseDto> reviewListResponseDto = new ArrayList<>();
+
         for (Review review : reviews) {
             reviewListResponseDto.add(ReviewListResponseDto.builder()
                     .reviewId(review.getId())

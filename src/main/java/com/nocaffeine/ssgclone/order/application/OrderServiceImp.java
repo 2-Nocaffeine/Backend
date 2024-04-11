@@ -14,15 +14,18 @@ import com.nocaffeine.ssgclone.order.dto.response.OrderProductListResponseDto;
 import com.nocaffeine.ssgclone.order.infrastructure.OrderProductRepository;
 import com.nocaffeine.ssgclone.order.infrastructure.OrderRepository;
 import com.nocaffeine.ssgclone.product.domain.OptionSelectedProduct;
+import com.nocaffeine.ssgclone.product.domain.Product;
+import com.nocaffeine.ssgclone.product.domain.Total;
 import com.nocaffeine.ssgclone.product.infrastructure.ImageRepository;
 import com.nocaffeine.ssgclone.product.infrastructure.OptionSelectedProductRepository;
+import com.nocaffeine.ssgclone.product.infrastructure.ProductRepository;
+import com.nocaffeine.ssgclone.product.infrastructure.TotalRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.*;
 
@@ -37,6 +40,8 @@ public class OrderServiceImp implements OrderService{
     private final MemberRepository memberRepository;
     private final ImageRepository imageRepository;
     private final BrandListRepository brandListRepository;
+    private final TotalRepository totalRepository;
+    private final ProductRepository productRepository;
 
     @Override
     @Transactional
@@ -74,8 +79,28 @@ public class OrderServiceImp implements OrderService{
 
             orderProductRepository.save(orderProduct);
 
-        }
+            updateTotal(orderedProductRequestDto, optionSelectedProduct);
 
+        }
+    }
+
+    // 누적 판매량 업데이트
+    private void updateTotal(OrderedProductRequestDto orderedProductRequestDto, OptionSelectedProduct optionSelectedProduct) {
+        Total total = totalRepository.findByProduct(optionSelectedProduct.getProduct())
+                .orElseGet(() -> Total.builder()
+                        .product(optionSelectedProduct.getProduct())
+                        .sales(0)
+                        .rateAverage(0.0)
+                        .reviewCount(0)
+                        .build());
+
+        totalRepository.save(Total.builder()
+                .id(total.getId())
+                .product(total.getProduct())
+                .sales(total.getSales() + orderedProductRequestDto.getCount())
+                .rateAverage(total.getRateAverage())
+                .reviewCount(total.getReviewCount())
+                .build());
     }
 
     @Override
@@ -105,10 +130,36 @@ public class OrderServiceImp implements OrderService{
 
 //        order.changeStatus(Orders.OrderStatus.CANCEL); //더티체킹..
 
-        //재고 복구
         //주문한 상품 객체 리스트
         List<OrderProduct> orderProductIdList = orderProductRepository.findAllByOrder(order);
 
+        stockRecover(orderProductIdList);
+
+        totalRecover(orderProductIdList);
+
+    }
+
+    // 누적 판매량 복구
+    private void totalRecover(List<OrderProduct> orderProductIdList) {
+        for(OrderProduct orderProduct : orderProductIdList){
+            Product product = productRepository.findById(orderProduct.getProductId())
+                    .orElseThrow(() -> new BaseException(NO_PRODUCT));
+
+            Total total = totalRepository.findByProduct(product)
+                    .orElseThrow(() -> new BaseException(NO_DATA));
+
+            totalRepository.save(Total.builder()
+                    .id(total.getId())
+                    .product(total.getProduct())
+                    .sales(total.getSales() - orderProduct.getQuantity())
+                    .rateAverage(total.getRateAverage())
+                    .reviewCount(total.getReviewCount())
+                    .build());
+        }
+    }
+
+    // 재고 복구
+    private void stockRecover(List<OrderProduct> orderProductIdList) {
         for (OrderProduct orderProduct : orderProductIdList){
             OptionSelectedProduct optionSelectedProduct = optionSelectedProductRepository.findById(orderProduct.getId())
                     .orElseThrow(() -> new BaseException(NO_PRODUCT));
@@ -117,8 +168,6 @@ public class OrderServiceImp implements OrderService{
                     .increaseStock(optionSelectedProduct, orderProduct.getQuantity());
 
             optionSelectedProductRepository.save(updateOptionSelectedProduct);
-
-
         }
     }
 
