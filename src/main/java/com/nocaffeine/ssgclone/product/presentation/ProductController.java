@@ -50,7 +50,7 @@ public class ProductController {
     @Operation(summary = "전체 상품 리스트 페이징 조회", description = "전체 상품 리스트 페이징 조회")
     @GetMapping("/product-list-paged")
     public CommonResponse<ProductPageListResponseVo> getAllProducts(
-            @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable page) {
+            @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable page) {
 
         ProductPageListResponseDto productPageListResponseDto = productService.getAllProducts(page);
 

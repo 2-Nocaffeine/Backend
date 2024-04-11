@@ -62,6 +62,11 @@ public class ProductServiceImpl implements ProductService{
             responses.add(ProductResponseDto.fromProduct(product));
         }
 
+        // 페이지가 마지막 페이지를 넘겨서 다음 페이지가 없을 때 예외 처리
+//        if (products.getTotalPages() <= products.getNumber()) {
+//            throw new BaseException(NO_EXISTING_PAGE);
+//        }
+
         return ProductPageListResponseDto.fromProductPageListResponseDto(products.getNumber(), products.getTotalPages(), products.hasNext(), products.isLast(), responses);
     }
 

@@ -46,7 +46,7 @@ public class BrandController {
     @GetMapping("brand/{brandId}/products-paged")
     public CommonResponse<BrandProductIdPageListResponseVo> getBrandProductListPaged(
             @PathVariable("brandId") Long brandId,
-            @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable page){
+            @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable page){
 
         BrandProductIdPageListResponseDto brandProductIdPageListResponseDto = brandService.findBrandProductListPaged(brandId, page);
 

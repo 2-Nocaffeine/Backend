@@ -2,9 +2,13 @@ package com.nocaffeine.ssgclone.product.application;
 
 import com.nocaffeine.ssgclone.category.domain.ProductCategoryList;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
+import com.nocaffeine.ssgclone.product.domain.Product;
+import com.nocaffeine.ssgclone.product.dto.response.product.CategoryProductPageListResponseDto;
 import com.nocaffeine.ssgclone.product.dto.response.product.ProductIdListResponseDto;
 import com.nocaffeine.ssgclone.product.infrastructure.ProductCategoryListRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +39,21 @@ public class ProductCategoryListServiceImpl implements ProductCategoryListServic
     }
 
     @Override
+    public CategoryProductPageListResponseDto getProductIdListWithLargeCategoryPaged(Long largeId, Pageable page) {
+
+        Page<ProductCategoryList> productCategoryLists = productCategoryListRepository.findByLargeCategoryId(largeId, page);
+
+        List<ProductIdListResponseDto> responses = new ArrayList<>();
+
+        for (ProductCategoryList productCategoryList : productCategoryLists) {
+
+            responses.add(ProductIdListResponseDto.fromProductIdListResponseDto(productCategoryList));
+        }
+
+        return CategoryProductPageListResponseDto.fromCategoryProductPageListResponseDto(productCategoryLists.hasNext(), productCategoryLists.isLast(), responses);
+    }
+
+    @Override
     public List<ProductIdListResponseDto> getProductIdListWithMediumCategory(Long mediumId) {
         List<ProductIdListResponseDto> productIdListResponseListDto = new ArrayList<>();
 
@@ -46,6 +65,21 @@ public class ProductCategoryListServiceImpl implements ProductCategoryListServic
             productIdListResponseListDto.add(productIdListResponseDto);
         }
         return productIdListResponseListDto;
+    }
+
+    @Override
+    public CategoryProductPageListResponseDto getProductIdListWithMediumCategoryPaged(Long mediumId, Pageable page) {
+
+        Page<ProductCategoryList> productCategoryLists = productCategoryListRepository.findByMediumCategoryId(mediumId, page);
+
+        List<ProductIdListResponseDto> responses = new ArrayList<>();
+
+        for (ProductCategoryList productCategoryList : productCategoryLists) {
+
+            responses.add(ProductIdListResponseDto.fromProductIdListResponseDto(productCategoryList));
+        }
+
+        return CategoryProductPageListResponseDto.fromCategoryProductPageListResponseDto(productCategoryLists.hasNext(), productCategoryLists.isLast(), responses);
     }
 
     @Override
@@ -63,12 +97,27 @@ public class ProductCategoryListServiceImpl implements ProductCategoryListServic
     }
 
     @Override
+    public CategoryProductPageListResponseDto getProductIdListWithSmallCategoryPaged(Long smallId, Pageable page) {
+
+        Page<ProductCategoryList> productCategoryLists = productCategoryListRepository.findBySmallCategoryId(smallId, page);
+
+        List<ProductIdListResponseDto> responses = new ArrayList<>();
+
+        for (ProductCategoryList productCategoryList : productCategoryLists) {
+
+            responses.add(ProductIdListResponseDto.fromProductIdListResponseDto(productCategoryList));
+        }
+
+        return CategoryProductPageListResponseDto.fromCategoryProductPageListResponseDto(productCategoryLists.hasNext(), productCategoryLists.isLast(), responses);
+    }
+
+    @Override
     public List<ProductIdListResponseDto> getProductIdListWithTinyCategory(Long tinyId) {
 
         List<ProductCategoryList> productCategoryLists = productCategoryListRepository.findByTinyCategory(tinyId);
-        if (productCategoryLists.isEmpty()){
-                throw new BaseException(NO_PRODUCT);
-        }
+//        if (productCategoryLists.isEmpty()){
+//                throw new BaseException(NO_PRODUCT);
+//        }
 
         List<ProductIdListResponseDto> productIdList = new ArrayList<>();
 
@@ -82,8 +131,23 @@ public class ProductCategoryListServiceImpl implements ProductCategoryListServic
         return productIdList;
     }
 
+    @Override
+    public CategoryProductPageListResponseDto getProductIdListWithTinyCategoryPaged(Long tinyId, Pageable page) {
 
+        Page<ProductCategoryList> productCategoryLists = productCategoryListRepository.findByTinyCategory(tinyId, page);
 
+//        if (productCategoryLists.isEmpty()){ // 상품 카테고리 리스트가 비어있을 때
+//            throw new BaseException(NO_PRODUCT);
+//        }
 
+        List<ProductIdListResponseDto> responses = new ArrayList<>();
+
+        for (ProductCategoryList productCategoryList : productCategoryLists) {
+
+            responses.add(ProductIdListResponseDto.fromProductIdListResponseDto(productCategoryList));
+        }
+
+        return CategoryProductPageListResponseDto.fromCategoryProductPageListResponseDto(productCategoryLists.hasNext(), productCategoryLists.isLast(), responses);
+    }
 }
 
