@@ -47,10 +47,10 @@ public class ViewHistoryController {
     }
 
     // 최근 본 상품 조회
-    @Operation(summary = "최근 본 상품 목록 조회", description = "최근 본 상품 목록 조회", tags = {"View History"})
+    @Operation(summary = "최근 본 상품 목록 페이징 조회", description = "최근 본 상품 목록 페이징 조회", tags = {"View History"})
     @GetMapping
     public CommonResponse<ViewHistoryPageListResponseVo> getViewHistoryPageList(
-            @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable page) {
+            @PageableDefault(size = 10, sort = "id") Pageable page) {
 
         String token = jwtTokenProvider.getHeader();
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(token);

@@ -1,6 +1,8 @@
 package com.nocaffeine.ssgclone.brandstore.infrastructure;
 
 import com.nocaffeine.ssgclone.brandstore.domain.BrandList;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,4 +19,6 @@ public interface BrandListRepository extends JpaRepository<BrandList, Long>{
     String findBrandNameByProductId(@Param("productId") Long productId);
 
     List<BrandList> findByBrandId(Long brandId);
+
+    Page<BrandList> findByBrandId(Long brandId, Pageable page);
 }

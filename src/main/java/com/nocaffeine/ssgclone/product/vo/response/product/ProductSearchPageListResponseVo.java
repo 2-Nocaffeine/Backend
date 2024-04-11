@@ -9,26 +9,26 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class ProductPageListResponseVo {
+public class ProductSearchPageListResponseVo {
 
     private int nowPage;
     private int lastPage;
     private int totalPage;
     private boolean next;
     private boolean last;
-    private List<ProductListResponseVo> productList;
+    private List<ProductSearchResponseVo> productList;
 
-public ProductPageListResponseVo(int nowPage, int totalPage, boolean next, boolean last, List<ProductResponseDto> productResponseDtoList) {
+    public ProductSearchPageListResponseVo(int nowPage, int totalPage, boolean next, boolean last, List<ProductResponseDto> productResponseDtoList) {
         this.nowPage = nowPage;
         this.lastPage = totalPage - 1;
         this.totalPage = totalPage;
         this.next = next;
         this.last = last;
-        this.productList = ProductListResponseVo.productDtoToVo(productResponseDtoList);
+        this.productList = ProductSearchResponseVo.productDtoToVo(productResponseDtoList);
     }
 
-    public static ProductPageListResponseVo fromProductPageListResponseDto(ProductPageListResponseDto productPageListResponseDto) {
-        return new ProductPageListResponseVo(
+    public static ProductSearchPageListResponseVo fromProductPageListResponseDto(ProductPageListResponseDto productPageListResponseDto) {
+        return new ProductSearchPageListResponseVo(
                 productPageListResponseDto.getNowPage(),
                 productPageListResponseDto.getTotalPage(),
                 productPageListResponseDto.isNext(),
