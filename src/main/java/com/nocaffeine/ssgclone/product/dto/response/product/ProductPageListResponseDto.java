@@ -13,12 +13,16 @@ import java.util.List;
 @AllArgsConstructor
 public class ProductPageListResponseDto {
 
+    private int nowPage;
+    private int totalPage;
     private boolean next;
     private boolean last;
     private List<ProductResponseDto> productResponseDtoList;
 
-    public static ProductPageListResponseDto fromProductPageListResponseDto(boolean next, boolean last, List<ProductResponseDto> productResponseDtoList) {
+    public static ProductPageListResponseDto fromProductPageListResponseDto(int nowPage, int totalPage, boolean next, boolean last, List<ProductResponseDto> productResponseDtoList) {
         return ProductPageListResponseDto.builder()
+                .nowPage(nowPage)
+                .totalPage(totalPage)
                 .next(next)
                 .last(last)
                 .productResponseDtoList(productResponseDtoList)

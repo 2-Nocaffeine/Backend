@@ -10,10 +10,7 @@ import com.nocaffeine.ssgclone.product.dto.response.productoption.ColorOptionRes
 import com.nocaffeine.ssgclone.product.dto.response.productoption.ProductOptionTypesResponseDto;
 import com.nocaffeine.ssgclone.product.dto.response.productoption.SizeOptionResponseDto;
 import com.nocaffeine.ssgclone.product.vo.response.category.ProductCategoryResponseVo;
-import com.nocaffeine.ssgclone.product.vo.response.product.ProductListResponseVo;
-import com.nocaffeine.ssgclone.product.vo.response.product.ProductPageListResponseVo;
-import com.nocaffeine.ssgclone.product.vo.response.product.ProductResponseVo;
-import com.nocaffeine.ssgclone.product.vo.response.product.ProductSearchResponseVo;
+import com.nocaffeine.ssgclone.product.vo.response.product.*;
 import com.nocaffeine.ssgclone.product.vo.response.productoption.AddOptionResponseVo;
 import com.nocaffeine.ssgclone.product.vo.response.productoption.ColorOptionResponseVo;
 import com.nocaffeine.ssgclone.product.vo.response.productoption.ProductOptionTypesResponseVo;
@@ -106,7 +103,7 @@ public class ProductController {
     }
 
     @Operation(summary = "상품 검색", description = "상품 검색")
-    @GetMapping
+    @GetMapping("/search")
     public CommonResponse<List<ProductSearchResponseVo>> getProductsBySearchTerm(
             @RequestParam("search") String searchKeyword) {
 
@@ -114,6 +111,18 @@ public class ProductController {
 
         return CommonResponse.success("검색어와 일치하는 상품을 성공적으로 찾았습니다.",
                 ProductSearchResponseVo.productDtoToVo(getProductResponseDto));
+    }
+
+    @Operation(summary = "상품 검색 페이징", description = "상품 검색 페이징")
+    @GetMapping("/search-paged")
+    public CommonResponse<ProductSearchPageListResponseVo> getProductsBySearchKeyword (
+            @RequestParam("search") String searchKeyword,
+            @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable page) {
+
+        ProductPageListResponseDto getProductPageListResponseDto = productService.getSearchProductByKeyword(searchKeyword, page);
+
+        return CommonResponse.success("검색어와 일치하는 상품을 성공적으로 찾았습니다.",
+                ProductSearchPageListResponseVo.fromProductPageListResponseDto(getProductPageListResponseDto));
     }
 
     // 해당 상품이 어떤 옵션을 가지고 있는지 조회하는 메소드

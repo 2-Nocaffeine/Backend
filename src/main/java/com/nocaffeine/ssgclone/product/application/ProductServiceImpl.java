@@ -62,7 +62,7 @@ public class ProductServiceImpl implements ProductService{
             responses.add(ProductResponseDto.fromProduct(product));
         }
 
-        return ProductPageListResponseDto.fromProductPageListResponseDto(products.hasNext(), products.isLast(), responses);
+        return ProductPageListResponseDto.fromProductPageListResponseDto(products.getNumber(), products.getTotalPages(), products.hasNext(), products.isLast(), responses);
     }
 
 
@@ -159,6 +159,20 @@ public class ProductServiceImpl implements ProductService{
         }
 
         return responses;
+    }
+
+    @Override
+    public ProductPageListResponseDto getSearchProductByKeyword(String searchKeyword, Pageable page) {
+
+        Page<Product> products = productRepository.findByNameContaining(searchKeyword, page);
+
+        List<ProductResponseDto> responses = new ArrayList<>();
+
+        for (Product product : products) {
+            responses.add(ProductResponseDto.fromProduct(product));
+        }
+
+        return ProductPageListResponseDto.fromProductPageListResponseDto(products.getNumber(), products.getTotalPages(), products.hasNext(), products.isLast(), responses);
     }
 
     @Override

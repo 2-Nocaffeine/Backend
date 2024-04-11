@@ -1,12 +1,15 @@
 package com.nocaffeine.ssgclone.brandstore.application;
 
 import com.nocaffeine.ssgclone.brandstore.domain.BrandList;
+import com.nocaffeine.ssgclone.brandstore.dto.response.BrandProductIdPageListResponseDto;
 import com.nocaffeine.ssgclone.brandstore.dto.response.BrandProductIdResponseDto;
 import com.nocaffeine.ssgclone.brandstore.dto.response.BrandResponseDto;
 import com.nocaffeine.ssgclone.brandstore.infrastructure.BrandListRepository;
 import com.nocaffeine.ssgclone.brandstore.vo.response.BrandProductIdResponseVo;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,9 +22,10 @@ import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.NO_EXI
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class BrandServiceImp implements BrandService{
+public class BrandServiceImp implements BrandService {
 
     private final BrandListRepository brandListRepository;
+
     @Override
     public BrandResponseDto findBrand(Long productId) {
         BrandList brandId = brandListRepository.findByProductId(productId)
@@ -37,14 +41,26 @@ public class BrandServiceImp implements BrandService{
     public List<BrandProductIdResponseDto> findBrandProductList(Long brandId) {
         List<BrandList> brandList = brandListRepository.findByBrandId(brandId);
 
-        List<BrandProductIdResponseDto> brandProductIdList = new ArrayList<>();
+        List<BrandProductIdResponseDto> responses = new ArrayList<>();
 
         for (BrandList brand : brandList) {
-            BrandProductIdResponseDto brandProductId = BrandProductIdResponseDto.builder()
-                    .productId(brand.getProduct().getId())
-                    .build();
-            brandProductIdList.add(brandProductId);
+            responses.add(BrandProductIdResponseDto.fromBrandProductIdResponseDto(brand.getProduct()));
         }
-        return brandProductIdList;
+
+        return responses;
+    }
+
+    @Override
+    public BrandProductIdPageListResponseDto findBrandProductListPaged(Long brandId, Pageable page) {
+
+        Page<BrandList> brandListPage = brandListRepository.findByBrandId(brandId, page);
+
+        List<BrandProductIdResponseDto> responses = new ArrayList<>();
+
+        for (BrandList brand : brandListPage) {
+            responses.add(BrandProductIdResponseDto.fromBrandProductIdResponseDto(brand.getProduct()));
+        }
+
+        return BrandProductIdPageListResponseDto.fromBrandProductIdPageListResponseDto(brandListPage.hasNext(), brandListPage.isLast(), responses);
     }
 }
