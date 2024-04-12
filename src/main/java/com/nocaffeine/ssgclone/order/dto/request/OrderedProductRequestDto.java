@@ -15,7 +15,6 @@ public class OrderedProductRequestDto {
     private Long optionSelectedProductId;
     private int count;
     private int price;
-    private Long thumbnailId;
 
     public static OrderedProductRequestDto convertToDto(OrderedProductRequestVo orderProducts) {
 
@@ -23,7 +22,6 @@ public class OrderedProductRequestDto {
                 .optionSelectedProductId(orderProducts.getOptionSelectedProductId())
                 .count(orderProducts.getCount())
                 .price(orderProducts.getPrice())
-                .thumbnailId(orderProducts.getThumbnailId())
                 .build();
     }
 }
