@@ -33,7 +33,6 @@ public class OrderServiceImp implements OrderService{
     private final OrderProductRepository orderProductRepository;
     private final OptionSelectedProductRepository optionSelectedProductRepository;
     private final MemberRepository memberRepository;
-    private final ImageRepository imageRepository;
     private final BrandListRepository brandListRepository;
     private final TotalRepository totalRepository;
     private final ProductRepository productRepository;
@@ -64,7 +63,7 @@ public class OrderServiceImp implements OrderService{
             //썸네일 찾기
             Product product = productRepository.findById(optionSelectedProduct.getProduct().getId())
                     .orElseThrow(() -> new BaseException(NO_PRODUCT));
-            ProductImage productImage = productImageRepository.findByProduct(product);
+            List<ProductImage> productImage = productImageRepository.findByProduct(product);
 
             //브랜드
             String brandName = brandListRepository.findBrandNameByProductId(optionSelectedProduct.getProduct().getId());
@@ -75,7 +74,7 @@ public class OrderServiceImp implements OrderService{
                     .productName(optionSelectedProduct.getProduct().getName())
                     .price(orderedProductRequestDto.getPrice())
                     .quantity(orderedProductRequestDto.getCount())
-                    .thumbnailUrl(productImage.getImage().getUrl())
+                    .thumbnailUrl(productImage.get(0).getImage().getUrl())
                     .color(optionSelectedProduct.getColorOption().getColor())
                     .size(optionSelectedProduct.getSizeOption().getSize())
                     .addOption(optionSelectedProduct.getAddOption().getOptionName())
