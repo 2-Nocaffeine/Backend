@@ -1,6 +1,7 @@
 package com.nocaffeine.ssgclone.member.presentation;
 
 import com.nocaffeine.ssgclone.common.CommonResponse;
+import com.nocaffeine.ssgclone.common.security.JwtTokenProvider;
 import com.nocaffeine.ssgclone.member.application.AuthService;
 import com.nocaffeine.ssgclone.member.dto.request.*;
 import com.nocaffeine.ssgclone.member.dto.response.TokenResponseDto;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Operation(summary = "이메일 중복 검증", description = "이메일 중복 검증")
     @GetMapping("/duplication")
@@ -77,6 +79,14 @@ public class AuthController {
     {
         authService.emailAuthCodeCheck(email, code);
         return CommonResponse.success("이메일 인증코드 확인 성공");
+    }
+
+    @Operation(summary = "로그아웃", description = "로그아웃")
+    @PostMapping("/logout")
+    public CommonResponse<String> logout() {
+        log.info("logout Controller : {}",jwtTokenProvider.getHeader());
+        authService.logout(jwtTokenProvider.getHeader());
+        return CommonResponse.success("로그아웃 성공");
     }
 
 

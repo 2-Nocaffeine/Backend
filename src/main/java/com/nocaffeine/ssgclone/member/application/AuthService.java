@@ -13,4 +13,6 @@ public interface AuthService {
 
     void emailAuth(AuthEmailRequestDto authEmailRequestDto);
     void emailAuthCodeCheck(String email, String code);
+
+    void logout(String token);
 }
