@@ -38,7 +38,7 @@ public class ProductCategoryListController {
     @GetMapping("/large-category-paged/{largeId}")
     public CommonResponse<CategoryProductPageListResponseVo> productIdWithLargeCategoryListPaged(
             @PathVariable("largeId") Long largeId,
-            @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable page){
+            @PageableDefault(size = 20, sort = "id") Pageable page){
 
         CategoryProductPageListResponseDto categoryProductPageListResponseDto = productCategoryListService.getProductIdListWithLargeCategoryPaged(largeId, page);
 
@@ -61,7 +61,7 @@ public class ProductCategoryListController {
     @GetMapping("/medium-category-paged/{mediumId}")
     public CommonResponse<CategoryProductPageListResponseVo> productIdWithMediumCategoryListPaged(
             @PathVariable("mediumId") Long mediumId,
-            @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable page){
+            @PageableDefault(size = 20, sort = "id") Pageable page){
 
         CategoryProductPageListResponseDto categoryProductPageListResponseDto = productCategoryListService.getProductIdListWithMediumCategoryPaged(mediumId, page);
 
@@ -83,7 +83,7 @@ public class ProductCategoryListController {
     @GetMapping("/small-category-paged/{smallId}")
     public CommonResponse<CategoryProductPageListResponseVo> productIdWithSmallCategoryListPaged(
             @PathVariable("smallId") Long smallId,
-            @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable page){
+            @PageableDefault(size = 20, sort = "id") Pageable page){
 
         CategoryProductPageListResponseDto categoryProductPageListResponseDto = productCategoryListService.getProductIdListWithSmallCategoryPaged(smallId, page);
 
@@ -105,7 +105,7 @@ public class ProductCategoryListController {
     @GetMapping("/tiny-category-paged/{tinyId}")
     public CommonResponse<CategoryProductPageListResponseVo> productIdWithTinyCategoryListPaged(
             @PathVariable("tinyId") Long tinyId,
-            @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable page){
+            @PageableDefault(size = 20, sort = "id") Pageable page){
 
         CategoryProductPageListResponseDto categoryProductPageListResponseDto = productCategoryListService.getProductIdListWithTinyCategoryPaged(tinyId, page);
 
