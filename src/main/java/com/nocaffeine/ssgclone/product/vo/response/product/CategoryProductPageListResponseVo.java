@@ -14,12 +14,12 @@ public class CategoryProductPageListResponseVo {
 
     private boolean next;
     private boolean last;
-    private List<ProductIdListResponseVo> productIdListList;
+    private List<ProductIdListResponseVo> productIdList;
 
     public CategoryProductPageListResponseVo(boolean next, boolean last, List<ProductIdListResponseDto> productIdListResponseDtoList) {
         this.next = next;
         this.last = last;
-        this.productIdListList = ProductIdListResponseVo.convertToVo(productIdListResponseDtoList);
+        this.productIdList = ProductIdListResponseVo.convertToVo(productIdListResponseDtoList);
     }
 
     public static CategoryProductPageListResponseVo fromCategoryProductPageListResponseVo(CategoryProductPageListResponseDto categoryProductPageListResponseDto) {

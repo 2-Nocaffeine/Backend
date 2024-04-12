@@ -1,13 +1,12 @@
 package com.nocaffeine.ssgclone.specialprice.application;
 import com.nocaffeine.ssgclone.specialprice.domain.SpecialPrice;
 import com.nocaffeine.ssgclone.specialprice.domain.SpecialPriceList;
-import com.nocaffeine.ssgclone.specialprice.dto.response.SpecialPriceDetailResponseDto;
-import com.nocaffeine.ssgclone.specialprice.dto.response.SpecialPriceIdListResponseDto;
-import com.nocaffeine.ssgclone.specialprice.dto.response.SpecialPriceInfoResponseDto;
-import com.nocaffeine.ssgclone.specialprice.dto.response.SpecialPriceProductIdResponseDto;
+import com.nocaffeine.ssgclone.specialprice.dto.response.*;
 import com.nocaffeine.ssgclone.specialprice.infrastructure.SpecialPriceListRepository;
 import com.nocaffeine.ssgclone.specialprice.infrastructure.SpecialPriceRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
@@ -35,7 +34,8 @@ public class SpecialPriceServiceImp implements SpecialPriceService{
                             .build();
             specialPriceIdListResponseDtos.add(specialPriceIdListResponseDto);
         }
-        return specialPriceIdListResponseDtos;}
+        return specialPriceIdListResponseDtos;
+    }
 
 
     @Override
@@ -85,17 +85,18 @@ public class SpecialPriceServiceImp implements SpecialPriceService{
     }
 
     @Override
-    public List<SpecialPriceProductIdResponseDto> findSpecialPriceRandomId() {
+    public SpecialPriceProductPageListResponseDto findSpecialPriceRandomIdPaged(Pageable page) {
 
-        List<SpecialPriceList> specialPriceLists = specialPriceListRepository.findAll();
-        List<SpecialPriceProductIdResponseDto> specialPriceProductIdResponseDtos = new ArrayList<>();
+        Page<SpecialPriceList> specialPriceLists = specialPriceListRepository.findAll(page);
 
-        for (SpecialPriceList specialPriceList : specialPriceLists){
-            SpecialPriceProductIdResponseDto specialPriceProductIdResponseDto = SpecialPriceProductIdResponseDto.builder()
-                    .productId(specialPriceList.getProduct().getId())
-                    .build();
-            specialPriceProductIdResponseDtos.add(specialPriceProductIdResponseDto);
+        List<SpecialPriceProductIdResponseDto> responses = new ArrayList<>();
+
+        for (SpecialPriceList specialPriceList : specialPriceLists) {
+
+            responses.add(SpecialPriceProductIdResponseDto.fromSpecialPriceProductIdResponseDto(specialPriceList));
         }
-        return specialPriceProductIdResponseDtos;
+
+        return SpecialPriceProductPageListResponseDto.fromSpecialPriceProductPageListResponseDto(
+                specialPriceLists.hasNext(), specialPriceLists.isLast(), responses);
     }
 }
