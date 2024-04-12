@@ -7,13 +7,13 @@ import com.nocaffeine.ssgclone.order.dto.request.OrderIdRequestDto;
 import com.nocaffeine.ssgclone.order.dto.request.UserOrderSaveRequestDto;
 import com.nocaffeine.ssgclone.order.dto.response.OrderIdListResponseDto;
 import com.nocaffeine.ssgclone.order.dto.response.OrderInfoAndProductListResponseDto;
-import com.nocaffeine.ssgclone.order.dto.response.OrderNameAndOrderIdResponseDto;
+import com.nocaffeine.ssgclone.order.dto.response.OrderStatusResponseDto;
 
 import java.util.List;
 
 public interface OrderService {
 
-    OrderNameAndOrderIdResponseDto addMemberOrder (UserOrderSaveRequestDto userOrderSaveRequestDto);
+    void addMemberOrder (UserOrderSaveRequestDto userOrderSaveRequestDto);
 
     void removeOrder(OrderIdRequestDto orderIdRequestDto);
 
@@ -25,4 +25,6 @@ public interface OrderService {
 
 
     OrderInfoAndProductListResponseDto findGuestOrderInfo(GuestOrderInfoRequestDto guestOrderInfoRequestDto);
+
+    OrderStatusResponseDto findOrderStatusCount(String status, String memberUuid);
 }

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ExceptionAdvice {
 
     @ExceptionHandler(BaseException.class)
-//    @ResponseStatus(HttpStatus.OK)
     public CommonResponse<?> baseException(BaseException e) {
         return CommonResponse.fail(e.getErrorCode(), e.getMessage());
     }

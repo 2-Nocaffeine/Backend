@@ -1,14 +1,14 @@
 package com.nocaffeine.ssgclone.specialprice.presentation;
 import com.nocaffeine.ssgclone.common.CommonResponse;
 import com.nocaffeine.ssgclone.specialprice.application.SpecialPriceService;
-import com.nocaffeine.ssgclone.specialprice.vo.response.SpecialPriceDetailResponseVo;
-import com.nocaffeine.ssgclone.specialprice.vo.response.SpecialPriceIdListResponseVo;
-import com.nocaffeine.ssgclone.specialprice.vo.response.SpecialPriceInfoResponseVo;
-import com.nocaffeine.ssgclone.specialprice.vo.response.SpecialPriceProductIdResponseVo;
+import com.nocaffeine.ssgclone.specialprice.dto.response.SpecialPriceProductPageListResponseDto;
+import com.nocaffeine.ssgclone.specialprice.vo.response.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -60,16 +60,15 @@ public class SpecialPriceController {
 
     }
 
-    //썸네일, 이름, 가격
-    @Operation(summary = "오늘의 장보기", description = "특가별 상품 id 랜덤 조회")
-    @GetMapping("/ramdom/special-price-product")
-    public CommonResponse<List<SpecialPriceProductIdResponseVo>> randomSpecialPriceProductList(){
+    // 특가별 상품 id 랜덤 페이징 조회
+    @Operation(summary = "오늘의 장보기 페이징", description = "특가별 상품 id 랜덤 페이징 조회")
+    @GetMapping("/random/special-price-product-paged")
+    public CommonResponse<SpecialPriceProductIPageListResponseVo> getRandomSpecialPriceProductListPaged(
+            @PageableDefault(size = 20,  sort = "id") Pageable page) {
 
-        List<SpecialPriceProductIdResponseVo> specialPriceProductIdResponseVoList = SpecialPriceProductIdResponseVo.convertToVo(specialPriceService.findSpecialPriceRandomId());
-        Collections.shuffle(specialPriceProductIdResponseVoList);
+        SpecialPriceProductPageListResponseDto specialPriceProductPageListResponseDto = specialPriceService.findSpecialPriceRandomIdPaged(page);
 
-        return CommonResponse.success("특가별 상품을 랜덤으로 모두 찾았습니다.", specialPriceProductIdResponseVoList);
+        return CommonResponse.success("특가별 상품을 랜덤으로 페이징으로 모두 찾았습니다.",
+                SpecialPriceProductIPageListResponseVo.fromDtoToVo(specialPriceProductPageListResponseDto));
     }
-
-
 }

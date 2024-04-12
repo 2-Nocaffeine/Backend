@@ -46,6 +46,7 @@ public enum BaseResponseStatus {
     JWT_VALID_FAILED(HttpStatus.UNAUTHORIZED , false, 2005, "토큰 검증에 실패했습니다."),
     EXPIRED_AUTH_CODE(HttpStatus.UNAUTHORIZED , false, 2006, "인증번호가 만료되었거나 존재하지 않는 멤버입니다."),
     WRONG_AUTH_CODE(HttpStatus.UNAUTHORIZED , false, 2007, "인증번호가 일치하지 않습니다."),
+    LOGOUT_TOKEN(HttpStatus.UNAUTHORIZED , false, 2008, "로그아웃된 토큰입니다."),
 
     // Members
     DUPLICATE_EMAIL(HttpStatus.CONFLICT, false, 2100, "사용중인 이메일입니다."),
