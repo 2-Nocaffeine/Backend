@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface TotalRepository extends JpaRepository<Total, Long> {
 
     Optional<Total> findByProduct(Product product);
+
 }
