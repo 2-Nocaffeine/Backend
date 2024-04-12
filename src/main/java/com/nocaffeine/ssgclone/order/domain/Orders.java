@@ -49,6 +49,7 @@ public class Orders extends BaseTimeEntity {
 
     public enum OrderStatus {
         ORDERED, PREPARING, DELIVERING, DETERMINING, CANCEL
+        //주문접수, 준비중, 배송중, 결제완료, 취소
     }
 
     @Builder

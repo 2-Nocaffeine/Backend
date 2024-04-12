@@ -17,4 +17,5 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
 
     Optional<Orders> findByPhoneNumberAndOrderNumber(String orderPhone, Long orderNumber);
 
+    List<Orders> findByStatusAndUuid(Orders.OrderStatus orderStatus, String memberUuid);
 }

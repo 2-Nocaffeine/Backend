@@ -8,18 +8,24 @@ import com.nocaffeine.ssgclone.order.dto.request.OrderIdRequestDto;
 import com.nocaffeine.ssgclone.order.dto.request.OrderNumberRequestDto;
 import com.nocaffeine.ssgclone.order.dto.request.UserOrderSaveRequestDto;
 import com.nocaffeine.ssgclone.order.dto.response.OrderInfoAndProductListResponseDto;
+import com.nocaffeine.ssgclone.order.dto.response.OrderStatusResponseDto;
 import com.nocaffeine.ssgclone.order.vo.request.OrderIdRequestVo;
 import com.nocaffeine.ssgclone.order.vo.request.UserOrderProductRequestVo;
 import com.nocaffeine.ssgclone.order.vo.response.OrderIdListResponseVo;
 import com.nocaffeine.ssgclone.order.vo.response.MemberOrderInfoResponseVo;
 import com.nocaffeine.ssgclone.order.vo.response.OrderInfoAndProductListResponseVo;
+import com.nocaffeine.ssgclone.order.vo.response.OrderStatusResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Order", description = "주문")
 @RequestMapping("/api/v1/order")
 public class OrderController {
 
@@ -27,7 +33,7 @@ public class OrderController {
     private final JwtTokenProvider jwtTokenProvider;
 
     //회원 주문
-    @Operation(summary = "회원 주문", description = "회원 주문", tags = {"Order"})
+    @Operation(summary = "회원 주문", description = "회원 주문")
     @PostMapping("/member")
     public CommonResponse<String> memberOrderAdd(@RequestBody UserOrderProductRequestVo userOrderProductRequestVo) {
 
@@ -44,7 +50,7 @@ public class OrderController {
     }
 
     //비회원 주문
-    @Operation(summary = "비회원 주문", description = "비회원 주문", tags = {"Order"})
+    @Operation(summary = "비회원 주문", description = "비회원 주문")
     @PostMapping("/guest")
     public CommonResponse<String> nonMemberOrderAdd(@RequestBody UserOrderProductRequestVo userOrderProductRequestVo) {
 
@@ -57,7 +63,7 @@ public class OrderController {
     }
 
     // 주문 취소
-    @Operation(summary = "주문 취소", description = "주문 취소", tags = {"Order"})
+    @Operation(summary = "주문 취소", description = "주문 취소")
     @DeleteMapping
     public CommonResponse<String> orderRemove(@RequestBody OrderIdRequestVo orderIdRequestVo) {
 
@@ -69,7 +75,7 @@ public class OrderController {
     }
 
     // 주문자 정보 조회
-    @Operation(summary = "주문자 정보 조회", description = "주문자 정보 조회", tags = {"Order"})
+    @Operation(summary = "주문자 정보 조회", description = "주문자 정보 조회")
     @GetMapping("/member-info")
     public CommonResponse<MemberOrderInfoResponseVo> orderMemberList(){
 
@@ -81,7 +87,7 @@ public class OrderController {
     }
 
     //회원 주문 id 호출
-    @Operation(summary = "회원 주문 id 호출", description = "회원 주문 id 호출", tags = {"Order"})
+    @Operation(summary = "회원 주문 id 호출", description = "회원 주문 id 호출")
     @GetMapping("/member-order-id-list")
     public CommonResponse<List<OrderIdListResponseVo>> orderIdList(){
 
@@ -92,7 +98,7 @@ public class OrderController {
     }
 
     //회원 주문 상품 조회
-    @Operation(summary = "주문 상품 및 주문 정보 조회", description = "주문 상품 및 주문 정보 조회", tags = {"Order"})
+    @Operation(summary = "주문 상품 및 주문 정보 조회", description = "주문 상품 및 주문 정보 조회")
     @GetMapping("/{orderId}/member-order-product/")
     public CommonResponse<OrderInfoAndProductListResponseVo> orderProductList(@PathVariable("orderId") Long orderId){
 
@@ -103,7 +109,7 @@ public class OrderController {
         return CommonResponse.success("주문 상품을 불러왔습니다.", OrderInfoAndProductListResponseVo.convertToVo(orderInfoAndProductListResponseDto));
     }
 
-    @Operation(summary = "비회원 주문 조회", description = "비회원 주문 조회", tags = {"Order"})
+    @Operation(summary = "비회원 주문 조회", description = "비회원 주문 조회")
     @GetMapping("/guest/order")
     public CommonResponse<OrderInfoAndProductListResponseVo> guestOrderList(@RequestParam("orderName") String orderName,
                                                                             @RequestParam("phoneNumber") String phoneNumber,
@@ -114,6 +120,16 @@ public class OrderController {
         return CommonResponse.success("비회원 주문 정보를 불러왔습니다.",
                 OrderInfoAndProductListResponseVo.convertToVo(orderService.findGuestOrderInfo(guestOrderInfoRequestDto)));
     }
+
+    @Operation(summary = "주문 상태별 개수 조회", description = "주문 상태별 개수 조회")
+    @GetMapping("/status/{status}/count")
+    public CommonResponse<OrderStatusResponseVo> orderStatus(
+            @Parameter(description = "주문 상태", required = true, in = ParameterIn.PATH, example = "ORDERED")
+            @PathVariable("status") String status){
+        String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
+        return CommonResponse.success("주문 상태별 개수를 불러왔습니다.", OrderStatusResponseDto.dtoToVo(orderService.findOrderStatusCount(status, memberUuid)));
+    }
+
 
 
 }
