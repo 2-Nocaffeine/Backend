@@ -15,11 +15,9 @@ import com.nocaffeine.ssgclone.order.infrastructure.OrderProductRepository;
 import com.nocaffeine.ssgclone.order.infrastructure.OrderRepository;
 import com.nocaffeine.ssgclone.product.domain.OptionSelectedProduct;
 import com.nocaffeine.ssgclone.product.domain.Product;
+import com.nocaffeine.ssgclone.product.domain.ProductImage;
 import com.nocaffeine.ssgclone.product.domain.Total;
-import com.nocaffeine.ssgclone.product.infrastructure.ImageRepository;
-import com.nocaffeine.ssgclone.product.infrastructure.OptionSelectedProductRepository;
-import com.nocaffeine.ssgclone.product.infrastructure.ProductRepository;
-import com.nocaffeine.ssgclone.product.infrastructure.TotalRepository;
+import com.nocaffeine.ssgclone.product.infrastructure.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +40,7 @@ public class OrderServiceImp implements OrderService{
     private final BrandListRepository brandListRepository;
     private final TotalRepository totalRepository;
     private final ProductRepository productRepository;
+    private final ProductImageRepository productImageRepository;
 
     @Override
     @Transactional
@@ -56,12 +55,21 @@ public class OrderServiceImp implements OrderService{
             OptionSelectedProduct optionSelectedProduct = optionSelectedProductRepository.findById(orderedProductRequestDto.getOptionSelectedProductId())
                     .orElseThrow(() -> new BaseException(NO_PRODUCT));
 
+            if (optionSelectedProduct.getStock() < orderedProductRequestDto.getCount()){
+                throw new BaseException(NOT_ENOUGH_STOCK);
+            }
             OptionSelectedProduct updateOptionSelectedProduct = OptionSelectedProduct
                     .decreaseStock(optionSelectedProduct, orderedProductRequestDto.getCount());
 
             optionSelectedProductRepository.save(updateOptionSelectedProduct);
 
-            String thumbnailUrl = imageRepository.findByUrlQuery(orderedProductRequestDto.getThumbnailId());
+
+            //썸네일 찾기
+            Product product = productRepository.findById(optionSelectedProduct.getProduct().getId())
+                    .orElseThrow(() -> new BaseException(NO_PRODUCT));
+            ProductImage productImage = productImageRepository.findByProduct(product);
+
+            //브랜드
             String brandName = brandListRepository.findBrandNameByProductId(optionSelectedProduct.getProduct().getId());
 
             OrderProduct orderProduct = OrderProduct.builder()
@@ -70,7 +78,7 @@ public class OrderServiceImp implements OrderService{
                     .productName(optionSelectedProduct.getProduct().getName())
                     .price(orderedProductRequestDto.getPrice())
                     .quantity(orderedProductRequestDto.getCount())
-                    .thumbnailUrl(thumbnailUrl)
+                    .thumbnailUrl(productImage.getImage().getUrl())
                     .color(optionSelectedProduct.getColorOption().getColor())
                     .size(optionSelectedProduct.getSizeOption().getSize())
                     .addOption(optionSelectedProduct.getAddOption().getOptionName())

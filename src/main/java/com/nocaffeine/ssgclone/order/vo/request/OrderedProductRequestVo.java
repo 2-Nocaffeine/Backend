@@ -7,5 +7,4 @@ public class OrderedProductRequestVo {
     private Long optionSelectedProductId;
     private int count;
     private int price;
-    private Long thumbnailId;
 }
