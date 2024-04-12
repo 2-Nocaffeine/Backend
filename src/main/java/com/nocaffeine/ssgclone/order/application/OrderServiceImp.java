@@ -7,10 +7,7 @@ import com.nocaffeine.ssgclone.member.infrastructure.MemberRepository;
 import com.nocaffeine.ssgclone.order.domain.OrderProduct;
 import com.nocaffeine.ssgclone.order.domain.Orders;
 import com.nocaffeine.ssgclone.order.dto.request.*;
-import com.nocaffeine.ssgclone.order.dto.response.MemberOrderInfoResponseDto;
-import com.nocaffeine.ssgclone.order.dto.response.OrderIdListResponseDto;
-import com.nocaffeine.ssgclone.order.dto.response.OrderInfoAndProductListResponseDto;
-import com.nocaffeine.ssgclone.order.dto.response.OrderProductListResponseDto;
+import com.nocaffeine.ssgclone.order.dto.response.*;
 import com.nocaffeine.ssgclone.order.infrastructure.OrderProductRepository;
 import com.nocaffeine.ssgclone.order.infrastructure.OrderRepository;
 import com.nocaffeine.ssgclone.product.domain.OptionSelectedProduct;
@@ -44,7 +41,7 @@ public class OrderServiceImp implements OrderService{
 
     @Override
     @Transactional
-    public void addMemberOrder(UserOrderSaveRequestDto userOrderSaveRequestDto) {
+    public OrderNameAndOrderIdResponseDto addMemberOrder(UserOrderSaveRequestDto userOrderSaveRequestDto) {
 
         //주문 저장
         Orders order = Orders.toEntity(userOrderSaveRequestDto);
@@ -90,6 +87,10 @@ public class OrderServiceImp implements OrderService{
             updateTotal(orderedProductRequestDto, optionSelectedProduct);
 
         }
+        return OrderNameAndOrderIdResponseDto.builder()
+                .orderId(savedOrders.getId())
+                .orderNumber(savedOrders.getOrderNumber())
+                .build();
     }
 
     // 누적 판매량 업데이트

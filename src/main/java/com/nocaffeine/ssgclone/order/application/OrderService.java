@@ -7,12 +7,13 @@ import com.nocaffeine.ssgclone.order.dto.request.OrderIdRequestDto;
 import com.nocaffeine.ssgclone.order.dto.request.UserOrderSaveRequestDto;
 import com.nocaffeine.ssgclone.order.dto.response.OrderIdListResponseDto;
 import com.nocaffeine.ssgclone.order.dto.response.OrderInfoAndProductListResponseDto;
+import com.nocaffeine.ssgclone.order.dto.response.OrderNameAndOrderIdResponseDto;
 
 import java.util.List;
 
 public interface OrderService {
 
-    void addMemberOrder (UserOrderSaveRequestDto userOrderSaveRequestDto);
+    OrderNameAndOrderIdResponseDto addMemberOrder (UserOrderSaveRequestDto userOrderSaveRequestDto);
 
     void removeOrder(OrderIdRequestDto orderIdRequestDto);
 

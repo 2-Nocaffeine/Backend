@@ -13,6 +13,7 @@ import com.nocaffeine.ssgclone.order.vo.request.UserOrderProductRequestVo;
 import com.nocaffeine.ssgclone.order.vo.response.OrderIdListResponseVo;
 import com.nocaffeine.ssgclone.order.vo.response.MemberOrderInfoResponseVo;
 import com.nocaffeine.ssgclone.order.vo.response.OrderInfoAndProductListResponseVo;
+import com.nocaffeine.ssgclone.order.vo.response.OrderNameAndOrderIdResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +30,7 @@ public class OrderController {
     //회원 주문
     @Operation(summary = "회원 주문", description = "회원 주문", tags = {"Order"})
     @PostMapping("/member")
-    public CommonResponse<String> memberOrderAdd(@RequestBody UserOrderProductRequestVo userOrderProductRequestVo) {
+    public CommonResponse<OrderNameAndOrderIdResponseVo> memberOrderAdd(@RequestBody UserOrderProductRequestVo userOrderProductRequestVo) {
 
         String token = jwtTokenProvider.getHeader();
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(token);
@@ -37,9 +38,9 @@ public class OrderController {
         //vo를 dto로 변환
         UserOrderSaveRequestDto userOrderSaveRequestDto = UserOrderSaveRequestDto.convertToDto(memberUuid, userOrderProductRequestVo);
 
-        orderService.addMemberOrder(userOrderSaveRequestDto);
 
-        return CommonResponse.success("주문이 완료되었습니다.");
+
+        return CommonResponse.success("주문이 완료되었습니다.", OrderNameAndOrderIdResponseVo.convertToVo(orderService.addMemberOrder(userOrderSaveRequestDto)));
 
     }
 
