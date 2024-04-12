@@ -219,4 +219,14 @@ public class AuthServiceImpl implements AuthService{
         // 인증 코드 확인 후 Redis 에서 삭제
         redisUtils.deleteData(email);
     }
+
+    /**
+     * 로그아웃
+     */
+    @Override
+    public void logout(String accessToken) {
+        Long expiration = jwtTokenProvider.getExpiration(accessToken);
+        log.info("만료시간 : {}", expiration);
+        redisUtils.setData(accessToken, "logout", expiration);
+    }
 }
