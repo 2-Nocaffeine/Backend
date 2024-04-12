@@ -8,13 +8,11 @@ import com.nocaffeine.ssgclone.order.dto.request.OrderIdRequestDto;
 import com.nocaffeine.ssgclone.order.dto.request.OrderNumberRequestDto;
 import com.nocaffeine.ssgclone.order.dto.request.UserOrderSaveRequestDto;
 import com.nocaffeine.ssgclone.order.dto.response.OrderInfoAndProductListResponseDto;
+import com.nocaffeine.ssgclone.order.dto.response.OrderNameAndOrderIdResponseDto;
 import com.nocaffeine.ssgclone.order.dto.response.OrderStatusResponseDto;
 import com.nocaffeine.ssgclone.order.vo.request.OrderIdRequestVo;
 import com.nocaffeine.ssgclone.order.vo.request.UserOrderProductRequestVo;
-import com.nocaffeine.ssgclone.order.vo.response.OrderIdListResponseVo;
-import com.nocaffeine.ssgclone.order.vo.response.MemberOrderInfoResponseVo;
-import com.nocaffeine.ssgclone.order.vo.response.OrderInfoAndProductListResponseVo;
-import com.nocaffeine.ssgclone.order.vo.response.OrderStatusResponseVo;
+import com.nocaffeine.ssgclone.order.vo.response.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -35,7 +33,7 @@ public class OrderController {
     //회원 주문
     @Operation(summary = "회원 주문", description = "회원 주문")
     @PostMapping("/member")
-    public CommonResponse<String> memberOrderAdd(@RequestBody UserOrderProductRequestVo userOrderProductRequestVo) {
+    public CommonResponse<OrderNameAndOrderIdResponseVo> memberOrderAdd(@RequestBody UserOrderProductRequestVo userOrderProductRequestVo) {
 
         String token = jwtTokenProvider.getHeader();
         String memberUuid = jwtTokenProvider.validateAndGetUserUuid(token);
@@ -43,9 +41,7 @@ public class OrderController {
         //vo를 dto로 변환
         UserOrderSaveRequestDto userOrderSaveRequestDto = UserOrderSaveRequestDto.convertToDto(memberUuid, userOrderProductRequestVo);
 
-        orderService.addMemberOrder(userOrderSaveRequestDto);
-
-        return CommonResponse.success("주문이 완료되었습니다.");
+        return CommonResponse.success("주문이 완료되었습니다.",OrderNameAndOrderIdResponseVo.convertToVo(orderService.addMemberOrder(userOrderSaveRequestDto)));
 
     }
 

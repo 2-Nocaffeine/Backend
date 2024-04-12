@@ -40,7 +40,7 @@ public class OrderServiceImp implements OrderService{
 
     @Override
     @Transactional
-    public void addMemberOrder(UserOrderSaveRequestDto userOrderSaveRequestDto) {
+    public OrderNameAndOrderIdResponseDto addMemberOrder(UserOrderSaveRequestDto userOrderSaveRequestDto) {
 
         //주문 저장
         Orders order = Orders.toEntity(userOrderSaveRequestDto);
@@ -86,6 +86,10 @@ public class OrderServiceImp implements OrderService{
             updateTotal(orderedProductRequestDto, optionSelectedProduct);
 
         }
+        return OrderNameAndOrderIdResponseDto.builder()
+                .orderId(savedOrders.getId())
+                .orderNumber(savedOrders.getOrderNumber())
+                .build();
     }
 
     // 누적 판매량 업데이트
