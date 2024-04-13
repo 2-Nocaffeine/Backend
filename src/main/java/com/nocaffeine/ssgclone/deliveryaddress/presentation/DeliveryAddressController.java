@@ -6,10 +6,12 @@ import com.nocaffeine.ssgclone.common.security.JwtTokenProvider;
 import com.nocaffeine.ssgclone.deliveryaddress.application.DeliveryAddressService;
 import com.nocaffeine.ssgclone.deliveryaddress.dto.request.DeliveryAddressAddRequestDto;
 import com.nocaffeine.ssgclone.deliveryaddress.dto.request.DeliveryAddressModifyRequestDto;
+import com.nocaffeine.ssgclone.deliveryaddress.dto.response.DeliveryAddressDefaultResponseDto;
 import com.nocaffeine.ssgclone.deliveryaddress.dto.response.DeliveryAddressDetailResponseDto;
 import com.nocaffeine.ssgclone.deliveryaddress.dto.response.DeliveryAddressListResponseDto;
 import com.nocaffeine.ssgclone.deliveryaddress.vo.request.DeliveryAddressAddRequestVo;
 import com.nocaffeine.ssgclone.deliveryaddress.vo.request.DeliveryAddressModifyRequestVo;
+import com.nocaffeine.ssgclone.deliveryaddress.vo.response.DeliveryAddressDefaultResponseVo;
 import com.nocaffeine.ssgclone.deliveryaddress.vo.response.DeliveryAddressDetailResponseVo;
 import com.nocaffeine.ssgclone.deliveryaddress.vo.response.DeliveryAddressListResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
@@ -83,5 +85,13 @@ public class DeliveryAddressController {
         DeliveryAddressDetailResponseVo deliveryAddressDetailResponseVo = DeliveryAddressDetailResponseDto.dtoToVo(deliveryAddressService.findDeliveryAddressDetail(deliveryAddressId, memberUuid));
         return CommonResponse.success("배송지 상세 조회 성공",deliveryAddressDetailResponseVo);
     }
+
+    @Operation(summary = "기본 배송지 조회", description = "기본 배송지 조회")
+    @GetMapping("/default")
+    public CommonResponse<DeliveryAddressDefaultResponseVo> findDefaultDeliveryAddress() {
+        String memberUuid = jwtTokenProvider.validateAndGetUserUuid(jwtTokenProvider.getHeader());
+        return CommonResponse.success("기본 배송지 조회 성공", DeliveryAddressDefaultResponseDto.dtoToVo(deliveryAddressService.findDefaultDeliveryAddress(memberUuid)));
+    }
+
 
 }
