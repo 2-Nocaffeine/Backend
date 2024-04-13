@@ -5,6 +5,7 @@ import com.nocaffeine.ssgclone.common.exception.BaseException;
 import com.nocaffeine.ssgclone.deliveryaddress.domain.DeliveryAddress;
 import com.nocaffeine.ssgclone.deliveryaddress.dto.request.DeliveryAddressAddRequestDto;
 import com.nocaffeine.ssgclone.deliveryaddress.dto.request.DeliveryAddressModifyRequestDto;
+import com.nocaffeine.ssgclone.deliveryaddress.dto.response.DeliveryAddressDefaultResponseDto;
 import com.nocaffeine.ssgclone.deliveryaddress.dto.response.DeliveryAddressDetailResponseDto;
 import com.nocaffeine.ssgclone.deliveryaddress.dto.response.DeliveryAddressListResponseDto;
 import com.nocaffeine.ssgclone.deliveryaddress.infrastructure.DeliveryAddressRepository;
@@ -36,8 +37,8 @@ public class DeliveryAddressServiceImpl implements DeliveryAddressService{
     @Override
     @Transactional
     public void addDeliveryAddress(DeliveryAddressAddRequestDto deliveryAddressAddRequestDto, String memberUuid) {
-        Member member = memberRepository.findByUuid(memberUuid).orElseThrow(() ->
-                new BaseException(NO_EXIST_MEMBERS));
+        Member member = memberRepository.findByUuid(memberUuid)
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
 
         deliveryAddressRepository.save(DeliveryAddress.builder()
                 .member(member)
@@ -58,11 +59,11 @@ public class DeliveryAddressServiceImpl implements DeliveryAddressService{
     @Override
     @Transactional
     public void removeDeliveryAddress(Long deliveryAddressId, String memberUuid) {
-        Member member = memberRepository.findByUuid(memberUuid).orElseThrow(() ->
-                new BaseException(NO_EXIST_MEMBERS));
+        Member member = memberRepository.findByUuid(memberUuid)
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
 
-        DeliveryAddress deliveryAddress = deliveryAddressRepository.findByIdAndMember(deliveryAddressId, member).orElseThrow(() ->
-                new BaseException(NO_EXIST_ADDRESS));
+        DeliveryAddress deliveryAddress = deliveryAddressRepository.findByIdAndMember(deliveryAddressId, member)
+                .orElseThrow(() -> new BaseException(NO_EXIST_ADDRESS));
 
         deliveryAddressRepository.delete(deliveryAddress);
     }
@@ -74,15 +75,15 @@ public class DeliveryAddressServiceImpl implements DeliveryAddressService{
     @Override
     @Transactional
     public void modifyDeliveryAddress(DeliveryAddressModifyRequestDto deliveryAddressModifyRequestDto, String memberUuid) {
-        Member member = memberRepository.findByUuid(memberUuid).orElseThrow(() ->
-                new BaseException(NO_EXIST_MEMBERS));
+        Member member = memberRepository.findByUuid(memberUuid)
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
 
-        DeliveryAddress deliveryAddress = deliveryAddressRepository.findByIdAndMember(deliveryAddressModifyRequestDto.getDeliveryAddressId(), member).orElseThrow(() ->
-                new BaseException(NO_EXIST_ADDRESS));
+        DeliveryAddress deliveryAddress = deliveryAddressRepository.findByIdAndMember(deliveryAddressModifyRequestDto.getDeliveryAddressId(), member)
+                .orElseThrow(() -> new BaseException(NO_EXIST_ADDRESS));
 
         deliveryAddressRepository.save(
                 DeliveryAddress.builder()
-                .id(deliveryAddressModifyRequestDto.getDeliveryAddressId())
+                .id(deliveryAddress.getId())
                 .member(deliveryAddress.getMember())
                 .addressName(deliveryAddressModifyRequestDto.getAddressName())
                 .recipient(deliveryAddressModifyRequestDto.getRecipient())
@@ -103,8 +104,8 @@ public class DeliveryAddressServiceImpl implements DeliveryAddressService{
      */
     @Override
     public List<DeliveryAddressListResponseDto> findDeliveryAddress(String memberUuid) {
-        Member member = memberRepository.findByUuid(memberUuid).orElseThrow(() ->
-                new BaseException(NO_EXIST_MEMBERS));
+        Member member = memberRepository.findByUuid(memberUuid)
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
 
         List<DeliveryAddress> deliveryAddresses = deliveryAddressRepository.findByMember(member);
 
@@ -152,8 +153,8 @@ public class DeliveryAddressServiceImpl implements DeliveryAddressService{
             );
         });
 
-        DeliveryAddress deliveryAddress = deliveryAddressRepository.findById(deliveryAddressId).orElseThrow(() ->
-                new BaseException(NO_EXIST_ADDRESS));
+        DeliveryAddress deliveryAddress = deliveryAddressRepository.findById(deliveryAddressId)
+                .orElseThrow(() -> new BaseException(NO_EXIST_ADDRESS));
 
         deliveryAddressRepository.save(
                 DeliveryAddress.builder()
@@ -175,11 +176,11 @@ public class DeliveryAddressServiceImpl implements DeliveryAddressService{
      */
     @Override
     public DeliveryAddressDetailResponseDto findDeliveryAddressDetail(Long addressId, String memberUuid) {
-        Member member = memberRepository.findByUuid(memberUuid).orElseThrow(() ->
-                new BaseException(NO_EXIST_MEMBERS));
+        Member member = memberRepository.findByUuid(memberUuid)
+                .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
 
-        DeliveryAddress deliveryAddress = deliveryAddressRepository.findByIdAndMember(addressId, member).orElseThrow(() ->
-                new BaseException(NO_EXIST_ADDRESS));
+        DeliveryAddress deliveryAddress = deliveryAddressRepository.findByIdAndMember(addressId, member)
+                .orElseThrow(() -> new BaseException(NO_EXIST_ADDRESS));
 
         return DeliveryAddressDetailResponseDto.builder()
                 .deliveryAddressId(deliveryAddress.getId())
@@ -191,6 +192,31 @@ public class DeliveryAddressServiceImpl implements DeliveryAddressService{
                 .street(deliveryAddress.getStreet())
                 .defaultCheck(deliveryAddress.isDefaultCheck())
                 .build();
+    }
+
+    /**
+     * 기본 배송지 조회
+     */
+    @Override
+    public DeliveryAddressDefaultResponseDto findDefaultDeliveryAddress(String memberUuid) {
+        Member member = memberRepository.findByUuid(memberUuid).orElseThrow(() ->
+                new BaseException(NO_EXIST_MEMBERS));
+
+        DeliveryAddress deliveryAddress = deliveryAddressRepository.findByMemberAndDefaultCheck(member, true)
+                .orElseThrow(() -> new BaseException(NO_EXIST_ADDRESS));
+
+        return DeliveryAddressDefaultResponseDto.builder()
+                .deliveryAddressId(deliveryAddress.getId())
+                .addressName(deliveryAddress.getAddressName())
+                .recipient(deliveryAddress.getRecipient())
+                .phoneNumber(deliveryAddress.getPhoneNumber())
+                .zip(deliveryAddress.getZip())
+                .post(deliveryAddress.getPost())
+                .street(deliveryAddress.getStreet())
+                .defaultCheck(deliveryAddress.isDefaultCheck())
+                .build();
+
+
     }
 
 
