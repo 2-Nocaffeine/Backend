@@ -22,6 +22,8 @@ public class OrderInfoAndProductListResponseDto {
     private int totalPrice;
     private Orders.OrderStatus orderStatus;
     private LocalDateTime orderDate;
+    private String orderPhoneNumber;
+    private String region;
 
     private List<OrderProductListResponseDto> orderProductList;
 }

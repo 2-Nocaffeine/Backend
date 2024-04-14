@@ -241,6 +241,8 @@ public class OrderServiceImp implements OrderService{
                 .orderStatus(order.getStatus())
                 .orderDate(order.getCreatedAt())
                 .orderProductList(orderProductinfoList)
+                .orderPhoneNumber(order.getPhoneNumber())
+                .region(order.getRegion())
                 .build();
 
     }
