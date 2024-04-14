@@ -20,10 +20,12 @@ public class OrderInfoAndProductListResponseVo {
     private int totalPrice;
     private Orders.OrderStatus orderStatus;
     private LocalDateTime orderDate;
+    private String orderPhoneNumber;
+    private String region;
 
     private List<OrderProductListResponseVo> orderProductList;
 
-    public OrderInfoAndProductListResponseVo(Long orderNumber, Long orderId, String receiverName, int totalPrice, Orders.OrderStatus orderStatus, LocalDateTime orderDate, List<OrderProductListResponseVo> orderProductListResponseDtoList) {
+    public OrderInfoAndProductListResponseVo(Long orderNumber, Long orderId, String receiverName, int totalPrice, Orders.OrderStatus orderStatus, LocalDateTime orderDate, List<OrderProductListResponseVo> orderProductListResponseDtoList,String orderPhoneNumber,String region) {
         this.orderNumber = orderNumber;
         this.orderId = orderId;
         this.receiverName = receiverName;
@@ -31,6 +33,8 @@ public class OrderInfoAndProductListResponseVo {
         this.orderStatus = orderStatus;
         this.orderDate = orderDate;
         this.orderProductList = orderProductListResponseDtoList;
+        this.orderPhoneNumber = orderPhoneNumber;
+        this.region = region;
     }
 
     public static OrderInfoAndProductListResponseVo convertToVo(OrderInfoAndProductListResponseDto orderInfoAndProductListResponseDto) {
@@ -48,7 +52,9 @@ public class OrderInfoAndProductListResponseVo {
                 orderInfoAndProductListResponseDto.getTotalPrice(),
                 orderInfoAndProductListResponseDto.getOrderStatus(),
                 orderInfoAndProductListResponseDto.getOrderDate(),
-                OrderProductListResponseDtoList
+                OrderProductListResponseDtoList,
+                orderInfoAndProductListResponseDto.getOrderPhoneNumber(),
+                orderInfoAndProductListResponseDto.getRegion()
 
         );
     }

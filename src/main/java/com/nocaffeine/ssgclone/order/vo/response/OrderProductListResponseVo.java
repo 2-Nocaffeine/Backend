@@ -17,8 +17,10 @@ public class OrderProductListResponseVo {
     private int price;
     private String brand;
     private String thumbnail;
+    private String orderNumber;
+    private String region;
 
-    public OrderProductListResponseVo(String productName, String addOption, String color, String size, int count, int price, String brand, String thumbnail) {
+    public OrderProductListResponseVo(String productName, String addOption, String color, String size, int count, int price, String brand, String thumbnail,String orderPhoneNumber,String region) {
         this.productName = productName;
         this.addOption = addOption;
         this.color = color;
@@ -27,7 +29,11 @@ public class OrderProductListResponseVo {
         this.price = price;
         this.brand = brand;
         this.thumbnail = thumbnail;
+        this.orderNumber = orderPhoneNumber;
+        this.region = region;
+
     }
+
 
     public static OrderProductListResponseVo convertToVo(OrderProductListResponseDto orderProductListResponseDto) {
         return new OrderProductListResponseVo(
@@ -38,7 +44,9 @@ public class OrderProductListResponseVo {
                 orderProductListResponseDto.getCount(),
                 orderProductListResponseDto.getPrice(),
                 orderProductListResponseDto.getBrand(),
-                orderProductListResponseDto.getThumbnail()
+                orderProductListResponseDto.getThumbnail(),
+                orderProductListResponseDto.getOrderPhoneNumber(),
+                orderProductListResponseDto.getRegion()
         );
     }
 

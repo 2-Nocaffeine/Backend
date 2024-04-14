@@ -20,6 +20,8 @@ public class OrderProductListResponseDto {
     private int price;
     private String brand;
     private String thumbnail;
+    private String orderPhoneNumber;
+    private String region;
 
 
 }
