@@ -1,15 +1,27 @@
 package com.nocaffeine.ssgclone.order.application;
 
-import com.nocaffeine.ssgclone.order.domain.Orders;
-import com.nocaffeine.ssgclone.order.infrastructure.OrderRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.nocaffeine.ssgclone.order.dto.request.GuestOrderInfoRequestDto;
+import com.nocaffeine.ssgclone.order.dto.request.OrderNumberRequestDto;
+import com.nocaffeine.ssgclone.order.dto.response.*;
+import com.nocaffeine.ssgclone.order.dto.request.OrderIdRequestDto;
+import com.nocaffeine.ssgclone.order.dto.request.UserOrderSaveRequestDto;
+
+import java.util.List;
+
+public interface OrderService {
+
+    OrderNameAndOrderIdResponseDto addMemberOrder (UserOrderSaveRequestDto userOrderSaveRequestDto);
+
+    void removeOrder(OrderIdRequestDto orderIdRequestDto);
+
+    MemberOrderInfoResponseDto findOrderInfo(String memberUuid);
+
+    List<OrderIdListResponseDto> findOrderIdList(String memberUuid);
+
+    OrderInfoAndProductListResponseDto findOrderProductList(OrderNumberRequestDto orderNumberRequestDto);
 
 
-@Service
-@RequiredArgsConstructor
-public class OrderService {
-    private final OrderRepository orderRepository;
-    
+    OrderInfoAndProductListResponseDto findGuestOrderInfo(GuestOrderInfoRequestDto guestOrderInfoRequestDto);
+
+    OrderStatusResponseDto findOrderStatusCount(String status, String memberUuid);
 }

@@ -24,35 +24,43 @@ public class Member extends BaseTimeEntity implements UserDetails{
     private Long id;
 
     @NotNull
+    @Column(length = 100)
     private String email;
 
     @NotNull
+    @Column(length = 255)
     private String password;
 
+    @Column(length = 255)
     private String uuid;
 
     @NotNull
+    @Column(length = 50)
     private String name;
 
     @NotNull
+    @Column(length = 50)
     private String phoneNumber;
 
+    @Column(length = 255)
     private String address;
 
+    // 탈퇴여부
+    @NotNull
+    private boolean status;
 
     @Builder
-    public Member(String email, String password, String uuid, String name, String phoneNumber, String address) {
+    public Member(Long id, String email, String password, String uuid, String name, String phoneNumber, String address, boolean status) {
+        this.id = id;
         this.email = email;
         this.password = password;
         this.uuid = uuid;
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.address = address;
+        this.status = status;
     }
 
-    public void changeHashPassword(String password) {
-        this.password = new BCryptPasswordEncoder().encode(password);
-    }
 
     public Member(String uuid) {
         this.uuid = uuid;

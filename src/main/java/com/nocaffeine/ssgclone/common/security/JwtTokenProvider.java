@@ -1,11 +1,13 @@
 package com.nocaffeine.ssgclone.common.security;
 
+import com.nocaffeine.ssgclone.common.exception.BaseException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -18,12 +20,19 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 
+import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.JWT_VALID_FAILED;
+import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.TOKEN_NULL;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class JwtTokenProvider {
 
     private final Environment env;
+
+
+    @Value("${JWT.SECRET_KEY}")
+    private String secretKey;
 
     public String getUuid(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -45,20 +54,35 @@ public class JwtTokenProvider {
 
         log.info("generateToken {} ", userDetails);
         return Jwts.builder()
-                .setClaims(extractClaims)
+                .setClaims(extractClaims) // 정보저장
                 .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + env.getProperty("JWT.EXPIRATION_TIME", Long.class)))
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .setIssuedAt(new Date(System.currentTimeMillis())) // 토큰 발행 시간
+                .setExpiration(new Date(System.currentTimeMillis() + env.getProperty("JWT.EXPIRATION_TIME", Long.class)))// 토큰 유효시간
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256) // 암호화 알고리즘
                 .compact();
     }
+
+    public Long getExpiration(String accessToken) {
+        Claims claims = Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(accessToken).getBody();
+
+        // 토큰의 만료 시간
+        Date expiration = claims.getExpiration();
+        // 현재 시간
+        Date now = new Date();
+        // 남은 유효 시간 계산 (밀리초 단위)
+        long remainingTimeMillis = expiration.getTime() - now.getTime();
+        // 음수 값이 나올 경우 0으로 설정하여 음수 값 방지
+        return Math.max(remainingTimeMillis, 0);
+    }
+
+
+
 
     public String validateAndGetUserUuid(String token) {
         try {
             return extractClaim(token, Claims::getSubject);
-        } catch (NullPointerException e) {
-            log.info("토큰에 담긴 유저 정보가 없습니다");
-            return null;
+        } catch (Exception e) {
+            throw new BaseException(JWT_VALID_FAILED);
         }
     }
 
@@ -66,6 +90,9 @@ public class JwtTokenProvider {
         final String uuid = getUuid(token);
         return (uuid.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
+
+
+
 
 
     private boolean isTokenExpired(String token) {
@@ -97,7 +124,7 @@ public class JwtTokenProvider {
             // "Bearer " 부분을 제외한 토큰만 반환
             return headerValue.substring(7).trim();
         }
-        return null;
+        throw new BaseException(TOKEN_NULL);
+//        return null;
     }
-
 }

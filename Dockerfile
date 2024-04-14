@@ -1,4 +1,3 @@
-FROM openjdk:170-ea-11-jdk-slim
-ARG JAR_FILE=build/libs/*.jar
-COPY ${JAR_FILE} app.jar
+FROM openjdk:17-jdk-alpine3.13
+COPY build/libs/*.jar app.jar
 ENTRYPOINT ["java","-jar","/app.jar"]

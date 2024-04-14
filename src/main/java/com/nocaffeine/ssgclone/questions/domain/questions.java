@@ -23,9 +23,11 @@ public class questions extends BaseTimeEntity {
     private int type;
 
     @NotNull
+    @Column(length = 255)
     private String title;
 
     @NotNull
+    @Column(length = 500)
     private String content;
 
     @NotNull

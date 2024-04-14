@@ -1,8 +1,8 @@
 package com.nocaffeine.ssgclone.member.dto.request;
 
+import com.nocaffeine.ssgclone.member.vo.request.MemberSaveRequestVo;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
 
@@ -26,5 +26,13 @@ public class MemberSaveRequestDto {
     @NotBlank(message = "휴대폰번호 번호를 입력해 주세요")
     private String phoneNumber;
 
+    public static MemberSaveRequestDto voToDto(MemberSaveRequestVo memberSaveRequestVo) {
+        return MemberSaveRequestDto.builder()
+                .email(memberSaveRequestVo.getEmail())
+                .password(memberSaveRequestVo.getPassword())
+                .name(memberSaveRequestVo.getName())
+                .phoneNumber(memberSaveRequestVo.getPhoneNumber())
+                .build();
+    }
 }
 

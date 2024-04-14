@@ -1,19 +1,17 @@
 package com.nocaffeine.ssgclone.member.application;
 
 
-import com.nocaffeine.ssgclone.common.ResponseDto;
-import com.nocaffeine.ssgclone.member.dto.request.MemberLoginRequestDto;
-import com.nocaffeine.ssgclone.member.dto.request.MemberPasswordRequestDto;
-import com.nocaffeine.ssgclone.member.dto.request.MemberSaveRequestDto;
-import org.springframework.http.ResponseEntity;
+import com.nocaffeine.ssgclone.member.dto.request.*;
+import com.nocaffeine.ssgclone.member.dto.response.MemberDetailResponseDto;
+import com.nocaffeine.ssgclone.member.dto.response.TokenResponseDto;
 
 public interface MemberService {
 
-    public ResponseDto<Void> duplicationEmail(String email);
-    public ResponseDto<Void> signUp(MemberSaveRequestDto memberSaveRequestDto);
 
-    public ResponseEntity<ResponseDto<Object>> logIn(MemberLoginRequestDto memberLoginRequestDto);
+    void updatePassword(String memberUuid, MemberPasswordRequestDto memberPasswordRequestDto);
 
-    public ResponseDto<Void> changePassword(String memberUuid, MemberPasswordRequestDto memberPasswordRequestDto);
+    MemberDetailResponseDto findMember(String memberUuid);
+
+    void removeMember(String memberUuid);
 
 }
