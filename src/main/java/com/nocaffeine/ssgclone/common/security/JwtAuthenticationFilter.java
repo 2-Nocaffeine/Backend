@@ -53,7 +53,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             final String userUuid;
 
             if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-                log.info("로그인 되어있지 않음");
                 filterChain.doFilter(request, response);
                 return;
             }

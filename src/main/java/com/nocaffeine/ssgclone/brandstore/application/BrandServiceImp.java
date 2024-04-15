@@ -5,7 +5,6 @@ import com.nocaffeine.ssgclone.brandstore.dto.response.BrandProductIdPageListRes
 import com.nocaffeine.ssgclone.brandstore.dto.response.BrandProductIdResponseDto;
 import com.nocaffeine.ssgclone.brandstore.dto.response.BrandResponseDto;
 import com.nocaffeine.ssgclone.brandstore.infrastructure.BrandListRepository;
-import com.nocaffeine.ssgclone.brandstore.vo.response.BrandProductIdResponseVo;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.NO_DATA;
-import static com.nocaffeine.ssgclone.common.exception.BaseResponseStatus.NO_EXIST_BRAND_PRODUCT;
 
 @Service
 @RequiredArgsConstructor

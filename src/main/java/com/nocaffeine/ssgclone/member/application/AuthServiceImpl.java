@@ -110,12 +110,7 @@ public class AuthServiceImpl implements AuthService{
     @Override
     @Transactional
     public void addMember(MemberSaveRequestDto memberSaveRequestDto) {
-        try{
-            duplicationEmail(memberSaveRequestDto.getEmail());
-        } catch (BaseException e){
-            throw new BaseException(DUPLICATE_EMAIL);
-        }
-
+        duplicationEmail(memberSaveRequestDto.getEmail());
         createMember(memberSaveRequestDto);
     }
 
