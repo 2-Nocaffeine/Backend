@@ -179,6 +179,8 @@ public class AuthServiceImpl implements AuthService{
     public void emailAuth(AuthEmailRequestDto authEmailRequestDto) {
         String authCode = createAuthCode();
 
+        duplicationEmail(authEmailRequestDto.getEmail());
+
         if(!emailProvider.sendAuthMail(authEmailRequestDto.getEmail(), authCode)){
             throw new BaseException(MASSAGE_SEND_FAILED);
         }
