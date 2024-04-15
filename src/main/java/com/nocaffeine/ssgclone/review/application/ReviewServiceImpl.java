@@ -291,7 +291,7 @@ public class ReviewServiceImpl implements ReviewService {
                 .memberName(maskEmail(member.getEmail()))
                 .content(review.getContent())
                 .rate(review.getRate())
-                .createdAt(review.getCreatedAt().toString())
+                .createdAt(review.getCreatedAt())
                 .build();
     }
 
