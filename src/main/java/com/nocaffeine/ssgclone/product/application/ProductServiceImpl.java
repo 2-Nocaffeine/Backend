@@ -209,7 +209,9 @@ public class ProductServiceImpl implements ProductService{
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new BaseException(NO_PRODUCT));
 
-        ProductCategoryList productCategoryList = productCategoryListRepository.findByProduct(product);
+        ProductCategoryList productCategoryList =
+                productCategoryListRepository.findByProduct(product)
+                .orElseThrow(() -> new BaseException(NO_EXISTING_PRODUCT_CATEGORY));
 
         return ProductCategoryResponseDto.fromProductCategoryList(productCategoryList);
     }
