@@ -213,12 +213,15 @@ public class ReviewServiceImpl implements ReviewService {
 
         List<ReviewPossibleWriteResponseDto> writableReviews = new ArrayList<>();
 
+
         for (Orders order : orders) {
             List<OrderProduct> orderProducts = orderProductRepository.findAllByOrder(order);
 
             for (OrderProduct orderProduct : orderProducts) {
+                // 해당 상품에 대한 리뷰가 이미 작성되었는지 확인
                 List<Review> reviews = reviewRepository.findAllByOrderAndProductId(order, orderProduct.getProductId());
 
+                // 리뷰가 작성되지 않은 경우 작성 가능한 리뷰 목록에 추가
                 if (reviews.isEmpty()) {
                     writableReviews.add(ReviewPossibleWriteResponseDto.builder()
                             .productId(orderProduct.getProductId())

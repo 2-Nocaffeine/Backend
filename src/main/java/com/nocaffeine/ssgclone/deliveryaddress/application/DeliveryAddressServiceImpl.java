@@ -40,6 +40,9 @@ public class DeliveryAddressServiceImpl implements DeliveryAddressService{
         Member member = memberRepository.findByUuid(memberUuid)
                 .orElseThrow(() -> new BaseException(NO_EXIST_MEMBERS));
 
+        // 회원에게 등록된 기본 배송지가 있는지 확인
+        boolean hasDefaultAddress = deliveryAddressRepository.existsByMemberAndDefaultCheck(member, true);
+
         deliveryAddressRepository.save(DeliveryAddress.builder()
                 .member(member)
                 .addressName(deliveryAddressAddRequestDto.getAddressName())
@@ -48,7 +51,7 @@ public class DeliveryAddressServiceImpl implements DeliveryAddressService{
                 .zip(deliveryAddressAddRequestDto.getZip())
                 .post(deliveryAddressAddRequestDto.getPost())
                 .street(deliveryAddressAddRequestDto.getStreet())
-                .defaultCheck(false)
+                .defaultCheck(!hasDefaultAddress)
                 .build());
     }
 
