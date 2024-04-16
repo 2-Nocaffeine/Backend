@@ -16,4 +16,6 @@ public interface DeliveryAddressRepository extends JpaRepository<DeliveryAddress
     Optional<DeliveryAddress> findByMemberAndDefaultCheck(Member member, boolean b);
 
     Optional<DeliveryAddress> findByIdAndMember(Long deliveryAddressId, Member member);
+
+    boolean existsByMemberAndDefaultCheck(Member member, boolean b);
 }

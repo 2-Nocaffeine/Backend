@@ -32,5 +32,5 @@ public interface ProductCategoryListRepository extends JpaRepository<ProductCate
     Page<ProductCategoryList> findByTinyCategory(Long tinyId, Pageable page);
 
     // 상품으로 상품 카테고리 리스트 조회
-    ProductCategoryList findByProduct(Product product);
+    Optional<ProductCategoryList> findByProduct(Product product);
 }

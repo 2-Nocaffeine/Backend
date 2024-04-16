@@ -110,12 +110,7 @@ public class AuthServiceImpl implements AuthService{
     @Override
     @Transactional
     public void addMember(MemberSaveRequestDto memberSaveRequestDto) {
-        try{
-            duplicationEmail(memberSaveRequestDto.getEmail());
-        } catch (BaseException e){
-            throw new BaseException(DUPLICATE_EMAIL);
-        }
-
+        duplicationEmail(memberSaveRequestDto.getEmail());
         createMember(memberSaveRequestDto);
     }
 
@@ -178,6 +173,8 @@ public class AuthServiceImpl implements AuthService{
     @Transactional
     public void emailAuth(AuthEmailRequestDto authEmailRequestDto) {
         String authCode = createAuthCode();
+
+        duplicationEmail(authEmailRequestDto.getEmail());
 
         if(!emailProvider.sendAuthMail(authEmailRequestDto.getEmail(), authCode)){
             throw new BaseException(MASSAGE_SEND_FAILED);
