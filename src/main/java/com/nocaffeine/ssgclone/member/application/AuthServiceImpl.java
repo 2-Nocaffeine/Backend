@@ -73,9 +73,10 @@ public class AuthServiceImpl implements AuthService{
 
         deliveryAddressRepository.save(DeliveryAddress.builder()
                 .member(member)
-                .addressName("기본배송지")
+                .addressName("배송지")
                 .recipient("받는분")
-                .phoneNumber("01012345678")
+                .phoneNumber("폰번호")
+                .defaultCheck(true)
                 .build());
 
 
