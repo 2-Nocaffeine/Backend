@@ -5,6 +5,8 @@ import com.nocaffeine.ssgclone.common.EmailProvider;
 import com.nocaffeine.ssgclone.common.exception.BaseException;
 import com.nocaffeine.ssgclone.common.redis.RedisUtils;
 import com.nocaffeine.ssgclone.common.security.JwtTokenProvider;
+import com.nocaffeine.ssgclone.deliveryaddress.domain.DeliveryAddress;
+import com.nocaffeine.ssgclone.deliveryaddress.infrastructure.DeliveryAddressRepository;
 import com.nocaffeine.ssgclone.member.domain.Member;
 import com.nocaffeine.ssgclone.member.domain.SnsInfo;
 import com.nocaffeine.ssgclone.member.dto.request.*;
@@ -34,7 +36,7 @@ public class AuthServiceImpl implements AuthService{
     private final EmailProvider emailProvider;
     private final AuthenticationManager authenticateManager;
     private final RedisUtils redisUtils;
-
+    private final DeliveryAddressRepository deliveryAddressRepository;
 
     /**
      *  소셜 회원가입
@@ -68,6 +70,15 @@ public class AuthServiceImpl implements AuthService{
                 .build();
 
         snsInfoRepository.save(snsInfo);
+
+        deliveryAddressRepository.save(DeliveryAddress.builder()
+                .member(member)
+                .addressName("기본배송지")
+                .recipient("받는분")
+                .phoneNumber("01012345678")
+                .build());
+
+
     }
 
 
@@ -130,6 +141,14 @@ public class AuthServiceImpl implements AuthService{
         member.hashPassword(memberSaveRequestDto.getPassword());
 
         memberRepository.save(member);
+
+        deliveryAddressRepository.save(DeliveryAddress.builder()
+                .member(member)
+                .addressName("기본배송지")
+                .recipient("받는분")
+                .phoneNumber("01012345678")
+                .build());
+
     }
 
     /**
