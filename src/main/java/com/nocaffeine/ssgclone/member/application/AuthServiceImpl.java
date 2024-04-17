@@ -73,12 +73,14 @@ public class AuthServiceImpl implements AuthService{
 
         deliveryAddressRepository.save(DeliveryAddress.builder()
                 .member(member)
-                .addressName("배송지")
+                .addressName("기본배송지")
                 .recipient("받는분")
-                .phoneNumber("폰번호")
+                .phoneNumber("phone")
+                .zip("null")
+                .post("null")
+                .street("null")
                 .defaultCheck(true)
                 .build());
-
 
     }
 
@@ -147,7 +149,11 @@ public class AuthServiceImpl implements AuthService{
                 .member(member)
                 .addressName("기본배송지")
                 .recipient("받는분")
-                .phoneNumber("01012345678")
+                .phoneNumber("phone")
+                .zip("null")
+                .post("null")
+                .street("null")
+                .defaultCheck(true)
                 .build());
 
     }
