@@ -1,14 +1,4 @@
 # 🛒 SSG 클론코딩
-<div align="center">
-<img src="https://cdn.discordapp.com/attachments/1209744304000737312/1229073222675464212/image.png?ex=662e5aa3&is=661be5a3&hm=8ae2589f4d21ae1283d127956fbd04892d5e4fd99d042a6278edf0555987f315&" height=500 width=245>
-<img src="https://github.com/2-Nocaffeine/Backend/assets/83085413/4986cd53-53e0-48a4-9d21-8acfa3f795b6" height=500 width=245>
-    <br>
-    <img src="https://media.discordapp.net/attachments/1209744304000737312/1229073868283580487/image.png?ex=662e5b3d&is=661be63d&hm=72482ed9f10e8414c5d6fb10c8fa452c005216ee6e07113b8ee18503f1c3ad5d&=&format=webp&quality=lossless&width=289&height=585" height=500 width=245>
-    <img src="https://cdn.discordapp.com/attachments/1209744304000737312/1229074160517382164/image.png?ex=662e5b82&is=661be682&hm=ddc12bcf25b5a4dc32b4fa1c1f5984bcb49446c6d5b343ae18426b4b19c2fa02&" height=500 width=245>
-    <img src="https://cdn.discordapp.com/attachments/1209744304000737312/1229077145712590928/image.png?ex=662e5e4a&is=661be94a&hm=9be531ba7643463c2aa3690b9a9928e56fbff412126e501ebb5cb5cd2f82a980&" height=500 width=245>
-
-
-</div>
 
 - FE Github https://github.com/2-Nocaffeine/Frontend
 - BE Github https://github.com/2-Nocaffeine/Backend
@@ -16,6 +6,8 @@
 - 배포 URL : https://www.nocaffeine.shop
   - Test ID : guest@guest.com
   - Test PW : 12312312
+
+
 
 <br>
 
@@ -33,6 +25,55 @@
 - 전체 프로젝트 기간 : 2024-02-23 ~ 2024-4-16
 
 <br>
+
+##  💻 주요기능
+<p align="center">
+  <img src="https://github.com/2-Nocaffeine/.github/assets/83085413/51d75157-98aa-498f-90eb-70298dd8cd78" alt="Product List" width="40%" height="40%">
+  <br>
+  <b>상품 리스트</b>
+</p>
+
+<br>
+
+<p align="center">
+  <img src="https://github.com/2-Nocaffeine/.github/assets/83085413/ed7a3ed5-ee38-4ab2-af4c-10afb748e9ff" alt="General Login" width="40%" height="40%">
+  <img src="https://github.com/2-Nocaffeine/.github/assets/83085413/77209097-0583-4e0a-8b0b-0df8e0ab8fff" alt="Kakao Login" width="40%" height="40%">
+  <br>
+  <b>일반로그인 및 소셜로그인</b>
+</p>
+
+<br>
+
+<p align="center">
+  <img src="https://github.com/2-Nocaffeine/.github/assets/83085413/132b6907-805e-457e-9087-bef5cb3bc207)" alt="Ordering Products" width="40%" height="40%">
+  <br>
+  <b>상품 주문</b>
+</p>
+
+<br>
+
+<p align="center">
+  <img src="https://github.com/2-Nocaffeine/.github/assets/83085413/ba5a5f31-8f64-4ee7-899e-e9bf23215c92)" alt="Like Feature" width="40%" height="40%">
+  <br>
+  <b>상품 좋아요 및 폴더관리</b>
+</p>
+
+<br>
+
+<p align="center">
+  <img src="https://github.com/2-Nocaffeine/.github/assets/83085413/7a8f8a1f-fe7e-43ba-8172-8eaa4702a923" alt="Category-wise Listing" width="40%" height="40%">
+  <br>
+  <b>카테고리별 상품 리스트 및 상품 상세</b>
+</p>
+
+<br>
+
+<p align="center">
+  <img src="https://github.com/2-Nocaffeine/.github/assets/83085413/da92a36f-7aa8-4abb-b728-8f1cc0f5e0d0" alt="Special Offers" width="40%" height="40%">
+  <br>
+  <b>특가 상품</b>
+</p>
+
 
 ## 🤗 팀원 구성
 
@@ -62,15 +103,17 @@
 ## 📄 문서
 ERD : <br>
 https://www.erdcloud.com/d/neGjcsmon9sbR7xxM <br><br>
+<img src="https://github.com/2-Nocaffeine/.github/assets/83085413/2121b376-0af3-4874-be24-f883c7e77323">
+
 요구사항 정의서 : <br>
-https://docs.google.com/spreadsheets/d/1JiUEaJEgHRNInsHNYELBXOH42THX2_3EkwaM6tyvKHo/edit#gid=1474673446 <br><br>
+https://docs.google.com/spreadsheets/d/1JiUEaJEgHRNInsHNYELBXOH42THX2_3EkwaM6tyvKHo/edit?pli=1&gid=1474673446#gid=1474673446 <br><br>
 API 정의서 : <br>
-https://docs.google.com/spreadsheets/d/1JiUEaJEgHRNInsHNYELBXOH42THX2_3EkwaM6tyvKHo/edit#gid=1680415821 <br>
+https://docs.google.com/spreadsheets/d/1JiUEaJEgHRNInsHNYELBXOH42THX2_3EkwaM6tyvKHo/edit?pli=1&gid=1680415821#gid=1680415821 <br>
 
 <br>
 
 ## ⚙ 아키텍처
-<img src="https://media.discordapp.net/attachments/1209744304000737312/1229064514880667689/image.png?ex=662e5287&is=661bdd87&hm=e65abb308008d27d65f4ecd5fd20f53b7ec8a10370ac4a198b2eee65c01cd64c&=&format=webp&quality=lossless">
+<img src="https://github.com/2-Nocaffeine/.github/assets/83085413/5b78122b-d942-409a-9b8f-fed54c0a57f2">
 
 <br>
 
